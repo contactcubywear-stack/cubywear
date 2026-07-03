@@ -47,8 +47,8 @@ h1, #timer, #info, #triesLeft {
   height: 100%;
   min-width: 0;
   min-height: 0;
-  background: var(--bg-card);
-  border: 2px solid var(--accent-blue);
+  background: var(--accent-blue);
+  border: 2px solid var(--accent-gold);
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
   display: flex;
