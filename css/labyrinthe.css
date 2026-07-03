@@ -1,0 +1,61 @@
+body {
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#timer {
+  color: var(--accent-gold);
+  font-weight: bold;
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.hint {
+  color: var(--text-light);
+  font-size: 14px;
+  margin-top: 15px;
+}
+
+.maze {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, minmax(0, 1fr));
+  width: min(92vw, 380px);
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 3px solid var(--accent-blue);
+  box-sizing: border-box;
+}
+
+.maze-cell {
+  box-sizing: border-box;
+  border-top: 2px solid transparent;
+  border-right: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+  border-left: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.maze-cell.wall-N { border-top-color: var(--accent-blue); }
+.maze-cell.wall-S { border-bottom-color: var(--accent-blue); }
+.maze-cell.wall-E { border-right-color: var(--accent-blue); }
+.maze-cell.wall-W { border-left-color: var(--accent-blue); }
+
+.maze-cell.player {
+  background: var(--accent-gold);
+}
+
+.maze-cell.goal {
+  font-size: 16px;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}

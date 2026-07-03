@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cubiwear – Puzzle glissant</title>
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/puzzle-glissant.css">
+</head>
+
+<body>
+
+  <h1>🧩 Puzzle glissant</h1>
+  <p id="moves">0 coups</p>
+
+  <div class="size-toggle">
+    <button class="btn-small size-btn active" data-size="3">3×3</button>
+    <button class="btn-small size-btn" data-size="4">4×4</button>
+  </div>
+
+  <div class="puzzle-board" id="board"></div>
+
+  <div class="actions">
+    <button class="btn-small" id="shuffleBtn">Mélanger</button>
+    <a href="../index.html" class="btn-small">Accueil</a>
+  </div>
+
+  <script type="module" src="../js/puzzle-glissant.js"></script>
+</body>
+</html>

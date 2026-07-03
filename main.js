@@ -5,7 +5,11 @@ const descriptions = {
   tictactoe: "Bats l'IA ou ton ami",
   flappy: "Évite les obstacles",
   sudoku: "Résous la grille",
-  pendu: "Découvre le mot lettre par lettre"
+  pendu: "Découvre le mot lettre par lettre",
+  mastermind: "Devine la combinaison de couleurs",
+  "2048": "Fusionne les tuiles jusqu'à 2048",
+  labyrinthe: "Trouve la sortie avant la fin du temps",
+  "puzzle-glissant": "Reconstitue l'image en glissant les pièces"
 };
 
 document.getElementById("currentDate").textContent =
