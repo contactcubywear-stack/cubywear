@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Cubiwear – Jeu du jour</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <h1 class="title">Cubiwear</h1>
+  <p class="subtitle">Scan. Play. Win.</p>
+
+  <p class="date" id="currentDate"></p>
+
+  <!-- JEU DU JOUR -->
+  <div class="big-card">
+    <h3>JEU DU JOUR</h3>
+    <h2 id="dailyGame">Chargement...</h2>
+    <p id="dailyDesc">Un nouveau défi chaque jour</p>
+    <a id="playButton" href="#" class="btn-big">JOUER</a>
+  </div>
+
+  <!-- SHOP -->
+  <div class="big-card shop-card" onclick="window.location.href='https://cubiwear.ca/shop'">
+    <h3>BOUTIQUE</h3>
+    <p>Découvre les hoodies Cubiwear</p>
+  </div>
+
+  <!-- MODE ADMIN -->
+  <div class="big-card admin-card">
+    <h3>Mode Test</h3>
+    <p>Choisir le jeu du jour :</p>
+
+    <select id="gameSelector">
+      <option value="memory">Memory</option>
+      <option value="tictactoe">Tic Tac Toe</option>
+      <option value="flappy">Flappy Bird</option>
+      <option value="sudoku">Sudoku</option>
+      <option value="pendu">Pendu</option>
+    </select>
+
+    <button class="btn-big" onclick="setDailyGame()">Appliquer</button>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cubiwear – Memory</title>
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/memory-select.css">
+</head>
+
+<body>
+
+  <h1 class="title">🧠 Memory</h1>
+  <p class="subtitle">Choisis ton niveau</p>
+
+  <div class="difficulty-container">
+
+    <button class="difficulty-btn facile" onclick="startMemory('facile')">
+      <h2>Facile</h2>
+      <p>10 minutes · Infini essais · 4×4</p>
+    </button>
+
+    <button class="difficulty-btn moyen" onclick="startMemory('moyen')">
+      <h2>Moyen</h2>
+      <p>3 minutes · 20 essais · 4×4</p>
+    </button>
+
+    <button class="difficulty-btn difficile" onclick="startMemory('difficile')">
+      <h2>Difficile</h2>
+      <p>2 minutes · 10 essais · 6×6</p>
+    </button>
+
+    <button class="difficulty-btn impossible" onclick="startMemory('impossible')">
+      <h2>Impossible</h2>
+      <p>1 minute · 5 essais · 6×6</p>
+    </button>
+
+  </div>
+
+  <a href="../index.html" class="btn-small">Retour</a>
+
+  <script src="../js/memory-select.js"></script>
+</body>
+</html>

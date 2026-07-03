@@ -1,0 +1,92 @@
+.title {
+  color: var(--accent-gold);
+  font-size: 32px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.subtitle {
+  color: var(--text-light);
+  font-size: 18px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.difficulty-container {
+  width: 92%;
+  max-width: 420px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-sizing: border-box;
+}
+
+.difficulty-btn {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-blue);
+  border-radius: 16px;
+  padding: 20px;
+  color: var(--text-white);
+  text-align: left;
+  cursor: pointer;
+  transition: 0.25s;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.difficulty-btn h2 {
+  margin: 0;
+  color: var(--accent-gold);
+  font-size: 20px;
+}
+
+.difficulty-btn p {
+  margin: 5px 0 0 0;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+.difficulty-btn:hover,
+.difficulty-btn:active {
+  background: var(--accent-blue);
+}
+
+/* FACILE = VERT */
+.difficulty-btn.facile {
+  border-color: #3CCF4E; /* vert */
+}
+
+/* MOYEN = JAUNE */
+.difficulty-btn.moyen {
+  border-color: #FFD93D; /* jaune */
+}
+
+/* DIFFICILE = ORANGE */
+.difficulty-btn.difficile {
+  border-color: #FF8B13; /* orange */
+}
+
+/* IMPOSSIBLE = ROUGE */
+.difficulty-btn.impossible {
+  border-color: #FF1E1E; /* rouge */
+}
+
+@media (max-width: 360px) {
+  .title {
+    font-size: 26px;
+  }
+  .subtitle {
+    font-size: 15px;
+  }
+  .difficulty-btn {
+    padding: 16px;
+  }
+  .difficulty-btn h2 {
+    font-size: 17px;
+  }
+  .difficulty-btn p {
+    font-size: 13px;
+  }
+}
