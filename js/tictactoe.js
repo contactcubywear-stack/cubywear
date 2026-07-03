@@ -19,10 +19,14 @@ function render() {
 function play(i) {
   if (board[i] !== "") return;
   board[i] = player;
-  if (checkWin(player)) return endGame(true);
+
+  if (checkWin(player)) return endGame("win");
+  if (isDraw()) return endGame("draw");
 
   botPlay();
-  if (checkWin(bot)) return endGame(false);
+
+  if (checkWin(bot)) return endGame("lose");
+  if (isDraw()) return endGame("draw");
 
   render();
 }
@@ -42,9 +46,16 @@ function checkWin(p) {
   return wins.some(w => w.every(i => board[i] === p));
 }
 
-async function endGame(win) {
-  alert(win ? "Tu as gagné !" : "Tu as perdu !");
-  await saveScore("CW-BLK-1-0001", "tictactoe", win ? 10 : 0);
+function isDraw() {
+  return board.every(cell => cell !== "");
+}
+
+async function endGame(result) {
+  render();
+  const messages = { win: "Tu as gagné !", lose: "Tu as perdu !", draw: "Match nul !" };
+  const scores = { win: 10, lose: 0, draw: 5 };
+  alert(messages[result]);
+  await saveScore("CW-BLK-1-0001", "tictactoe", scores[result]);
   window.location.href = "../index.html";
 }
 
