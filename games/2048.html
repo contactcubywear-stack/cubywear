@@ -16,7 +16,16 @@
 
   <div class="board-2048" id="board"></div>
 
-  <p class="hint">Flèches ou glisser pour bouger les tuiles</p>
+  <p class="hint">Flèches, glisser ou les boutons ci-dessous</p>
+
+  <div class="dpad">
+    <button class="btn-small dpad-up" id="btnUp" aria-label="Haut">▲</button>
+    <div class="dpad-row">
+      <button class="btn-small dpad-left" id="btnLeft" aria-label="Gauche">◀</button>
+      <button class="btn-small dpad-down" id="btnDown" aria-label="Bas">▼</button>
+      <button class="btn-small dpad-right" id="btnRight" aria-label="Droite">▶</button>
+    </div>
+  </div>
 
   <div class="actions">
     <a href="../games/2048.html" class="btn-small" id="restartBtn">Rejouer</a>

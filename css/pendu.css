@@ -1,0 +1,144 @@
+body {
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#theme {
+  color: var(--text-light);
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.hangman-figure {
+  width: 140px;
+  height: auto;
+  display: block;
+  margin: 0 auto 10px;
+}
+
+.hangman-figure line,
+.hangman-figure circle {
+  stroke: var(--text-light);
+  fill: none;
+  stroke-linecap: round;
+}
+
+.hangman-figure .part {
+  stroke: var(--accent-gold);
+  visibility: hidden;
+}
+
+.hangman-figure .part.show {
+  visibility: visible;
+}
+
+.word-display {
+  color: var(--text-white);
+  font-size: clamp(20px, 6vw, 32px);
+  font-weight: bold;
+  letter-spacing: 6px;
+  margin: 10px 0;
+}
+
+#triesLeft {
+  color: var(--accent-gold);
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.keyboard {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.key {
+  padding: 8px 0;
+  background: var(--accent-blue);
+  color: var(--text-white);
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.key:hover:not(:disabled) {
+  background: var(--accent-gold);
+  color: var(--bg-main);
+}
+
+.key.correct {
+  background: #2ecc71;
+  color: var(--bg-main);
+}
+
+.key.wrong {
+  background: #555;
+  color: var(--text-light);
+}
+
+.key:disabled {
+  cursor: default;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.win-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.win-modal[hidden] {
+  display: none;
+}
+
+.win-modal-content {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-gold);
+  border-radius: 14px;
+  padding: 25px;
+  max-width: 320px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.win-modal-content h2 {
+  color: var(--accent-gold);
+  margin: 0 0 10px;
+}
+
+.reveal-word {
+  color: var(--text-white);
+  font-weight: bold;
+  letter-spacing: 3px;
+  margin-bottom: 20px;
+}
+
+.win-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+@media (max-width: 400px) {
+  .keyboard {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}

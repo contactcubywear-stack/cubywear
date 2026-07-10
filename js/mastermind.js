@@ -1,6 +1,7 @@
 import { saveScore } from "../api.js";
 
-const COLORS = ["#E8AA42", "#1F4690", "#2ecc71", "#e74c3c", "#9b59b6", "#f1c40f"];
+// Jaune, Bleu pâle, Bleu foncé, Rose, Violet, Orange
+const COLORS = ["#F5D30F", "#5AC8FA", "#1F4690", "#FF6FA5", "#9B59B6", "#F2811D"];
 const CODE_LENGTH = 4;
 const MAX_TRIES = 10;
 

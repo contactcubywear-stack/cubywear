@@ -144,6 +144,11 @@ boardEl.addEventListener("touchend", e => {
   }
 }, { passive: true });
 
+document.getElementById("btnUp").onclick = () => move("up");
+document.getElementById("btnDown").onclick = () => move("down");
+document.getElementById("btnLeft").onclick = () => move("left");
+document.getElementById("btnRight").onclick = () => move("right");
+
 addRandomTile();
 addRandomTile();
 render();
