@@ -1,16 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Flappy Bird</title>
-  <style>
-    canvas { background:#70c5ce; display:block; margin:50px auto; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cubiwear – Flappy Bird</title>
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/flappy.css">
 </head>
+
 <body>
 
-<canvas id="game" width="400" height="600"></canvas>
+  <h1>🐤 Flappy Bird</h1>
+  <p class="hint">Clique, appuie sur Espace ou touche l'écran pour voler</p>
 
-<script type="module" src="../js/flappy.js"></script>
+  <canvas id="game" width="360" height="560"></canvas>
+
+  <div class="actions">
+    <a href="../index.html" class="btn-small">Accueil</a>
+  </div>
+
+  <div class="win-modal" id="resultModal" hidden>
+    <div class="win-modal-content">
+      <h2>💥 Game Over !</h2>
+      <div class="win-stats">
+        <p>Score : <span id="statScore"></span></p>
+        <p>Meilleur score : <span id="statBest"></span></p>
+      </div>
+      <div class="win-actions">
+        <button class="btn-small" id="replayBtn">Rejouer</button>
+        <a href="../index.html" class="btn-small">Menu principal</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/flappy.js"></script>
 </body>
 </html>
