@@ -7,16 +7,23 @@ if (!settings) {
 }
 
 const gridSize = settings.grid;
-const maxTries = settings.tries === null ? Infinity : settings.tries;
+const maxTries = settings.tries;
 let timeLeft = settings.time;
 
 let tries = 0;
 let matched = 0;
 
-// Générer les icônes
-const baseIcons = ["🎮","⭐","🔥","💀","⚡","🎲","🎹","🎧","🎯","🎁","🚀","🧩","🎈","🪄","🔮","🍀","🦄","🍩"];
+// Générer les icônes : un pool de 50 emojis, dont on tire un sous-ensemble
+// aléatoire à chaque partie pour que le jeu varie d'une fois à l'autre.
+const baseIcons = [
+  "🎮","⭐","🔥","💀","⚡","🎲","🎹","🎧","🎯","🎁",
+  "🚀","🧩","🎈","🪄","🔮","🍀","🦄","🍩","🍕","🍔",
+  "🍟","🌮","🍎","🍇","🍉","🥑","🐶","🐱","🐵","🦊",
+  "🐸","🐧","🦁","🐢","🌟","🌈","☀️","🌙","⚽","🏀",
+  "🎾","🏈","🎳","🎱","🚗","✈️","🚁","🛸","⚓","🎸"
+];
 const needed = (gridSize * gridSize) / 2;
-const icons = baseIcons.slice(0, needed);
+const icons = [...baseIcons].sort(() => Math.random() - 0.5).slice(0, needed);
 
 let cards = [...icons, ...icons];
 cards.sort(() => Math.random() - 0.5);
@@ -68,8 +75,7 @@ const timerInterval = setInterval(() => {
   }
 }, 1000);
 
-document.getElementById("triesLeft").textContent =
-  maxTries === Infinity ? "Essais : infinis" : `Essais restants : ${maxTries}`;
+document.getElementById("triesLeft").textContent = `Essais restants : ${maxTries}`;
 
 let flipped = [];
 let boardLocked = false;
@@ -102,8 +108,7 @@ function checkMatch() {
 
     if (matched === icons.length) {
       clearInterval(timerInterval);
-      alert("Bravo ! Tu as gagné !");
-      location.href = "memory-select.html";
+      showWinModal();
       return;
     }
   } else {
@@ -116,10 +121,23 @@ function checkMatch() {
   flipped = [];
   boardLocked = false;
 
-  if (tries >= maxTries && maxTries !== Infinity) {
+  if (tries >= maxTries) {
     clearInterval(timerInterval);
     alert("Tu as utilisé tous tes essais !");
     location.href = "memory-select.html";
   }
 }
+
+function showWinModal() {
+  const min = String(Math.floor(timeLeft / 60)).padStart(2, "0");
+  const sec = String(timeLeft % 60).padStart(2, "0");
+
+  document.getElementById("statLevel").textContent = settings.level || "-";
+  document.getElementById("statMoves").textContent = tries;
+  document.getElementById("statTime").textContent = `${min}:${sec}`;
+
+  document.getElementById("winModal").hidden = false;
+}
+
+document.getElementById("replayBtn").onclick = () => location.reload();
 

@@ -20,10 +20,14 @@ document.getElementById("currentDate").textContent =
     year: "numeric"
   });
 
+const GAME_ENTRY_POINTS = {
+  memory: "./games/memory-select.html"
+};
+
 function updateDailyGame() {
   document.getElementById("dailyGame").textContent = dailyGame;
   document.getElementById("dailyDesc").textContent = descriptions[dailyGame];
-  document.getElementById("playButton").href = `./games/${dailyGame}.html`;
+  document.getElementById("playButton").href = GAME_ENTRY_POINTS[dailyGame] || `./games/${dailyGame}.html`;
 }
 
 updateDailyGame();
