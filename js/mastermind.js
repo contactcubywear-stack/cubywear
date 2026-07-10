@@ -1,7 +1,7 @@
 import { saveScore } from "../api.js";
 
-// Jaune, Bleu pâle, Bleu foncé, Rose, Violet, Orange
-const COLORS = ["#F5D30F", "#5AC8FA", "#1F4690", "#FF6FA5", "#9B59B6", "#F2811D"];
+// Jaune, Bleu pâle, Rose, Violet, Orange
+const COLORS = ["#F5D30F", "#5AC8FA", "#FF6FA5", "#9B59B6", "#F2811D"];
 const CODE_LENGTH = 4;
 const MAX_TRIES = 10;
 
@@ -87,18 +87,21 @@ function addHistoryRow(attempt, feedback) {
 
   const fb = document.createElement("div");
   fb.className = "feedback";
+  const wrong = CODE_LENGTH - feedback.black - feedback.white;
   for (let i = 0; i < feedback.black; i++) {
     const dot = document.createElement("span");
-    dot.className = "black";
+    dot.className = "green";
     fb.appendChild(dot);
   }
   for (let i = 0; i < feedback.white; i++) {
     const dot = document.createElement("span");
-    dot.className = "white";
+    dot.className = "gold";
     fb.appendChild(dot);
   }
-  for (let i = feedback.black + feedback.white; i < CODE_LENGTH; i++) {
-    fb.appendChild(document.createElement("span"));
+  for (let i = 0; i < wrong; i++) {
+    const dot = document.createElement("span");
+    dot.className = "red";
+    fb.appendChild(dot);
   }
 
   row.appendChild(pegs);
@@ -116,23 +119,42 @@ async function submitGuess() {
 
   if (feedback.black === CODE_LENGTH) {
     over = true;
-    alert("Bravo, tu as trouvé la combinaison !");
+    endGame("win");
     await saveScore("CW-BLK-1-0001", "mastermind", (triesLeft + 1) * 10);
-    window.location.href = "../index.html";
     return;
   }
 
   if (triesLeft === 0) {
     over = true;
-    alert("Perdu ! La combinaison était affichée dans l'historique.");
+    endGame("lose");
     await saveScore("CW-BLK-1-0001", "mastermind", 0);
-    window.location.href = "../index.html";
     return;
   }
 
   guess = Array(CODE_LENGTH).fill(null);
   renderGuess();
 }
+
+function endGame(result) {
+  document.getElementById("resultTitle").textContent =
+    result === "win" ? "🎉 Bravo, tu as trouvé !" : "😕 Perdu !";
+
+  const revealEl = document.getElementById("revealCombo");
+  if (result === "lose") {
+    revealEl.innerHTML = "";
+    secret.forEach(colorIndex => {
+      const peg = document.createElement("div");
+      peg.className = "peg";
+      peg.style.background = COLORS[colorIndex];
+      revealEl.appendChild(peg);
+    });
+    revealEl.hidden = false;
+  }
+
+  document.getElementById("resultModal").hidden = false;
+}
+
+document.getElementById("replayBtn").onclick = () => location.reload();
 
 document.getElementById("clearBtn").onclick = () => {
   guess = Array(CODE_LENGTH).fill(null);

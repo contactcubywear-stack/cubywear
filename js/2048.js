@@ -73,9 +73,9 @@ function isGameOver() {
 
 async function endGame() {
   over = true;
-  alert(`Plus aucun mouvement possible ! Score final : ${score}`);
+  document.getElementById("statScore").textContent = score;
+  document.getElementById("resultModal").hidden = false;
   await saveScore("CW-BLK-1-0001", "2048", score);
-  window.location.href = "../index.html";
 }
 
 function move(direction) {
@@ -116,6 +116,7 @@ document.getElementById("btnUp").onclick = () => move("up");
 document.getElementById("btnDown").onclick = () => move("down");
 document.getElementById("btnLeft").onclick = () => move("left");
 document.getElementById("btnRight").onclick = () => move("right");
+document.getElementById("replayBtn").onclick = () => location.reload();
 
 addRandomTile();
 addRandomTile();

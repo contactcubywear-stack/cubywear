@@ -87,8 +87,7 @@ body {
 }
 
 .feedback {
-  display: grid;
-  grid-template-columns: repeat(2, 8px);
+  display: flex;
   gap: 3px;
 }
 
@@ -99,16 +98,70 @@ body {
   background: #444;
 }
 
-.feedback span.black {
-  background: var(--text-white);
+.feedback span.green {
+  background: #2ecc71;
 }
 
-.feedback span.white {
+.feedback span.gold {
   background: var(--accent-gold);
+}
+
+.feedback span.red {
+  background: #e74c3c;
 }
 
 .actions {
   display: flex;
   justify-content: center;
   margin-top: 25px;
+}
+
+.win-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.win-modal[hidden] {
+  display: none;
+}
+
+.win-modal-content {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-gold);
+  border-radius: 14px;
+  padding: 25px;
+  max-width: 320px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.win-modal-content h2 {
+  color: var(--accent-gold);
+  margin: 0 0 15px;
+}
+
+.reveal-combo {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.reveal-combo .peg {
+  cursor: default;
+}
+
+.win-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }
