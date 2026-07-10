@@ -112,38 +112,6 @@ function move(direction) {
   if (isGameOver()) endGame();
 }
 
-const KEY_DIRECTIONS = {
-  ArrowLeft: "left", ArrowRight: "right", ArrowUp: "up", ArrowDown: "down"
-};
-
-window.addEventListener("keydown", e => {
-  const direction = KEY_DIRECTIONS[e.key];
-  if (!direction) return;
-  e.preventDefault();
-  move(direction);
-});
-
-let touchStartX = 0;
-let touchStartY = 0;
-
-boardEl.addEventListener("touchstart", e => {
-  touchStartX = e.touches[0].clientX;
-  touchStartY = e.touches[0].clientY;
-}, { passive: true });
-
-boardEl.addEventListener("touchend", e => {
-  const dx = e.changedTouches[0].clientX - touchStartX;
-  const dy = e.changedTouches[0].clientY - touchStartY;
-
-  if (Math.max(Math.abs(dx), Math.abs(dy)) < 30) return;
-
-  if (Math.abs(dx) > Math.abs(dy)) {
-    move(dx > 0 ? "right" : "left");
-  } else {
-    move(dy > 0 ? "down" : "up");
-  }
-}, { passive: true });
-
 document.getElementById("btnUp").onclick = () => move("up");
 document.getElementById("btnDown").onclick = () => move("down");
 document.getElementById("btnLeft").onclick = () => move("left");

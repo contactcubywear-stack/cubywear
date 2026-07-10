@@ -9,6 +9,18 @@ body {
   margin-bottom: 10px;
 }
 
+.difficulty-select {
+  color: var(--text-light);
+}
+
+.difficulty-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
 .hangman-figure {
   width: 140px;
   height: auto;
