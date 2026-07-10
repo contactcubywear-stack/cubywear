@@ -12,12 +12,24 @@
 <body>
 
   <h1>❌⭕ Tic Tac Toe</h1>
-  <p id="status">À toi de jouer (X)</p>
 
-  <div class="ttt-grid" id="grid"></div>
+  <div class="difficulty-select" id="difficultySelect">
+    <p>Choisis la difficulté</p>
+    <div class="difficulty-buttons">
+      <button class="btn-small" data-difficulty="facile">Facile</button>
+      <button class="btn-small" data-difficulty="moyen">Moyen</button>
+      <button class="btn-small" data-difficulty="difficile">Difficile</button>
+    </div>
+  </div>
 
-  <div class="actions">
-    <a href="../index.html" class="btn-small">Accueil</a>
+  <div id="gameArea" hidden>
+    <p id="status">À toi de jouer (X)</p>
+
+    <div class="ttt-grid" id="grid"></div>
+
+    <div class="actions">
+      <a href="../index.html" class="btn-small">Accueil</a>
+    </div>
   </div>
 
   <div class="win-modal" id="resultModal" hidden>

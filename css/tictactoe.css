@@ -10,6 +10,18 @@ body {
   margin-bottom: 20px;
 }
 
+.difficulty-select {
+  color: var(--text-light);
+}
+
+.difficulty-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
 .ttt-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

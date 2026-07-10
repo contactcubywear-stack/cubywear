@@ -19,23 +19,48 @@ const JUMP = -6.5;
 const BIRD_X = 70;
 const BIRD_SIZE = 26;
 const PIPE_WIDTH = 56;
-const PIPE_GAP = 150;
-const PIPE_SPEED = 2.4;
-const PIPE_INTERVAL = 95;
 const GROUND_HEIGHT = 20;
+
+// La difficulté augmente avec le score : les tuyaux se rapprochent,
+// le trou pour passer rétrécit, et tout défile plus vite.
+const BASE_SPEED = 2.2;
+const MAX_SPEED = 5.5;
+const SPEED_PER_POINT = 0.05;
+
+const BASE_GAP = 170;
+const MIN_GAP = 110;
+const GAP_LOSS_PER_POINT = 2.5;
+
+const BASE_INTERVAL = 130;
+const MIN_INTERVAL = 60;
+const INTERVAL_LOSS_PER_POINT = 1.8;
+
+function currentSpeed() {
+  return Math.min(BASE_SPEED + score * SPEED_PER_POINT, MAX_SPEED);
+}
+
+function currentGap() {
+  return Math.max(BASE_GAP - score * GAP_LOSS_PER_POINT, MIN_GAP);
+}
+
+function currentInterval() {
+  return Math.max(BASE_INTERVAL - score * INTERVAL_LOSS_PER_POINT, MIN_INTERVAL);
+}
 
 let birdY = H / 2;
 let velocity = 0;
 let score = 0;
 let frame = 0;
+let framesSinceSpawn = 0;
 let pipes = [];
 let started = false;
 let over = false;
 
 function spawnPipe() {
+  const gap = currentGap();
   const margin = 60;
-  const gapY = margin + Math.random() * (H - GROUND_HEIGHT - margin * 2 - PIPE_GAP) + PIPE_GAP / 2;
-  pipes.push({ x: W, gapY, passed: false });
+  const gapY = margin + Math.random() * (H - GROUND_HEIGHT - margin * 2 - gap) + gap / 2;
+  pipes.push({ x: W, gapY, gap, passed: false });
 }
 
 function flap() {
@@ -55,9 +80,14 @@ function update() {
   birdY += velocity;
 
   frame++;
-  if (frame % PIPE_INTERVAL === 0) spawnPipe();
+  framesSinceSpawn++;
+  if (framesSinceSpawn >= currentInterval()) {
+    spawnPipe();
+    framesSinceSpawn = 0;
+  }
 
-  pipes.forEach(p => (p.x -= PIPE_SPEED));
+  const speed = currentSpeed();
+  pipes.forEach(p => (p.x -= speed));
   pipes = pipes.filter(p => p.x + PIPE_WIDTH > 0);
 
   pipes.forEach(p => {
@@ -68,8 +98,8 @@ function update() {
 
     const withinX = BIRD_X + BIRD_SIZE > p.x && BIRD_X < p.x + PIPE_WIDTH;
     if (withinX) {
-      const hitsTop = birdY < p.gapY - PIPE_GAP / 2;
-      const hitsBottom = birdY + BIRD_SIZE > p.gapY + PIPE_GAP / 2;
+      const hitsTop = birdY < p.gapY - p.gap / 2;
+      const hitsBottom = birdY + BIRD_SIZE > p.gapY + p.gap / 2;
       if (hitsTop || hitsBottom) endGame();
     }
   });
@@ -86,12 +116,12 @@ function draw() {
 
   pipes.forEach(p => {
     ctx.fillStyle = COLOR_PIPE;
-    ctx.fillRect(p.x, 0, PIPE_WIDTH, p.gapY - PIPE_GAP / 2);
-    ctx.fillRect(p.x, p.gapY + PIPE_GAP / 2, PIPE_WIDTH, H - (p.gapY + PIPE_GAP / 2));
+    ctx.fillRect(p.x, 0, PIPE_WIDTH, p.gapY - p.gap / 2);
+    ctx.fillRect(p.x, p.gapY + p.gap / 2, PIPE_WIDTH, H - (p.gapY + p.gap / 2));
 
     ctx.fillStyle = COLOR_PIPE_EDGE;
-    ctx.fillRect(p.x - 3, p.gapY - PIPE_GAP / 2 - 8, PIPE_WIDTH + 6, 8);
-    ctx.fillRect(p.x - 3, p.gapY + PIPE_GAP / 2, PIPE_WIDTH + 6, 8);
+    ctx.fillRect(p.x - 3, p.gapY - p.gap / 2 - 8, PIPE_WIDTH + 6, 8);
+    ctx.fillRect(p.x - 3, p.gapY + p.gap / 2, PIPE_WIDTH + 6, 8);
   });
 
   ctx.fillStyle = COLOR_GROUND;
