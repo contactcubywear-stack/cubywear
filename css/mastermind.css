@@ -56,6 +56,40 @@ body {
   margin-bottom: 25px;
 }
 
+.legend {
+  max-width: 420px;
+  margin: 0 auto 20px;
+  color: var(--text-light);
+  font-size: 13px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.legend small {
+  color: var(--text-light);
+  opacity: 0.7;
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.legend-dot.green {
+  background: #2ecc71;
+}
+
+.legend-dot.gold {
+  background: var(--accent-gold);
+}
+
+.legend-dot.red {
+  background: #e74c3c;
+}
+
 .history {
   max-width: 420px;
   margin: 0 auto;

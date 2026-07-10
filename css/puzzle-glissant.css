@@ -45,6 +45,26 @@ body {
   cursor: default;
 }
 
+.dpad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.dpad button {
+  width: 56px;
+  height: 48px;
+  font-size: 18px;
+  padding: 0;
+}
+
+.dpad-row {
+  display: flex;
+  gap: 8px;
+}
+
 .actions {
   display: flex;
   justify-content: center;

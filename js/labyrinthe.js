@@ -1,15 +1,30 @@
 import { saveScore } from "../api.js";
 
-const SIZE = 8;
-const TIME_LIMIT = 90;
+const DIFFICULTY_SETTINGS = {
+  facile:    { size: 5,  time: 45, keys: 0 },
+  moyen:     { size: 8,  time: 30, keys: 0 },
+  difficile: { size: 12, time: 30, keys: 5 }
+};
+
 const mazeEl = document.getElementById("maze");
 const timerEl = document.getElementById("timer");
+const keysStatusEl = document.getElementById("keysStatus");
 
-const cells = Array.from({ length: SIZE }, () =>
-  Array.from({ length: SIZE }, () => ({ N: true, S: true, E: true, W: true, visited: false }))
-);
+let SIZE, TIME_LIMIT, KEYS_NEEDED;
+let cells;
+let playerR, playerC;
+let goalR, goalC;
+let keyPositions = [];
+let keysCollected = 0;
+let over = false;
+let timeLeft;
+let timerInterval;
 
 function generateMaze() {
+  cells = Array.from({ length: SIZE }, () =>
+    Array.from({ length: SIZE }, () => ({ N: true, S: true, E: true, W: true, visited: false }))
+  );
+
   const stack = [[0, 0]];
   cells[0][0].visited = true;
   const opposite = { N: "S", S: "N", E: "W", W: "E" };
@@ -36,12 +51,17 @@ function generateMaze() {
   }
 }
 
-let playerR = 0;
-let playerC = 0;
-const goalR = SIZE - 1;
-const goalC = SIZE - 1;
-let over = false;
-let timeLeft = TIME_LIMIT;
+function placeKeys() {
+  const candidates = [];
+  for (let r = 0; r < SIZE; r++) {
+    for (let c = 0; c < SIZE; c++) {
+      if ((r === 0 && c === 0) || (r === goalR && c === goalC)) continue;
+      candidates.push([r, c]);
+    }
+  }
+  candidates.sort(() => Math.random() - 0.5);
+  keyPositions = candidates.slice(0, KEYS_NEEDED);
+}
 
 function render() {
   mazeEl.innerHTML = "";
@@ -59,6 +79,9 @@ function render() {
       } else if (r === goalR && c === goalC) {
         div.classList.add("goal");
         div.textContent = "🏁";
+      } else if (keyPositions.some(([kr, kc]) => kr === r && kc === c)) {
+        div.classList.add("key");
+        div.textContent = "🔑";
       }
 
       mazeEl.appendChild(div);
@@ -74,9 +97,16 @@ function move(dir) {
   if (dir === "left" && !cell.W) playerC--;
   if (dir === "right" && !cell.E) playerC++;
 
+  const keyIndex = keyPositions.findIndex(([r, c]) => r === playerR && c === playerC);
+  if (keyIndex !== -1) {
+    keyPositions.splice(keyIndex, 1);
+    keysCollected++;
+    keysStatusEl.textContent = `🔑 Clés : ${keysCollected}/${KEYS_NEEDED}`;
+  }
+
   render();
 
-  if (playerR === goalR && playerC === goalC) {
+  if (playerR === goalR && playerC === goalC && keysCollected >= KEYS_NEEDED) {
     win();
   }
 }
@@ -84,59 +114,72 @@ function move(dir) {
 async function win() {
   over = true;
   clearInterval(timerInterval);
-  alert(`Bravo, tu as trouvé la sortie avec ${timeLeft}s restantes !`);
+  document.getElementById("resultTitle").textContent = `🎉 Trouvé avec ${timeLeft}s restantes !`;
+  document.getElementById("resultModal").hidden = false;
   await saveScore("CW-BLK-1-0001", "labyrinthe", timeLeft);
-  window.location.href = "../index.html";
 }
 
 async function lose() {
   over = true;
-  alert("Temps écoulé !");
+  document.getElementById("resultTitle").textContent = "😕 Temps écoulé !";
+  document.getElementById("resultModal").hidden = false;
   await saveScore("CW-BLK-1-0001", "labyrinthe", 0);
-  window.location.href = "../index.html";
 }
 
-const timerInterval = setInterval(() => {
-  timeLeft--;
+function startTimer() {
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    const min = String(Math.floor(timeLeft / 60)).padStart(2, "0");
+    const sec = String(timeLeft % 60).padStart(2, "0");
+    timerEl.textContent = `${min}:${sec}`;
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      lose();
+    }
+  }, 1000);
+}
+
+function startGame(difficulty) {
+  const settings = DIFFICULTY_SETTINGS[difficulty];
+  SIZE = settings.size;
+  TIME_LIMIT = settings.time;
+  KEYS_NEEDED = settings.keys;
+
+  playerR = 0;
+  playerC = 0;
+  goalR = SIZE - 1;
+  goalC = SIZE - 1;
+  keysCollected = 0;
+  over = false;
+  timeLeft = TIME_LIMIT;
+
+  mazeEl.style.gridTemplateColumns = `repeat(${SIZE}, 1fr)`;
+  mazeEl.style.gridTemplateRows = `repeat(${SIZE}, minmax(0, 1fr))`;
+
+  generateMaze();
+  placeKeys();
+
+  keysStatusEl.hidden = KEYS_NEEDED === 0;
+  keysStatusEl.textContent = `🔑 Clés : 0/${KEYS_NEEDED}`;
+
   const min = String(Math.floor(timeLeft / 60)).padStart(2, "0");
   const sec = String(timeLeft % 60).padStart(2, "0");
   timerEl.textContent = `${min}:${sec}`;
-  if (timeLeft <= 0) {
-    clearInterval(timerInterval);
-    lose();
-  }
-}, 1000);
 
-const KEY_DIRECTIONS = {
-  ArrowLeft: "left", ArrowRight: "right", ArrowUp: "up", ArrowDown: "down"
-};
+  document.getElementById("difficultySelect").hidden = true;
+  document.getElementById("gameArea").hidden = false;
 
-window.addEventListener("keydown", e => {
-  const dir = KEY_DIRECTIONS[e.key];
-  if (!dir) return;
-  e.preventDefault();
-  move(dir);
+  render();
+  startTimer();
+}
+
+document.querySelectorAll("[data-difficulty]").forEach(btn => {
+  btn.onclick = () => startGame(btn.dataset.difficulty);
 });
 
-let touchStartX = 0;
-let touchStartY = 0;
+document.getElementById("btnUp").onclick = () => move("up");
+document.getElementById("btnDown").onclick = () => move("down");
+document.getElementById("btnLeft").onclick = () => move("left");
+document.getElementById("btnRight").onclick = () => move("right");
 
-mazeEl.addEventListener("touchstart", e => {
-  touchStartX = e.touches[0].clientX;
-  touchStartY = e.touches[0].clientY;
-}, { passive: true });
-
-mazeEl.addEventListener("touchend", e => {
-  const dx = e.changedTouches[0].clientX - touchStartX;
-  const dy = e.changedTouches[0].clientY - touchStartY;
-  if (Math.max(Math.abs(dx), Math.abs(dy)) < 25) return;
-
-  if (Math.abs(dx) > Math.abs(dy)) {
-    move(dx > 0 ? "right" : "left");
-  } else {
-    move(dy > 0 ? "down" : "up");
-  }
-}, { passive: true });
-
-generateMaze();
-render();
+document.getElementById("replayBtn").onclick = () => location.reload();

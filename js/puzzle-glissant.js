@@ -106,6 +106,25 @@ async function tryMove(slotIndex) {
   }
 }
 
+function moveBlank(dir) {
+  if (over) return;
+  const row = Math.floor(emptyIndex / size);
+  const col = emptyIndex % size;
+  let target = null;
+
+  if (dir === "up" && row > 0) target = emptyIndex - size;
+  if (dir === "down" && row < size - 1) target = emptyIndex + size;
+  if (dir === "left" && col > 0) target = emptyIndex - 1;
+  if (dir === "right" && col < size - 1) target = emptyIndex + 1;
+
+  if (target !== null) tryMove(target);
+}
+
+document.getElementById("btnUp").onclick = () => moveBlank("up");
+document.getElementById("btnDown").onclick = () => moveBlank("down");
+document.getElementById("btnLeft").onclick = () => moveBlank("left");
+document.getElementById("btnRight").onclick = () => moveBlank("right");
+
 sizeButtons.forEach(btn => {
   btn.onclick = () => {
     sizeButtons.forEach(b => b.classList.remove("active"));

@@ -17,9 +17,19 @@
   <div class="size-toggle">
     <button class="btn-small size-btn active" data-size="3">3×3</button>
     <button class="btn-small size-btn" data-size="4">4×4</button>
+    <button class="btn-small size-btn" data-size="5">5×5</button>
   </div>
 
   <div class="puzzle-board" id="board"></div>
+
+  <div class="dpad">
+    <button class="btn-small dpad-up" id="btnUp" aria-label="Haut">▲</button>
+    <div class="dpad-row">
+      <button class="btn-small dpad-left" id="btnLeft" aria-label="Gauche">◀</button>
+      <button class="btn-small dpad-down" id="btnDown" aria-label="Bas">▼</button>
+      <button class="btn-small dpad-right" id="btnRight" aria-label="Droite">▶</button>
+    </div>
+  </div>
 
   <div class="actions">
     <button class="btn-small" id="shuffleBtn">Mélanger</button>

@@ -12,15 +12,49 @@
 <body>
 
   <h1>🌀 Labyrinthe</h1>
-  <p id="timer">01:30</p>
 
-  <div class="maze" id="maze"></div>
+  <div class="difficulty-select" id="difficultySelect">
+    <p>Choisis la difficulté</p>
+    <div class="difficulty-buttons">
+      <button class="btn-small" data-difficulty="facile">Facile</button>
+      <button class="btn-small" data-difficulty="moyen">Moyen</button>
+      <button class="btn-small" data-difficulty="difficile">Difficile</button>
+    </div>
+    <div class="actions">
+      <a href="../index.html" class="btn-small">Menu principal</a>
+    </div>
+  </div>
 
-  <p class="hint">Flèches ou glisser pour te déplacer jusqu'à 🏁</p>
+  <div id="gameArea" hidden>
+    <p id="timer">00:30</p>
+    <p id="keysStatus" hidden>🔑 Clés : 0/5</p>
 
-  <div class="actions">
-    <a href="../games/labyrinthe.html" class="btn-small">Rejouer</a>
-    <a href="../index.html" class="btn-small">Accueil</a>
+    <div class="maze" id="maze"></div>
+
+    <p class="hint">Utilise les boutons pour te déplacer jusqu'à 🏁</p>
+
+    <div class="dpad">
+      <button class="btn-small dpad-up" id="btnUp" aria-label="Haut">▲</button>
+      <div class="dpad-row">
+        <button class="btn-small dpad-left" id="btnLeft" aria-label="Gauche">◀</button>
+        <button class="btn-small dpad-down" id="btnDown" aria-label="Bas">▼</button>
+        <button class="btn-small dpad-right" id="btnRight" aria-label="Droite">▶</button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a href="../index.html" class="btn-small">Accueil</a>
+    </div>
+  </div>
+
+  <div class="win-modal" id="resultModal" hidden>
+    <div class="win-modal-content">
+      <h2 id="resultTitle"></h2>
+      <div class="win-actions">
+        <button class="btn-small" id="replayBtn">Rejouer</button>
+        <a href="../index.html" class="btn-small">Menu principal</a>
+      </div>
+    </div>
   </div>
 
   <script type="module" src="../js/labyrinthe.js"></script>

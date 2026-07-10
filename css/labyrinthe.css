@@ -10,16 +10,32 @@ body {
   margin-bottom: 10px;
 }
 
+#keysStatus {
+  color: var(--text-light);
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
 .hint {
   color: var(--text-light);
   font-size: 14px;
   margin-top: 15px;
 }
 
+.difficulty-select {
+  color: var(--text-light);
+}
+
+.difficulty-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
 .maze {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(8, minmax(0, 1fr));
   width: min(92vw, 380px);
   aspect-ratio: 1 / 1;
   margin: 0 auto;
@@ -30,14 +46,14 @@ body {
 
 .maze-cell {
   box-sizing: border-box;
-  border-top: 2px solid transparent;
-  border-right: 2px solid transparent;
-  border-bottom: 2px solid transparent;
-  border-left: 2px solid transparent;
+  border-top: 1px solid transparent;
+  border-right: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-left: 1px solid transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .maze-cell.wall-N { border-top-color: var(--accent-blue); }
@@ -50,7 +66,31 @@ body {
 }
 
 .maze-cell.goal {
-  font-size: 16px;
+  font-size: 14px;
+}
+
+.maze-cell.key {
+  font-size: 12px;
+}
+
+.dpad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.dpad button {
+  width: 56px;
+  height: 48px;
+  font-size: 18px;
+  padding: 0;
+}
+
+.dpad-row {
+  display: flex;
+  gap: 8px;
 }
 
 .actions {
@@ -58,4 +98,43 @@ body {
   justify-content: center;
   gap: 10px;
   margin-top: 20px;
+}
+
+.win-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.win-modal[hidden] {
+  display: none;
+}
+
+.win-modal-content {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-gold);
+  border-radius: 14px;
+  padding: 25px;
+  max-width: 320px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.win-modal-content h2 {
+  color: var(--accent-gold);
+  margin: 0 0 20px;
+}
+
+.win-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }
