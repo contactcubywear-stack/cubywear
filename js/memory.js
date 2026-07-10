@@ -70,8 +70,7 @@ const timerInterval = setInterval(() => {
 
   if (timeLeft <= 0) {
     clearInterval(timerInterval);
-    alert("Temps écoulé !");
-    location.href = "memory-select.html";
+    showLoseModal("⏱️ Temps écoulé !");
   }
 }, 1000);
 
@@ -123,8 +122,7 @@ function checkMatch() {
 
   if (tries >= maxTries) {
     clearInterval(timerInterval);
-    alert("Tu as utilisé tous tes essais !");
-    location.href = "memory-select.html";
+    showLoseModal("😕 Plus d'essais !");
   }
 }
 
@@ -139,5 +137,14 @@ function showWinModal() {
   document.getElementById("winModal").hidden = false;
 }
 
+function showLoseModal(reason) {
+  document.getElementById("loseTitle").textContent = reason;
+  document.getElementById("loseStatLevel").textContent = settings.level || "-";
+  document.getElementById("loseStatMoves").textContent = tries;
+
+  document.getElementById("loseModal").hidden = false;
+}
+
 document.getElementById("replayBtn").onclick = () => location.reload();
+document.getElementById("loseReplayBtn").onclick = () => location.reload();
 
