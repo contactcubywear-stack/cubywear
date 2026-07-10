@@ -112,10 +112,12 @@ function moveBlank(dir) {
   const col = emptyIndex % size;
   let target = null;
 
-  if (dir === "up" && row > 0) target = emptyIndex - size;
-  if (dir === "down" && row < size - 1) target = emptyIndex + size;
-  if (dir === "left" && col > 0) target = emptyIndex - 1;
-  if (dir === "right" && col < size - 1) target = emptyIndex + 1;
+  // La flèche indique le sens où glisse la TUILE (pas la case vide) :
+  // "Haut" fait monter la tuile du dessous, donc la case vide descend.
+  if (dir === "up" && row < size - 1) target = emptyIndex + size;
+  if (dir === "down" && row > 0) target = emptyIndex - size;
+  if (dir === "left" && col < size - 1) target = emptyIndex + 1;
+  if (dir === "right" && col > 0) target = emptyIndex - 1;
 
   if (target !== null) tryMove(target);
 }

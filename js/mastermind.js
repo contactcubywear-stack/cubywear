@@ -47,29 +47,32 @@ function fillNextSlot(colorIndex) {
   renderGuess();
 }
 
+// Résultat par position, dans l'ordre des pastilles devinées (pas un
+// total mélangé) : chaque case dit directement si CETTE pastille est
+// bien placée, juste présente ailleurs, ou absente.
 function computeFeedback(attempt) {
   const secretCopy = [...secret];
-  const guessCopy = [...attempt];
-  let black = 0;
+  const result = new Array(CODE_LENGTH).fill(null);
 
   for (let i = 0; i < CODE_LENGTH; i++) {
-    if (guessCopy[i] === secretCopy[i]) {
-      black++;
-      secretCopy[i] = guessCopy[i] = null;
+    if (attempt[i] === secretCopy[i]) {
+      result[i] = "green";
+      secretCopy[i] = null;
     }
   }
 
-  let white = 0;
   for (let i = 0; i < CODE_LENGTH; i++) {
-    if (guessCopy[i] === null) continue;
-    const found = secretCopy.indexOf(guessCopy[i]);
+    if (result[i] !== null) continue;
+    const found = secretCopy.indexOf(attempt[i]);
     if (found !== -1) {
-      white++;
+      result[i] = "gold";
       secretCopy[found] = null;
+    } else {
+      result[i] = "red";
     }
   }
 
-  return { black, white };
+  return result;
 }
 
 function addHistoryRow(attempt, feedback) {
@@ -87,22 +90,11 @@ function addHistoryRow(attempt, feedback) {
 
   const fb = document.createElement("div");
   fb.className = "feedback";
-  const wrong = CODE_LENGTH - feedback.black - feedback.white;
-  for (let i = 0; i < feedback.black; i++) {
+  feedback.forEach(status => {
     const dot = document.createElement("span");
-    dot.className = "green";
+    dot.className = status;
     fb.appendChild(dot);
-  }
-  for (let i = 0; i < feedback.white; i++) {
-    const dot = document.createElement("span");
-    dot.className = "gold";
-    fb.appendChild(dot);
-  }
-  for (let i = 0; i < wrong; i++) {
-    const dot = document.createElement("span");
-    dot.className = "red";
-    fb.appendChild(dot);
-  }
+  });
 
   row.appendChild(pegs);
   row.appendChild(fb);
@@ -117,7 +109,7 @@ async function submitGuess() {
   triesLeft--;
   triesEl.textContent = `Essais restants : ${triesLeft}`;
 
-  if (feedback.black === CODE_LENGTH) {
+  if (feedback.every(status => status === "green")) {
     over = true;
     endGame("win");
     await saveScore("CW-BLK-1-0001", "mastermind", (triesLeft + 1) * 10);

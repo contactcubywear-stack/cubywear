@@ -10,7 +10,8 @@ body {
   margin-bottom: 10px;
 }
 
-#keysStatus {
+#keysStatus,
+#badgeStatus {
   color: var(--text-light);
   font-weight: bold;
   margin-bottom: 10px;
@@ -69,7 +70,8 @@ body {
   font-size: 14px;
 }
 
-.maze-cell.key {
+.maze-cell.key,
+.maze-cell.badge {
   font-size: 12px;
 }
 
