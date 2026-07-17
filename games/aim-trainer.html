@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cubiwear – Aim Trainer</title>
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/aim-trainer.css">
+</head>
+
+<body>
+
+  <h1>🎯 Aim Trainer</h1>
+  <p id="stats">Touchés : 0 · Ratés : 0 · Temps : 30s</p>
+
+  <div class="aim-area" id="area">
+    <div class="aim-start" id="startOverlay">
+      <button class="btn-small" id="startBtn">Commencer</button>
+    </div>
+  </div>
+
+  <div class="actions">
+    <a href="../index.html" class="btn-small">Accueil</a>
+  </div>
+
+  <div class="win-modal" id="resultModal" hidden>
+    <div class="win-modal-content">
+      <h2>🎯 Résultats</h2>
+      <div class="win-stats">
+        <p>Cibles touchées : <span id="statHits"></span></p>
+        <p>Précision : <span id="statAccuracy"></span>%</p>
+      </div>
+      <div class="win-actions">
+        <button class="btn-small" id="replayBtn">Rejouer</button>
+        <a href="../index.html" class="btn-small">Menu principal</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/aim-trainer.js"></script>
+</body>
+</html>

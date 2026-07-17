@@ -1,0 +1,103 @@
+body {
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#roundInfo {
+  color: var(--accent-gold);
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.tap-box {
+  width: min(90vw, 360px);
+  height: min(60vw, 280px);
+  margin: 0 auto;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--text-white);
+  cursor: pointer;
+  transition: background 0.1s;
+  user-select: none;
+}
+
+.tap-box.idle {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-blue);
+}
+
+.tap-box.waiting {
+  background: #b83232;
+}
+
+.tap-box.ready {
+  background: #2ecc71;
+  color: var(--bg-main);
+}
+
+.tap-box.toosoon {
+  background: #7a1f1f;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.win-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.win-modal[hidden] {
+  display: none;
+}
+
+.win-modal-content {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-gold);
+  border-radius: 14px;
+  padding: 25px;
+  max-width: 320px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.win-modal-content h2 {
+  color: var(--accent-gold);
+  margin: 0 0 15px;
+}
+
+.win-stats {
+  color: var(--text-light);
+  margin-bottom: 20px;
+}
+
+.win-stats span {
+  color: var(--text-white);
+  font-weight: bold;
+}
+
+.win-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}

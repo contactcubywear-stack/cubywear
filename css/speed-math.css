@@ -1,0 +1,118 @@
+body {
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#hud {
+  color: var(--accent-gold);
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+
+.math-box {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-blue);
+  border-radius: 14px;
+  padding: 30px 20px;
+  max-width: 320px;
+  margin: 0 auto;
+  box-shadow: var(--shadow);
+}
+
+#problem {
+  color: var(--text-white);
+  font-size: 32px;
+  font-weight: bold;
+  margin: 0 0 20px;
+}
+
+#answer {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 8px;
+  border: none;
+  margin-bottom: 15px;
+}
+
+.math-box .btn-small {
+  width: 100%;
+}
+
+.feedback-flash {
+  animation: flash 0.3s;
+}
+
+@keyframes flash {
+  0% { background: var(--bg-card); }
+  50% { background: rgba(46, 204, 113, 0.3); }
+  100% { background: var(--bg-card); }
+}
+
+.feedback-flash.wrong {
+  animation-name: flash-wrong;
+}
+
+@keyframes flash-wrong {
+  0% { background: var(--bg-card); }
+  50% { background: rgba(231, 76, 60, 0.3); }
+  100% { background: var(--bg-card); }
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.win-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.win-modal[hidden] {
+  display: none;
+}
+
+.win-modal-content {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-gold);
+  border-radius: 14px;
+  padding: 25px;
+  max-width: 320px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.win-modal-content h2 {
+  color: var(--accent-gold);
+  margin: 0 0 15px;
+}
+
+.win-stats {
+  color: var(--text-light);
+  margin-bottom: 20px;
+}
+
+.win-stats span {
+  color: var(--text-white);
+  font-weight: bold;
+}
+
+.win-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}

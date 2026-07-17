@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cubiwear – Speed Math</title>
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/speed-math.css">
+</head>
+
+<body>
+
+  <h1>🧮 Speed Math</h1>
+  <p id="hud">Score : 0 · Temps : 60s</p>
+
+  <div class="math-box">
+    <p id="problem">3 + 4 = ?</p>
+    <input type="text" inputmode="numeric" id="answer" placeholder="Réponse">
+    <button class="btn-small" id="submitBtn">Valider</button>
+  </div>
+
+  <div class="actions">
+    <a href="../index.html" class="btn-small">Accueil</a>
+  </div>
+
+  <div class="win-modal" id="resultModal" hidden>
+    <div class="win-modal-content">
+      <h2>🧮 Temps écoulé !</h2>
+      <div class="win-stats">
+        <p>Bonnes réponses : <span id="statCorrect"></span></p>
+        <p>Erreurs : <span id="statWrong"></span></p>
+      </div>
+      <div class="win-actions">
+        <button class="btn-small" id="replayBtn">Rejouer</button>
+        <a href="../index.html" class="btn-small">Menu principal</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/speed-math.js"></script>
+</body>
+</html>

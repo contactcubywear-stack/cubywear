@@ -9,7 +9,12 @@ const descriptions = {
   mastermind: "Devine la combinaison de couleurs",
   "2048": "Fusionne les tuiles jusqu'à 2048",
   labyrinthe: "Trouve la sortie avant la fin du temps",
-  "puzzle-glissant": "Reconstitue l'image en glissant les pièces"
+  "puzzle-glissant": "Reconstitue l'image en glissant les pièces",
+  "reaction-tap": "Clique dès que ça devient vert",
+  "aim-trainer": "Clique les cibles le plus vite possible",
+  "swipe-runner": "Esquive les obstacles gauche/droite",
+  "speed-math": "Résous des calculs contre le chrono",
+  "catch-the-cube": "Attrape la mascotte avant qu'elle ne se téléporte"
 };
 
 document.getElementById("currentDate").textContent =

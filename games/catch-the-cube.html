@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cubiwear – Catch the Cube</title>
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/catch-the-cube.css">
+</head>
+
+<body>
+
+  <h1>🧊 Catch the Cube</h1>
+  <p id="stats">Score : 0 · Temps : 30s</p>
+
+  <div class="catch-area" id="area">
+    <div class="catch-start" id="startOverlay">
+      <button class="btn-small" id="startBtn">Commencer</button>
+    </div>
+  </div>
+
+  <div class="actions">
+    <a href="../index.html" class="btn-small">Accueil</a>
+  </div>
+
+  <div class="win-modal" id="resultModal" hidden>
+    <div class="win-modal-content">
+      <h2>🧊 Temps écoulé !</h2>
+      <div class="win-stats">
+        <p>Mascottes attrapées : <span id="statCaught"></span></p>
+      </div>
+      <div class="win-actions">
+        <button class="btn-small" id="replayBtn">Rejouer</button>
+        <a href="../index.html" class="btn-small">Menu principal</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/catch-the-cube.js"></script>
+</body>
+</html>
