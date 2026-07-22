@@ -20,45 +20,41 @@ body {
   width: min(80vw, 320px);
   height: min(120vw, 480px);
   margin: 0 auto;
-  background: var(--bg-card);
+  background: linear-gradient(to bottom, #0a0f2a 0%, #161f4d 35%, var(--bg-card) 100%);
   border: 2px solid var(--accent-blue);
   border-radius: 12px;
   overflow: hidden;
   touch-action: none;
-  display: flex;
 }
 
-.lane {
-  flex: 1;
-  border-right: 1px dashed rgba(255, 255, 255, 0.1);
-}
-
-.lane:last-child {
-  border-right: none;
+.road-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .runner {
   position: absolute;
-  bottom: 12px;
-  width: 40px;
-  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   transition: left 0.12s;
+  animation: bounce 0.4s infinite alternate;
+  z-index: 5;
 }
 
-.obstacle {
+@keyframes bounce {
+  from { margin-top: 0; }
+  to { margin-top: -6px; }
+}
+
+.obstacle-3d {
   position: absolute;
-  width: 40px;
-  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
-  transform: translateX(-50%);
 }
 
 .runner-start {
@@ -68,7 +64,7 @@ body {
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 2;
+  z-index: 6;
 }
 
 .runner-start[hidden] {

@@ -39,7 +39,7 @@ function handleTap() {
     state = "toosoon";
     box.className = "tap-box toosoon";
     statusEl.textContent = "Trop tôt ! Réessaie...";
-    setTimeout(startRound, 1200);
+    setTimeout(startRound, 3000);
     return;
   }
 
@@ -56,11 +56,15 @@ function handleTap() {
       endGame();
     } else {
       box.className = "tap-box idle";
-      statusEl.textContent = `${reaction} ms — au suivant dans 1s`;
+      statusEl.textContent = `${toSeconds(reaction)} s — au suivant dans 3s`;
       state = "pending";
-      setTimeout(startRound, 1000);
+      setTimeout(startRound, 3000);
     }
   }
+}
+
+function toSeconds(ms) {
+  return (ms / 1000).toFixed(2);
 }
 
 async function endGame() {
@@ -69,9 +73,9 @@ async function endGame() {
   const record = Math.min(best, Number(localStorage.getItem("reactionBest") || Infinity));
   localStorage.setItem("reactionBest", record);
 
-  document.getElementById("statAvg").textContent = avg;
-  document.getElementById("statBest").textContent = best;
-  document.getElementById("statRecord").textContent = record;
+  document.getElementById("statAvg").textContent = toSeconds(avg);
+  document.getElementById("statBest").textContent = toSeconds(best);
+  document.getElementById("statRecord").textContent = toSeconds(record);
   document.getElementById("resultModal").hidden = false;
 
   await saveScore("CW-BLK-1-0001", "reaction-tap", Math.max(1000 - avg, 50));
