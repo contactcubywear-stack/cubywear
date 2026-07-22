@@ -27,34 +27,12 @@ body {
   touch-action: none;
 }
 
-.road-svg {
+#gameCanvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-}
-
-.runner {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform: translate(-50%, -50%);
-  transition: left 0.12s;
-  animation: bounce 0.4s infinite alternate;
-  z-index: 5;
-}
-
-@keyframes bounce {
-  from { margin-top: 0; }
-  to { margin-top: -6px; }
-}
-
-.obstacle-3d {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
 }
 
 .runner-start {
