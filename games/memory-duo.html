@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cubiwear – Memory Duo+</title>
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/memory-duo.css">
+</head>
+
+<body>
+
+  <h1>🧠✨ Memory Duo+</h1>
+  <p id="timer">01:00</p>
+  <p id="info">0 coups</p>
+  <p class="hint">Attention, les cartes non trouvées bougent de temps en temps !</p>
+
+  <div class="memory-duo-container" id="gameBoard"></div>
+
+  <div class="actions">
+    <a href="../index.html" class="btn-small">Accueil</a>
+  </div>
+
+  <div class="win-modal" id="winModal" hidden>
+    <div class="win-modal-content">
+      <h2>🎉 Bravo, tu as gagné !</h2>
+      <div class="win-stats">
+        <p>Coups joués : <span id="statMoves"></span></p>
+        <p>Temps restant : <span id="statTime"></span></p>
+      </div>
+      <div class="win-actions">
+        <button class="btn-small" id="replayBtn">Rejouer</button>
+        <a href="../index.html" class="btn-small">Menu principal</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="win-modal" id="loseModal" hidden>
+    <div class="win-modal-content">
+      <h2>😕 Temps écoulé !</h2>
+      <div class="win-stats">
+        <p>Coups joués : <span id="loseStatMoves"></span></p>
+      </div>
+      <div class="win-actions">
+        <button class="btn-small" id="loseReplayBtn">Rejouer</button>
+        <a href="../index.html" class="btn-small">Menu principal</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/memory-duo.js"></script>
+</body>
+</html>

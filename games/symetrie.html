@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cubiwear – Symétrie</title>
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/symetrie.css">
+</head>
+
+<body>
+
+  <h1>🦋 Symétrie</h1>
+  <p id="hud">Manche 1/10 · Score : 0</p>
+  <p class="hint">Cette forme est-elle symétrique (axe vertical) ?</p>
+
+  <canvas id="shapeCanvas" width="240" height="240"></canvas>
+
+  <div class="choice-buttons">
+    <button class="btn-small" id="btnYes">✅ Oui</button>
+    <button class="btn-small" id="btnNo">❌ Non</button>
+  </div>
+
+  <div class="actions">
+    <a href="../index.html" class="btn-small">Accueil</a>
+  </div>
+
+  <div class="win-modal" id="resultModal" hidden>
+    <div class="win-modal-content">
+      <h2>🦋 Terminé !</h2>
+      <div class="win-stats">
+        <p>Score final : <span id="statScore"></span></p>
+      </div>
+      <div class="win-actions">
+        <button class="btn-small" id="replayBtn">Rejouer</button>
+        <a href="../index.html" class="btn-small">Menu principal</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/symetrie.js"></script>
+</body>
+</html>

@@ -19,7 +19,12 @@ const descriptions = {
   breakout: "Détruis toutes les briques avec la balle",
   "space-shooter": "Esquive et tire sur les ennemis",
   "runner-2d": "Saute par-dessus les obstacles",
-  "mini-tetris": "Empile les pièces et complète des lignes"
+  "mini-tetris": "Empile les pièces et complète des lignes",
+  "trouve-objet": "Repère l'objet différent dans la grille",
+  "color-match": "Choisis la nuance exacte",
+  symetrie: "Dis si la forme est symétrique",
+  "memory-duo": "Un memory dont les cartes bougent",
+  "bon-pixel": "Devine l'image pixelisée"
 };
 
 document.getElementById("currentDate").textContent =

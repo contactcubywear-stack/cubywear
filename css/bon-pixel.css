@@ -1,0 +1,100 @@
+body {
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#hud {
+  color: var(--accent-gold);
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+#pixelCanvas {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-blue);
+  border-radius: 12px;
+  display: block;
+  margin: 0 auto 20px;
+  width: min(60vw, 200px);
+  height: min(60vw, 200px);
+  image-rendering: pixelated;
+}
+
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  width: min(80vw, 300px);
+  margin: 0 auto;
+}
+
+.choice-btn {
+  padding: 12px;
+  background: var(--bg-card);
+  border: 2px solid var(--accent-blue);
+  border-radius: 10px;
+  color: var(--text-white);
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.choice-btn:hover {
+  background: var(--accent-blue);
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.win-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.win-modal[hidden] {
+  display: none;
+}
+
+.win-modal-content {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-gold);
+  border-radius: 14px;
+  padding: 25px;
+  max-width: 320px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.win-modal-content h2 {
+  color: var(--accent-gold);
+  margin: 0 0 15px;
+}
+
+.win-stats {
+  color: var(--text-light);
+  margin-bottom: 20px;
+}
+
+.win-stats span {
+  color: var(--text-white);
+  font-weight: bold;
+}
+
+.win-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
