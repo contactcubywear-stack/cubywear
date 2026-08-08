@@ -24,7 +24,14 @@ const descriptions = {
   "color-match": "Choisis la nuance exacte",
   symetrie: "Dis si la forme est symétrique",
   "memory-duo": "Un memory dont les cartes bougent",
-  "bon-pixel": "Devine l'image pixelisée"
+  "bon-pixel": "Devine l'image pixelisée",
+  anagrammes: "Remets les lettres dans le bon ordre",
+  "mot-flash": "Trouve le mot à partir d'un indice",
+  "lettre-manquante": "Complète le mot",
+  "mini-wordle": "Devine le mot de 4 lettres en 5 essais",
+  "mini-othello": "Retourne les pions de ton adversaire",
+  "connect4-lite": "Aligne 4 pions avant le bot",
+  "hexa-path": "Relie les deux côtés du plateau hexagonal"
 };
 
 document.getElementById("currentDate").textContent =

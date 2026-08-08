@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cubiwear – Connect 4 Lite</title>
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/connect4-lite.css">
+</head>
+
+<body>
+
+  <h1>🔴🟡 Connect 4 Lite</h1>
+  <p id="status">À toi de jouer</p>
+
+  <div class="connect4-board" id="board"></div>
+
+  <div class="actions">
+    <a href="../index.html" class="btn-small">Accueil</a>
+  </div>
+
+  <div class="win-modal" id="resultModal" hidden>
+    <div class="win-modal-content">
+      <h2 id="resultTitle"></h2>
+      <div class="win-actions">
+        <button class="btn-small" id="replayBtn">Rejouer</button>
+        <a href="../index.html" class="btn-small">Menu principal</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/connect4-lite.js"></script>
+</body>
+</html>

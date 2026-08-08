@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cubiwear – Mini-Wordle</title>
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/mini-wordle.css">
+</head>
+
+<body>
+
+  <h1>🟩 Mini-Wordle</h1>
+  <p id="hud">Essai 1/5</p>
+
+  <div class="wordle-grid" id="grid"></div>
+
+  <div class="wordle-keyboard" id="keyboard"></div>
+
+  <div class="actions">
+    <a href="../index.html" class="btn-small">Accueil</a>
+  </div>
+
+  <div class="win-modal" id="resultModal" hidden>
+    <div class="win-modal-content">
+      <h2 id="resultTitle"></h2>
+      <p id="resultWord" class="reveal-word"></p>
+      <div class="win-actions">
+        <button class="btn-small" id="replayBtn">Rejouer</button>
+        <a href="../index.html" class="btn-small">Menu principal</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/mini-wordle.js"></script>
+</body>
+</html>

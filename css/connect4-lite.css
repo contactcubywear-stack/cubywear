@@ -1,0 +1,98 @@
+body {
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#status {
+  color: var(--accent-gold);
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.connect4-board {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(5, minmax(0, 1fr));
+  gap: 5px;
+  width: min(92vw, 340px);
+  aspect-ratio: 6 / 5;
+  margin: 0 auto;
+  background: var(--accent-blue);
+  border: 2px solid var(--accent-blue);
+  border-radius: 10px;
+  padding: 6px;
+  box-sizing: border-box;
+}
+
+.c4-cell {
+  background: var(--bg-main);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.c4-cell.col-hover:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.c4-piece {
+  width: 82%;
+  height: 82%;
+  border-radius: 50%;
+}
+
+.c4-piece.player {
+  background: #e74c3c;
+}
+
+.c4-piece.bot {
+  background: var(--accent-gold);
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.win-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.win-modal[hidden] {
+  display: none;
+}
+
+.win-modal-content {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-gold);
+  border-radius: 14px;
+  padding: 25px;
+  max-width: 320px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.win-modal-content h2 {
+  color: var(--accent-gold);
+  margin: 0 0 20px;
+}
+
+.win-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
