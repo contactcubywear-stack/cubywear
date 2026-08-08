@@ -4,19 +4,29 @@ const GRID = 15;
 const boardEl = document.getElementById("board");
 const scoreEl = document.getElementById("score");
 
-const cells = [];
-for (let i = 0; i < GRID * GRID; i++) {
-  const div = document.createElement("div");
-  div.className = "cell";
-  boardEl.appendChild(div);
-  cells.push(div);
+const foodEl = document.createElement("div");
+foodEl.className = "food";
+boardEl.appendChild(foodEl);
+
+let segmentEls = [];
+
+function cellPct(v) {
+  return (v / GRID) * 100;
 }
 
-function idx(x, y) {
-  return y * GRID + x;
+function syncSegments() {
+  while (segmentEls.length < snake.length) {
+    const div = document.createElement("div");
+    div.className = "segment";
+    boardEl.insertBefore(div, foodEl);
+    segmentEls.push(div);
+  }
+  while (segmentEls.length > snake.length) {
+    segmentEls.pop().remove();
+  }
 }
 
-let snake, dir, nextDir, food, score, over, tickHandle;
+let snake, dir, nextDir, food, score, over, tickHandle, tickDuration;
 
 function placeFood() {
   let pos;
@@ -27,11 +37,16 @@ function placeFood() {
 }
 
 function render() {
-  cells.forEach(c => (c.className = "cell"));
+  syncSegments();
   snake.forEach((s, i) => {
-    cells[idx(s.x, s.y)].classList.add(i === 0 ? "head" : "body");
+    const el = segmentEls[i];
+    el.className = "segment " + (i === 0 ? "head" : "body");
+    el.style.transitionDuration = `${tickDuration}ms`;
+    el.style.left = `${cellPct(s.x)}%`;
+    el.style.top = `${cellPct(s.y)}%`;
   });
-  cells[idx(food.x, food.y)].classList.add("food");
+  foodEl.style.left = `${cellPct(food.x)}%`;
+  foodEl.style.top = `${cellPct(food.y)}%`;
 }
 
 function speedForScore() {
@@ -40,7 +55,8 @@ function speedForScore() {
 
 function scheduleTick() {
   clearInterval(tickHandle);
-  tickHandle = setInterval(tick, speedForScore());
+  tickDuration = speedForScore();
+  tickHandle = setInterval(tick, tickDuration);
 }
 
 function tick() {
@@ -91,8 +107,12 @@ function startGame() {
   over = false;
   scoreEl.textContent = "Score : 0";
   placeFood();
+  tickDuration = speedForScore();
   render();
-  scheduleTick();
+  // Pas de transition sur le premier rendu, pour éviter un glissement
+  // depuis le coin (0,0) au tout premier affichage.
+  segmentEls.forEach(el => { el.style.transitionDuration = "0ms"; });
+  requestAnimationFrame(() => scheduleTick());
 }
 
 document.getElementById("btnUp").onclick = () => setDir(0, -1);

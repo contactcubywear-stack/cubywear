@@ -15,10 +15,21 @@ body {
   margin-top: 15px;
 }
 
+.difficulty-select {
+  color: var(--text-light);
+}
+
+.difficulty-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
 .breakout-area {
   position: relative;
   width: min(92vw, 340px);
-  height: min(140vw, 500px);
   margin: 0 auto;
   border: 2px solid var(--accent-blue);
   border-radius: 12px;

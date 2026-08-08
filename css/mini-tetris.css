@@ -9,12 +9,21 @@ body {
   margin-bottom: 15px;
 }
 
+.difficulty-select {
+  color: var(--text-light);
+}
+
+.difficulty-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
 .tetris-board {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(14, minmax(0, 1fr));
   width: min(58vw, 220px);
-  aspect-ratio: 8 / 14;
   margin: 0 auto;
   background: var(--bg-card);
   border: 2px solid var(--accent-blue);

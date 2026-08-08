@@ -1,9 +1,6 @@
 import { saveScore } from "../api.js";
 
-const COLS = 8;
-const ROWS = 14;
-
-const PIECES = {
+const STANDARD_PIECES = {
   O: [[[0, 0], [1, 0], [0, 1], [1, 1]]],
   I: [
     [[0, 0], [1, 0], [2, 0], [3, 0]],
@@ -23,20 +20,49 @@ const PIECES = {
   ]
 };
 
-const COLORS = { O: "#F5D30F", I: "#5AC8FA", L: "#F2811D", T: "#9B59B6" };
+// Formes "bizarres" en plus des 4 classiques, pour le mode Difficile.
+const WEIRD_PIECES = {
+  ...STANDARD_PIECES,
+  S: [
+    [[1, 0], [2, 0], [0, 1], [1, 1]],
+    [[0, 0], [0, 1], [1, 1], [1, 2]]
+  ],
+  PLUS: [
+    [[1, 0], [0, 1], [1, 1], [2, 1], [1, 2]]
+  ]
+};
+
+const COLORS = {
+  O: "#F5D30F", I: "#5AC8FA", L: "#F2811D", T: "#9B59B6",
+  S: "#2ecc71", PLUS: "#e74c3c"
+};
+
+const DIFFICULTY_SETTINGS = {
+  facile:    { cols: 8,  rows: 14, pieces: STANDARD_PIECES },
+  moyen:     { cols: 10, rows: 18, pieces: STANDARD_PIECES },
+  difficile: { cols: 10, rows: 18, pieces: WEIRD_PIECES }
+};
 
 const boardEl = document.getElementById("board");
 const scoreEl = document.getElementById("score");
 
-const cells = [];
-for (let i = 0; i < COLS * ROWS; i++) {
-  const div = document.createElement("div");
-  div.className = "cell";
-  boardEl.appendChild(div);
-  cells.push(div);
-}
-
+let COLS, ROWS, PIECES;
+let cells = [];
 let board, current, score, over, tickHandle;
+
+function buildGrid() {
+  boardEl.innerHTML = "";
+  boardEl.style.aspectRatio = `${COLS} / ${ROWS}`;
+  boardEl.style.gridTemplateColumns = `repeat(${COLS}, 1fr)`;
+  boardEl.style.gridTemplateRows = `repeat(${ROWS}, minmax(0, 1fr))`;
+  cells = [];
+  for (let i = 0; i < COLS * ROWS; i++) {
+    const div = document.createElement("div");
+    div.className = "cell";
+    boardEl.appendChild(div);
+    cells.push(div);
+  }
+}
 
 function emptyBoard() {
   return Array.from({ length: ROWS }, () => Array(COLS).fill(null));
@@ -168,14 +194,28 @@ async function endGame() {
   await saveScore("CW-BLK-1-0001", "mini-tetris", score);
 }
 
-function startGame() {
+function startGame(level) {
+  const settings = DIFFICULTY_SETTINGS[level];
+  COLS = settings.cols;
+  ROWS = settings.rows;
+  PIECES = settings.pieces;
+
+  buildGrid();
   board = emptyBoard();
   score = 0;
   over = false;
   scoreEl.textContent = "Score : 0";
+
+  document.getElementById("difficultySelect").hidden = true;
+  document.getElementById("gameArea").hidden = false;
+
   spawnPiece();
   scheduleTick();
 }
+
+document.querySelectorAll("[data-difficulty]").forEach(btn => {
+  btn.onclick = () => startGame(btn.dataset.difficulty);
+});
 
 document.getElementById("btnLeft").onclick = () => move(-1);
 document.getElementById("btnRight").onclick = () => move(1);
@@ -192,6 +232,4 @@ window.addEventListener("keydown", e => {
 document.getElementById("replayBtn").onclick = () => location.reload();
 
 // Hook de test/debug (aucun impact en jeu normal).
-window.__tetrisDebug = { tick, move, rotate, softDrop, getBoard: () => board, getCurrent: () => current, getState: () => ({ score, over }) };
-
-startGame();
+window.__tetrisDebug = { tick, move, rotate, softDrop, getBoard: () => board, getCurrent: () => current, getState: () => ({ score, over, COLS, ROWS }) };

@@ -12,24 +12,40 @@
 <body>
 
   <h1>🚀 Space Shooter</h1>
-  <p id="hud">Score : 0 · Vies : 3</p>
 
-  <div class="shooter-area" id="area">
-    <canvas id="gameCanvas"></canvas>
-    <div class="shooter-start" id="startOverlay">
-      <button class="btn-small" id="startBtn">Commencer</button>
+  <div class="difficulty-select" id="difficultySelect">
+    <p>Choisis la difficulté</p>
+    <div class="difficulty-buttons">
+      <button class="btn-small" data-difficulty="facile">Facile</button>
+      <button class="btn-small" data-difficulty="moyen">Moyen</button>
+      <button class="btn-small" data-difficulty="difficile">Difficile</button>
+      <button class="btn-small" data-difficulty="impossible">Impossible</button>
+    </div>
+    <div class="actions">
+      <a href="../index.html" class="btn-small">Menu principal</a>
     </div>
   </div>
 
-  <p class="hint">Glisse ou utilise les boutons pour te déplacer (tir automatique)</p>
+  <div id="gameArea" hidden>
+    <p id="hud">Score : 0 · Vies : 3</p>
 
-  <div class="lane-buttons">
-    <button class="btn-small" id="btnLeft" aria-label="Gauche">◀</button>
-    <button class="btn-small" id="btnRight" aria-label="Droite">▶</button>
-  </div>
+    <div class="shooter-area" id="area">
+      <canvas id="gameCanvas"></canvas>
+      <div class="shooter-start" id="startOverlay">
+        <button class="btn-small" id="startBtn">Commencer</button>
+      </div>
+    </div>
 
-  <div class="actions">
-    <a href="../index.html" class="btn-small">Accueil</a>
+    <p class="hint">Glisse ou utilise les boutons pour te déplacer (tir automatique)</p>
+
+    <div class="lane-buttons">
+      <button class="btn-small" id="btnLeft" aria-label="Gauche">◀</button>
+      <button class="btn-small" id="btnRight" aria-label="Droite">▶</button>
+    </div>
+
+    <div class="actions">
+      <a href="../index.html" class="btn-small">Accueil</a>
+    </div>
   </div>
 
   <div class="win-modal" id="resultModal" hidden>

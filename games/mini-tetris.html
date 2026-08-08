@@ -12,20 +12,34 @@
 <body>
 
   <h1>🧱 Mini-Tetris</h1>
-  <p id="score">Score : 0</p>
 
-  <div class="tetris-board" id="board"></div>
-
-  <div class="tetris-controls">
-    <button class="btn-small" id="btnLeft" aria-label="Gauche">◀</button>
-    <button class="btn-small" id="btnRotate" aria-label="Tourner">⟳</button>
-    <button class="btn-small" id="btnRight" aria-label="Droite">▶</button>
-    <button class="btn-small" id="btnDown" aria-label="Bas">▼</button>
+  <div class="difficulty-select" id="difficultySelect">
+    <p>Choisis la difficulté</p>
+    <div class="difficulty-buttons">
+      <button class="btn-small" data-difficulty="facile">Facile</button>
+      <button class="btn-small" data-difficulty="moyen">Moyen</button>
+      <button class="btn-small" data-difficulty="difficile">Difficile</button>
+    </div>
+    <div class="actions">
+      <a href="../index.html" class="btn-small">Menu principal</a>
+    </div>
   </div>
 
-  <div class="actions">
-    <a href="../games/mini-tetris.html" class="btn-small">Rejouer</a>
-    <a href="../index.html" class="btn-small">Accueil</a>
+  <div id="gameArea" hidden>
+    <p id="score">Score : 0</p>
+
+    <div class="tetris-board" id="board"></div>
+
+    <div class="tetris-controls">
+      <button class="btn-small" id="btnLeft" aria-label="Gauche">◀</button>
+      <button class="btn-small" id="btnRotate" aria-label="Tourner">⟳</button>
+      <button class="btn-small" id="btnRight" aria-label="Droite">▶</button>
+      <button class="btn-small" id="btnDown" aria-label="Bas">▼</button>
+    </div>
+
+    <div class="actions">
+      <a href="../index.html" class="btn-small">Accueil</a>
+    </div>
   </div>
 
   <div class="win-modal" id="resultModal" hidden>

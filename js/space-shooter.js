@@ -1,35 +1,42 @@
 import { saveScore } from "../api.js";
 
+const DIFFICULTY_SETTINGS = {
+  facile:     { lives: 3, w: 340, h: 500, bigFast: false, enemyHp: 1, bonus: false },
+  moyen:      { lives: 3, w: 340, h: 500, bigFast: true,  enemyHp: 1, bonus: false },
+  difficile:  { lives: 1, w: 380, h: 560, bigFast: true,  enemyHp: 2, bonus: false },
+  impossible: { lives: 1, w: 380, h: 560, bigFast: true,  enemyHp: 3, bonus: true }
+};
+
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const area = document.getElementById("area");
 const hudEl = document.getElementById("hud");
-
-const W = 340;
-const H = 500;
-canvas.width = W;
-canvas.height = H;
 
 const theme = getComputedStyle(document.documentElement);
 const COLOR_BG = theme.getPropertyValue("--bg-main").trim() || "#130D33";
 const COLOR_SHIP = theme.getPropertyValue("--accent-gold").trim() || "#E8AA42";
 const COLOR_BULLET = theme.getPropertyValue("--text-white").trim() || "#ffffff";
 const COLOR_ENEMY = "#e74c3c";
+const COLOR_BONUS = "#2ecc71";
+
+let W, H, PLAYER_Y;
+let difficulty, settings;
 
 const PLAYER_SPEED = 260;
-const PLAYER_Y = H - 40;
 
-let player = { x: W / 2, w: 26, h: 20 };
+let player;
 let movingLeft = false;
 let movingRight = false;
 
 let bullets = [];
 let enemies = [];
+let skyBonuses = [];
 let score = 0;
 let lives = 3;
 let over = true;
 let shootTimer = 0;
 let spawnTimer = 0;
+let bonusTimer = 0;
 let invincibleTimer = 0;
 
 function updateHud() {
@@ -41,7 +48,28 @@ function speedForScore() {
 }
 
 function spawnEnemy() {
-  enemies.push({ x: 20 + Math.random() * (W - 40), y: -20, w: 24, h: 20, alive: true });
+  const isBig = settings.bigFast && Math.random() < 0.25;
+  enemies.push({
+    x: 20 + Math.random() * (W - 40),
+    y: -20,
+    w: isBig ? 34 : 24,
+    h: isBig ? 28 : 20,
+    hp: isBig ? settings.enemyHp : 1,
+    maxHp: isBig ? settings.enemyHp : 1,
+    speedMult: isBig ? 1.6 : 1,
+    alive: true
+  });
+}
+
+function spawnSkyBonus() {
+  skyBonuses.push({ x: 20 + Math.random() * (W - 40), y: -15, vy: 90 });
+}
+
+function loseLife() {
+  lives--;
+  invincibleTimer = 1.2;
+  updateHud();
+  if (lives <= 0) endGame();
 }
 
 function update(delta) {
@@ -66,24 +94,58 @@ function update(delta) {
     spawnEnemy();
   }
 
+  if (settings.bonus) {
+    bonusTimer += delta;
+    if (bonusTimer > 4) {
+      bonusTimer = 0;
+      spawnSkyBonus();
+    }
+  }
+
   const speed = speedForScore();
-  enemies.forEach(e => (e.y += speed * delta));
+  enemies.forEach(e => (e.y += speed * e.speedMult * delta));
+  skyBonuses.forEach(b => (b.y += b.vy * delta));
 
   enemies.forEach(e => {
     if (!e.alive) return;
     bullets.forEach(b => {
       if (b.hit) return;
       if (Math.abs(b.x - e.x) < e.w / 2 + 3 && Math.abs(b.y - e.y) < e.h / 2 + 3) {
-        e.alive = false;
         b.hit = true;
-        score += 5;
+        e.hp--;
+        if (e.hp <= 0) {
+          e.alive = false;
+          score += e.maxHp > 1 ? 15 : 5;
+        } else {
+          score += 2;
+        }
         updateHud();
       }
     });
   });
 
   bullets = bullets.filter(b => !b.hit);
-  enemies = enemies.filter(e => e.alive && e.y < H + 20);
+
+  enemies = enemies.filter(e => {
+    if (!e.alive) return false;
+    if (e.y > H + e.h) {
+      if (over) return false;
+      loseLife();
+      return false;
+    }
+    return true;
+  });
+
+  skyBonuses = skyBonuses.filter(b => {
+    if (b.y > PLAYER_Y - 14 && b.y < PLAYER_Y + 14 && Math.abs(b.x - player.x) < 20) {
+      lives++;
+      updateHud();
+      return false;
+    }
+    return b.y < H + 20;
+  });
+
+  if (over) return;
 
   if (invincibleTimer > 0) invincibleTimer -= delta;
 
@@ -93,13 +155,7 @@ function update(delta) {
     );
     if (hitEnemy) {
       hitEnemy.alive = false;
-      lives--;
-      invincibleTimer = 1.2;
-      updateHud();
-      if (lives <= 0) {
-        endGame();
-        return;
-      }
+      loseLife();
     }
   }
 
@@ -110,8 +166,23 @@ function draw() {
   ctx.fillStyle = COLOR_BG;
   ctx.fillRect(0, 0, W, H);
 
-  ctx.fillStyle = COLOR_ENEMY;
-  enemies.forEach(e => ctx.fillRect(e.x - e.w / 2, e.y - e.h / 2, e.w, e.h));
+  enemies.forEach(e => {
+    ctx.fillStyle = COLOR_ENEMY;
+    ctx.fillRect(e.x - e.w / 2, e.y - e.h / 2, e.w, e.h);
+    if (e.maxHp > 1) {
+      ctx.fillStyle = "#130D33";
+      ctx.font = "bold 11px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText(e.hp, e.x, e.y + 4);
+    }
+  });
+
+  ctx.fillStyle = COLOR_BONUS;
+  skyBonuses.forEach(b => {
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, 7, 0, Math.PI * 2);
+    ctx.fill();
+  });
 
   ctx.fillStyle = COLOR_BULLET;
   bullets.forEach(b => ctx.fillRect(b.x - 2, b.y - 6, 4, 10));
@@ -144,24 +215,47 @@ async function endGame() {
   await saveScore("CW-BLK-1-0001", "space-shooter", score);
 }
 
-function startGame() {
-  player.x = W / 2;
+function applyAreaSize() {
+  canvas.width = W;
+  canvas.height = H;
+  area.style.width = `min(92vw, ${W}px)`;
+  area.style.aspectRatio = `${W} / ${H}`;
+  area.style.height = "auto";
+}
+
+function startGame(level) {
+  difficulty = level;
+  settings = DIFFICULTY_SETTINGS[difficulty];
+  W = settings.w;
+  H = settings.h;
+  PLAYER_Y = H - 40;
+
+  applyAreaSize();
+  player = { x: W / 2, w: 26, h: 20 };
   bullets = [];
   enemies = [];
+  skyBonuses = [];
   score = 0;
-  lives = 3;
+  lives = settings.lives;
   shootTimer = 0;
   spawnTimer = 0;
+  bonusTimer = 0;
   invincibleTimer = 0;
   over = false;
   updateHud();
+
+  document.getElementById("difficultySelect").hidden = true;
+  document.getElementById("gameArea").hidden = false;
   document.getElementById("startOverlay").hidden = true;
 
   lastTime = null;
   requestAnimationFrame(loop);
 }
 
-document.getElementById("startBtn").onclick = startGame;
+document.querySelectorAll("[data-difficulty]").forEach(btn => {
+  btn.onclick = () => startGame(btn.dataset.difficulty);
+});
+
 document.getElementById("replayBtn").onclick = () => location.reload();
 
 function setMove(dir, active) {
@@ -197,6 +291,9 @@ area.addEventListener("touchmove", e => {
 }, { passive: true });
 
 // Hook de test/debug (aucun impact en jeu normal).
-window.__spaceShooterDebug = { update, draw, getState: () => ({ score, lives, over }), getEnemies: () => enemies, getBullets: () => bullets, getPlayer: () => player, spawnEnemy };
-
-draw();
+window.__spaceShooterDebug = {
+  update, draw,
+  getState: () => ({ score, lives, over }),
+  getEnemies: () => enemies, getBullets: () => bullets, getPlayer: () => player,
+  getSkyBonuses: () => skyBonuses, spawnEnemy, spawnSkyBonus
+};
