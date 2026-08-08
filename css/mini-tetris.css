@@ -1,0 +1,105 @@
+body {
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#score {
+  color: var(--accent-gold);
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.tetris-board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(14, minmax(0, 1fr));
+  width: min(58vw, 220px);
+  aspect-ratio: 8 / 14;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 2px solid var(--accent-blue);
+  border-radius: 8px;
+  overflow: hidden;
+  box-sizing: border-box;
+  gap: 1px;
+}
+
+.cell {
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.cell.filled {
+  border-radius: 2px;
+}
+
+.tetris-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.tetris-controls button {
+  width: 52px;
+  height: 48px;
+  font-size: 18px;
+  padding: 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.win-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.win-modal[hidden] {
+  display: none;
+}
+
+.win-modal-content {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-gold);
+  border-radius: 14px;
+  padding: 25px;
+  max-width: 320px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.win-modal-content h2 {
+  color: var(--accent-gold);
+  margin: 0 0 15px;
+}
+
+.win-stats {
+  color: var(--text-light);
+  margin-bottom: 20px;
+}
+
+.win-stats span {
+  color: var(--text-white);
+  font-weight: bold;
+}
+
+.win-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}

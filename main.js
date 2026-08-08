@@ -14,7 +14,12 @@ const descriptions = {
   "aim-trainer": "Clique les cibles le plus vite possible",
   "swipe-runner": "Esquive les obstacles gauche/droite",
   "speed-math": "Résous des calculs contre le chrono",
-  "catch-the-cube": "Attrape la mascotte avant qu'elle ne se téléporte"
+  "catch-the-cube": "Attrape la mascotte avant qu'elle ne se téléporte",
+  snake: "Mange les pommes sans te mordre",
+  breakout: "Détruis toutes les briques avec la balle",
+  "space-shooter": "Esquive et tire sur les ennemis",
+  "runner-2d": "Saute par-dessus les obstacles",
+  "mini-tetris": "Empile les pièces et complète des lignes"
 };
 
 document.getElementById("currentDate").textContent =
