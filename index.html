@@ -13,8 +13,24 @@
   <div class="bg-glow"></div>
 
   <img id="logoImg" class="logo-corner" src="assets/logo_dark.png" alt="Cubiwear">
-  <button id="themeToggle" class="theme-toggle" aria-label="Changer de thème" title="Thème clair / sombre">🌙</button>
-  <button id="musicToggle" class="theme-toggle music-toggle" aria-label="Musique de fond" title="Musique de fond">🔇</button>
+
+  <div class="settings-wrap">
+    <button id="settingsBtn" class="settings-btn" aria-label="Paramètres" title="Paramètres">⚙️</button>
+    <div id="settingsPanel" class="settings-panel" hidden>
+      <div class="settings-row">
+        <span data-i18n="settings.theme">Thème</span>
+        <button id="themeToggle" class="pill-toggle">🌙</button>
+      </div>
+      <div class="settings-row">
+        <span data-i18n="settings.sound">Son</span>
+        <button id="musicToggle" class="pill-toggle">🔇</button>
+      </div>
+      <div class="settings-row">
+        <span data-i18n="settings.language">Langue</span>
+        <button id="langToggle" class="pill-toggle">FR</button>
+      </div>
+    </div>
+  </div>
 
   <header class="hero">
     <p class="date" id="currentDate"></p>
@@ -22,25 +38,25 @@
 
   <!-- JEUX DU JOUR -->
   <section class="daily-section">
-    <span class="daily-badge">🔥 JEUX DU JOUR</span>
+    <span class="daily-badge" data-i18n="daily.badge">🔥 JEUX DU JOUR</span>
     <div class="daily-games-grid" id="dailyGamesGrid"></div>
-    <p class="daily-countdown" id="dailyCountdown">Prochains jeux dans --:--:--</p>
+    <p class="daily-countdown" id="dailyCountdown">--:--:--</p>
   </section>
 
   <!-- SHOP -->
   <div class="big-card shop-card" onclick="window.location.href='https://cubiwear.ca/shop'">
-    <h3>🛍️ BOUTIQUE</h3>
-    <p>Découvre les hoodies Cubiwear</p>
+    <h3 data-i18n="shop.title">🛍️ BOUTIQUE</h3>
+    <p data-i18n="shop.desc">Découvre les hoodies Cubiwear</p>
   </div>
 
   <!-- MODE ADMIN -->
   <details class="admin-card">
-    <summary>⚙️ Admin — choisir les 3 jeux du jour</summary>
+    <summary data-i18n="admin.summary">⚙️ Admin — choisir les 3 jeux du jour</summary>
     <div class="admin-body">
       <select id="gameSelector1"></select>
       <select id="gameSelector2"></select>
       <select id="gameSelector3"></select>
-      <button class="btn-big" onclick="setDailyGames()">Appliquer</button>
+      <button class="btn-big" data-i18n="admin.apply" onclick="setDailyGames()">Appliquer</button>
     </div>
   </details>
 

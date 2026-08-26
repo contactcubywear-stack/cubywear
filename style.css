@@ -467,14 +467,17 @@ h1 {
 }
 
 /* ============================================================
-   THEME TOGGLE
+   RÉGLAGES (paramètres)
    ============================================================ */
 
-.theme-toggle {
+.settings-wrap {
   position: fixed;
   top: 16px;
   right: 16px;
-  z-index: 5;
+  z-index: 6;
+}
+
+.settings-btn {
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -487,23 +490,69 @@ h1 {
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow);
-  transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), box-shadow 0.25s ease, background-color 0.25s ease;
+  transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), box-shadow 0.25s ease;
 }
 
-.theme-toggle:hover {
-  transform: translateY(-2px) scale(1.08) rotate(-8deg);
+.settings-btn:hover {
+  transform: rotate(35deg) scale(1.08);
   box-shadow: 0 6px 18px rgba(232, 170, 66, 0.35);
 }
 
-.theme-toggle:active {
+.settings-btn:active {
   transform: scale(0.92);
 }
 
-.music-toggle {
-  top: 68px;
+.settings-panel {
+  position: absolute;
+  top: 54px;
+  right: 0;
+  width: 220px;
+  background: var(--bg-card);
+  border: 2px solid var(--accent-blue);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: var(--shadow);
+  animation: cardIn 0.2s ease forwards;
 }
 
-.music-toggle.playing {
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 2px;
+  font-size: 14px;
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+.settings-row + .settings-row {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pill-toggle {
+  min-width: 46px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 16px;
+  border: 2px solid var(--accent-blue);
+  background: var(--bg-main);
+  color: var(--text-white);
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), border-color 0.2s ease, color 0.2s ease;
+}
+
+.pill-toggle:hover {
+  transform: scale(1.06);
+}
+
+.pill-toggle:active {
+  transform: scale(0.92);
+}
+
+.pill-toggle.playing {
   animation: musicPulse 1.6s ease-in-out infinite;
   border-color: var(--accent-gold);
   color: var(--accent-gold);

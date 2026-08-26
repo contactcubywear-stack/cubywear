@@ -1,38 +1,98 @@
 const GAMES = [
-  { id: "memory", name: "Memory", icon: "🧠", desc: "Trouve toutes les paires", entry: "./games/memory-select.html" },
-  { id: "tictactoe", name: "Tic Tac Toe", icon: "❌⭕", desc: "Bats l'IA ou ton ami" },
-  { id: "flappy", name: "Flappy Bird", icon: "🐤", desc: "Évite les obstacles" },
-  { id: "sudoku", name: "Sudoku", icon: "🔢", desc: "Résous la grille" },
-  { id: "pendu", name: "Pendu", icon: "🪢", desc: "Découvre le mot lettre par lettre" },
-  { id: "mastermind", name: "Mastermind", icon: "🎯", desc: "Devine la combinaison de couleurs" },
-  { id: "2048", name: "2048 Lite", icon: "🔢", desc: "Fusionne les tuiles jusqu'à 2048" },
-  { id: "labyrinthe", name: "Labyrinthe", icon: "🌀", desc: "Trouve la sortie avant la fin du temps" },
-  { id: "puzzle-glissant", name: "Puzzle glissant", icon: "🧩", desc: "Reconstitue l'image en glissant les pièces" },
-  { id: "reaction-tap", name: "Reaction Tap", icon: "⚡", desc: "Clique dès que ça devient vert" },
-  { id: "aim-trainer", name: "Aim Trainer", icon: "🎯", desc: "Clique les cibles le plus vite possible" },
-  { id: "swipe-runner", name: "Swipe Runner", icon: "🏃", desc: "Esquive les obstacles gauche/droite" },
-  { id: "speed-math", name: "Speed Math", icon: "🧮", desc: "Résous des calculs contre le chrono" },
-  { id: "catch-the-cube", name: "Catch the Cube", icon: "🧊", desc: "Attrape la mascotte avant qu'elle ne se téléporte" },
-  { id: "snake", name: "Snake", icon: "🐍", desc: "Mange les pommes sans te mordre" },
-  { id: "breakout", name: "Breakout", icon: "🧱", desc: "Détruis toutes les briques avec la balle" },
-  { id: "space-shooter", name: "Space Shooter", icon: "🚀", desc: "Esquive et tire sur les ennemis" },
-  { id: "runner-2d", name: "Runner 2D", icon: "🦘", desc: "Saute par-dessus les obstacles" },
-  { id: "mini-tetris", name: "Mini-Tetris", icon: "🧱", desc: "Empile les pièces et complète des lignes" },
-  { id: "trouve-objet", name: "Trouve l'objet", icon: "🔍", desc: "Repère l'objet différent dans la grille" },
-  { id: "color-match", name: "Color Match", icon: "🎨", desc: "Choisis la nuance exacte" },
-  { id: "symetrie", name: "Symétrie", icon: "🦋", desc: "Dis si la forme est symétrique" },
-  { id: "memory-duo", name: "Memory Duo+", icon: "🧠", desc: "Un memory dont les cartes bougent" },
-  { id: "bon-pixel", name: "Bon pixel", icon: "🖼️", desc: "Devine l'image pixelisée" },
-  { id: "anagrammes", name: "Anagrammes", icon: "🔤", desc: "Remets les lettres dans le bon ordre" },
-  { id: "mot-flash", name: "Mot Flash", icon: "⚡", desc: "Trouve le mot à partir d'un indice" },
-  { id: "lettre-manquante", name: "Lettre manquante", icon: "🔡", desc: "Complète le mot" },
-  { id: "mini-wordle", name: "Mini-Wordle", icon: "🟩", desc: "Devine le mot de 4 lettres en 5 essais" },
-  { id: "mini-othello", name: "Mini-Othello", icon: "⚫", desc: "Retourne les pions de ton adversaire" },
-  { id: "connect4-lite", name: "Connect 4 Lite", icon: "🔴", desc: "Aligne 4 pions avant le bot" },
-  { id: "hexa-path", name: "Hexa-Path", icon: "🔷", desc: "Relie les deux côtés du plateau hexagonal" }
+  { id: "memory", icon: "🧠", entry: "./games/memory-select.html",
+    fr: { name: "Memory", desc: "Trouve toutes les paires" }, en: { name: "Memory", desc: "Find all the pairs" } },
+  { id: "tictactoe", icon: "❌⭕",
+    fr: { name: "Tic Tac Toe", desc: "Bats l'IA ou ton ami" }, en: { name: "Tic Tac Toe", desc: "Beat the AI or a friend" } },
+  { id: "flappy", icon: "🐤",
+    fr: { name: "Flappy Bird", desc: "Évite les obstacles" }, en: { name: "Flappy Bird", desc: "Avoid the obstacles" } },
+  { id: "sudoku", icon: "🔢",
+    fr: { name: "Sudoku", desc: "Résous la grille" }, en: { name: "Sudoku", desc: "Solve the grid" } },
+  { id: "pendu", icon: "🪢",
+    fr: { name: "Pendu", desc: "Découvre le mot lettre par lettre" }, en: { name: "Hangman", desc: "Guess the word letter by letter" } },
+  { id: "mastermind", icon: "🎯",
+    fr: { name: "Mastermind", desc: "Devine la combinaison de couleurs" }, en: { name: "Mastermind", desc: "Guess the color combination" } },
+  { id: "2048", icon: "🔢",
+    fr: { name: "2048 Lite", desc: "Fusionne les tuiles jusqu'à 2048" }, en: { name: "2048 Lite", desc: "Merge tiles up to 2048" } },
+  { id: "labyrinthe", icon: "🌀",
+    fr: { name: "Labyrinthe", desc: "Trouve la sortie avant la fin du temps" }, en: { name: "Maze", desc: "Find the exit before time runs out" } },
+  { id: "puzzle-glissant", icon: "🧩",
+    fr: { name: "Puzzle glissant", desc: "Reconstitue l'image en glissant les pièces" }, en: { name: "Sliding Puzzle", desc: "Rebuild the picture by sliding pieces" } },
+  { id: "reaction-tap", icon: "⚡",
+    fr: { name: "Reaction Tap", desc: "Clique dès que ça devient vert" }, en: { name: "Reaction Tap", desc: "Tap as soon as it turns green" } },
+  { id: "aim-trainer", icon: "🎯",
+    fr: { name: "Aim Trainer", desc: "Clique les cibles le plus vite possible" }, en: { name: "Aim Trainer", desc: "Click the targets as fast as possible" } },
+  { id: "swipe-runner", icon: "🏃",
+    fr: { name: "Swipe Runner", desc: "Esquive les obstacles gauche/droite" }, en: { name: "Swipe Runner", desc: "Dodge obstacles left/right" } },
+  { id: "speed-math", icon: "🧮",
+    fr: { name: "Speed Math", desc: "Résous des calculs contre le chrono" }, en: { name: "Speed Math", desc: "Solve calculations against the clock" } },
+  { id: "catch-the-cube", icon: "🧊",
+    fr: { name: "Catch the Cube", desc: "Attrape la mascotte avant qu'elle ne se téléporte" }, en: { name: "Catch the Cube", desc: "Catch the mascot before it teleports" } },
+  { id: "snake", icon: "🐍",
+    fr: { name: "Snake", desc: "Mange les pommes sans te mordre" }, en: { name: "Snake", desc: "Eat apples without biting yourself" } },
+  { id: "breakout", icon: "🧱",
+    fr: { name: "Breakout", desc: "Détruis toutes les briques avec la balle" }, en: { name: "Breakout", desc: "Destroy all the bricks with the ball" } },
+  { id: "space-shooter", icon: "🚀",
+    fr: { name: "Space Shooter", desc: "Esquive et tire sur les ennemis" }, en: { name: "Space Shooter", desc: "Dodge and shoot the enemies" } },
+  { id: "runner-2d", icon: "🦘",
+    fr: { name: "Runner 2D", desc: "Saute par-dessus les obstacles" }, en: { name: "Runner 2D", desc: "Jump over the obstacles" } },
+  { id: "mini-tetris", icon: "🧱",
+    fr: { name: "Mini-Tetris", desc: "Empile les pièces et complète des lignes" }, en: { name: "Mini-Tetris", desc: "Stack pieces and clear lines" } },
+  { id: "trouve-objet", icon: "🔍",
+    fr: { name: "Trouve l'objet", desc: "Repère l'objet différent dans la grille" }, en: { name: "Spot It", desc: "Spot the different object in the grid" } },
+  { id: "color-match", icon: "🎨",
+    fr: { name: "Color Match", desc: "Choisis la nuance exacte" }, en: { name: "Color Match", desc: "Pick the exact shade" } },
+  { id: "symetrie", icon: "🦋",
+    fr: { name: "Symétrie", desc: "Dis si la forme est symétrique" }, en: { name: "Symmetry", desc: "Say if the shape is symmetrical" } },
+  { id: "memory-duo", icon: "🧠",
+    fr: { name: "Memory Duo+", desc: "Un memory dont les cartes bougent" }, en: { name: "Memory Duo+", desc: "A memory game where cards move" } },
+  { id: "bon-pixel", icon: "🖼️",
+    fr: { name: "Bon pixel", desc: "Devine l'image pixelisée" }, en: { name: "Pixel Guess", desc: "Guess the pixelated picture" } },
+  { id: "anagrammes", icon: "🔤",
+    fr: { name: "Anagrammes", desc: "Remets les lettres dans le bon ordre" }, en: { name: "Anagrams", desc: "Put the letters back in order" } },
+  { id: "mot-flash", icon: "⚡",
+    fr: { name: "Mot Flash", desc: "Trouve le mot à partir d'un indice" }, en: { name: "Word Flash", desc: "Find the word from a clue" } },
+  { id: "lettre-manquante", icon: "🔡",
+    fr: { name: "Lettre manquante", desc: "Complète le mot" }, en: { name: "Missing Letter", desc: "Complete the word" } },
+  { id: "mini-wordle", icon: "🟩",
+    fr: { name: "Mini-Wordle", desc: "Devine le mot de 4 lettres en 5 essais" }, en: { name: "Mini-Wordle", desc: "Guess the 4-letter word in 5 tries" } },
+  { id: "mini-othello", icon: "⚫",
+    fr: { name: "Mini-Othello", desc: "Retourne les pions de ton adversaire" }, en: { name: "Mini-Othello", desc: "Flip your opponent's pieces" } },
+  { id: "connect4-lite", icon: "🔴",
+    fr: { name: "Connect 4 Lite", desc: "Aligne 4 pions avant le bot" }, en: { name: "Connect 4 Lite", desc: "Line up 4 pieces before the bot" } },
+  { id: "hexa-path", icon: "🔷",
+    fr: { name: "Hexa-Path", desc: "Relie les deux côtés du plateau hexagonal" }, en: { name: "Hexa-Path", desc: "Connect both sides of the hex board" } }
 ];
 
 const GAMES_BY_ID = Object.fromEntries(GAMES.map(g => [g.id, g]));
+
+const UI_TEXT = {
+  fr: {
+    "settings.theme": "Thème",
+    "settings.sound": "Son",
+    "settings.language": "Langue",
+    "daily.badge": "🔥 JEUX DU JOUR",
+    "daily.play": "JOUER",
+    "daily.countdownPrefix": "Prochains jeux dans",
+    "shop.title": "🛍️ BOUTIQUE",
+    "shop.desc": "Découvre les hoodies Cubiwear",
+    "admin.summary": "⚙️ Admin — choisir les 3 jeux du jour",
+    "admin.apply": "Appliquer",
+    dateLocale: "fr-FR"
+  },
+  en: {
+    "settings.theme": "Theme",
+    "settings.sound": "Sound",
+    "settings.language": "Language",
+    "daily.badge": "🔥 GAMES OF THE DAY",
+    "daily.play": "PLAY",
+    "daily.countdownPrefix": "Next games in",
+    "shop.title": "🛍️ SHOP",
+    "shop.desc": "Discover Cubiwear hoodies",
+    "admin.summary": "⚙️ Admin — pick the 3 daily games",
+    "admin.apply": "Apply",
+    dateLocale: "en-US"
+  }
+};
 
 function entryFor(game) {
   return game.entry || `./games/${game.id}.html`;
@@ -52,13 +112,54 @@ function loadDailyGames() {
 
 let dailyGames = loadDailyGames();
 
-document.getElementById("currentDate").textContent =
-  new Date().toLocaleDateString("fr-FR", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric"
+// --- Réglages : panneau ---
+const settingsBtnEl = document.getElementById("settingsBtn");
+const settingsPanelEl = document.getElementById("settingsPanel");
+
+settingsBtnEl.addEventListener("click", (e) => {
+  e.stopPropagation();
+  settingsPanelEl.hidden = !settingsPanelEl.hidden;
+});
+
+document.addEventListener("click", (e) => {
+  if (!settingsPanelEl.hidden && !settingsPanelEl.contains(e.target) && e.target !== settingsBtnEl) {
+    settingsPanelEl.hidden = true;
+  }
+});
+
+// --- Langue (FR / EN) ---
+const langToggleEl = document.getElementById("langToggle");
+let currentLang = localStorage.getItem("cubywearLang") === "en" ? "en" : "fr";
+
+function applyLanguage(lang) {
+  const dict = UI_TEXT[lang];
+  document.documentElement.setAttribute("lang", lang);
+
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (dict[key]) el.textContent = dict[key];
   });
+
+  document.getElementById("currentDate").textContent =
+    new Date().toLocaleDateString(dict.dateLocale, {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+
+  langToggleEl.textContent = lang === "en" ? "EN" : "FR";
+
+  renderDailyGames();
+  populateAdminSelectors();
+  updateCountdown();
+}
+
+langToggleEl.addEventListener("click", () => {
+  currentLang = currentLang === "fr" ? "en" : "fr";
+  localStorage.setItem("cubywearLang", currentLang);
+  applyLanguage(currentLang);
+});
 
 // --- Thème clair / sombre ---
 const themeToggleEl = document.getElementById("themeToggle");
@@ -179,20 +280,19 @@ function renderDailyGames() {
   dailyGames.forEach(id => {
     const game = GAMES_BY_ID[id];
     if (!game) return;
+    const label = game[currentLang];
     const card = document.createElement("a");
     card.className = "daily-mini-card";
     card.href = entryFor(game);
     card.innerHTML = `
       <div class="daily-mini-icon">${game.icon}</div>
-      <div class="daily-mini-name">${game.name}</div>
-      <div class="daily-mini-desc">${game.desc}</div>
-      <span class="daily-mini-play">JOUER</span>
+      <div class="daily-mini-name">${label.name}</div>
+      <div class="daily-mini-desc">${label.desc}</div>
+      <span class="daily-mini-play">${UI_TEXT[currentLang]["daily.play"]}</span>
     `;
     dailyGridEl.appendChild(card);
   });
 }
-
-renderDailyGames();
 
 function setDailyGames() {
   const ids = [
@@ -206,16 +306,19 @@ function setDailyGames() {
 }
 
 // Sélecteurs admin, générés depuis la même liste (plus de doublon à maintenir).
-["gameSelector1", "gameSelector2", "gameSelector3"].forEach((selId, i) => {
-  const selectorEl = document.getElementById(selId);
-  GAMES.forEach(game => {
-    const option = document.createElement("option");
-    option.value = game.id;
-    option.textContent = game.name;
-    selectorEl.appendChild(option);
+function populateAdminSelectors() {
+  ["gameSelector1", "gameSelector2", "gameSelector3"].forEach((selId, i) => {
+    const selectorEl = document.getElementById(selId);
+    selectorEl.innerHTML = "";
+    GAMES.forEach(game => {
+      const option = document.createElement("option");
+      option.value = game.id;
+      option.textContent = game[currentLang].name;
+      selectorEl.appendChild(option);
+    });
+    selectorEl.value = dailyGames[i];
   });
-  selectorEl.value = dailyGames[i];
-});
+}
 
 // --- Décompte avant les 3 prochains jeux du jour (minuit) ---
 const countdownEl = document.getElementById("dailyCountdown");
@@ -229,8 +332,8 @@ function updateCountdown() {
   const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, "0");
   const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, "0");
 
-  countdownEl.textContent = `Prochains jeux dans ${h}:${m}:${s}`;
+  countdownEl.textContent = `${UI_TEXT[currentLang]["daily.countdownPrefix"]} ${h}:${m}:${s}`;
 }
 
-updateCountdown();
+applyLanguage(currentLang);
 setInterval(updateCountdown, 1000);
