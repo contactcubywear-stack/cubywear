@@ -85,6 +85,92 @@ themeToggleEl.addEventListener("click", () => {
   applyTheme(currentTheme);
 });
 
+// --- Musique de fond (ambiance lo-fi générée en direct, aucun fichier audio requis) ---
+const musicToggleEl = document.getElementById("musicToggle");
+let audioCtx = null;
+let masterGain = null;
+let musicTimer = null;
+let musicPlaying = false;
+
+const CHORDS = [
+  [110.00, 130.81, 164.81, 196.00],   // Am7
+  [87.31, 110.00, 130.81, 164.81],    // Fmaj7
+  [130.81, 164.81, 196.00, 246.94],   // Cmaj7
+  [98.00, 123.47, 146.83, 196.00]     // G
+];
+const CHORD_DURATION = 4;
+let chordIndex = 0;
+
+function scheduleChord(startTime) {
+  const freqs = CHORDS[chordIndex % CHORDS.length];
+  chordIndex++;
+
+  freqs.forEach(freq => {
+    const osc = audioCtx.createOscillator();
+    osc.type = "sine";
+    osc.frequency.value = freq;
+
+    const noteGain = audioCtx.createGain();
+    noteGain.gain.setValueAtTime(0, startTime);
+    noteGain.gain.linearRampToValueAtTime(0.05, startTime + 1.2);
+    noteGain.gain.linearRampToValueAtTime(0, startTime + CHORD_DURATION);
+
+    osc.connect(noteGain);
+    noteGain.connect(masterGain);
+    osc.start(startTime);
+    osc.stop(startTime + CHORD_DURATION + 0.1);
+  });
+}
+
+function startMusic() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = "lowpass";
+    filter.frequency.value = 900;
+
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.6;
+
+    masterGain.connect(filter);
+    filter.connect(audioCtx.destination);
+  }
+  if (audioCtx.state === "suspended") audioCtx.resume();
+
+  let nextTime = audioCtx.currentTime + 0.1;
+  scheduleChord(nextTime);
+  nextTime += CHORD_DURATION;
+  scheduleChord(nextTime);
+
+  musicTimer = setInterval(() => {
+    nextTime += CHORD_DURATION;
+    scheduleChord(nextTime);
+  }, CHORD_DURATION * 1000);
+
+  musicPlaying = true;
+  musicToggleEl.textContent = "🔊";
+  musicToggleEl.classList.add("playing");
+}
+
+function stopMusic() {
+  if (musicTimer) clearInterval(musicTimer);
+  musicTimer = null;
+  if (audioCtx) audioCtx.suspend();
+  musicPlaying = false;
+  musicToggleEl.textContent = "🔇";
+  musicToggleEl.classList.remove("playing");
+}
+
+musicToggleEl.addEventListener("click", () => {
+  if (musicPlaying) {
+    stopMusic();
+    localStorage.setItem("cubywearMusic", "off");
+  } else {
+    startMusic();
+    localStorage.setItem("cubywearMusic", "on");
+  }
+});
+
 // --- Jeux du jour (3 jeux, choisis par l'admin) ---
 const dailyGridEl = document.getElementById("dailyGamesGrid");
 
