@@ -285,6 +285,33 @@ h1 {
   letter-spacing: 0.5px;
 }
 
+.logo-corner {
+  position: fixed;
+  top: 14px;
+  left: 16px;
+  z-index: 5;
+  height: 42px;
+  width: auto;
+}
+
+.date {
+  display: inline-block;
+  background: rgba(232, 170, 66, 0.12);
+  border: 1px solid rgba(232, 170, 66, 0.35);
+  color: var(--accent-gold);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 0;
+  text-transform: capitalize;
+}
+
+.hero {
+  margin-top: 50px;
+}
+
 /* Carte du jeu du jour */
 .daily-card {
   position: relative;
@@ -529,6 +556,14 @@ h1 {
   font-weight: bold;
   padding: 5px 12px;
   border-radius: 10px;
+}
+
+.daily-countdown {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--text-light);
+  opacity: 0.85;
+  letter-spacing: 0.3px;
 }
 
 @media (max-width: 380px) {

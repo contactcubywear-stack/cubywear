@@ -62,14 +62,17 @@ document.getElementById("currentDate").textContent =
 
 // --- Thème clair / sombre ---
 const themeToggleEl = document.getElementById("themeToggle");
+const logoImgEl = document.getElementById("logoImg");
 
 function applyTheme(theme) {
   if (theme === "light") {
     document.documentElement.setAttribute("data-theme", "light");
     themeToggleEl.textContent = "☀️";
+    if (logoImgEl) logoImgEl.src = "assets/logo_light.png";
   } else {
     document.documentElement.removeAttribute("data-theme");
     themeToggleEl.textContent = "🌙";
+    if (logoImgEl) logoImgEl.src = "assets/logo_dark.png";
   }
 }
 
@@ -128,25 +131,20 @@ function setDailyGames() {
   selectorEl.value = dailyGames[i];
 });
 
-// Grille "Tous les jeux" avec recherche.
-const gridEl = document.getElementById("gameGrid");
-const searchEl = document.getElementById("gameSearch");
+// --- Décompte avant les 3 prochains jeux du jour (minuit) ---
+const countdownEl = document.getElementById("dailyCountdown");
 
-function renderGrid(filter = "") {
-  const query = filter.trim().toLowerCase();
-  gridEl.innerHTML = "";
+function updateCountdown() {
+  const now = new Date();
+  const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+  const diff = nextMidnight - now;
 
-  GAMES.filter(g => g.name.toLowerCase().includes(query)).forEach(game => {
-    const card = document.createElement("a");
-    card.className = "game-tile";
-    card.href = entryFor(game);
-    card.innerHTML = `
-      <span class="game-tile-icon">${game.icon}</span>
-      <span class="game-tile-name">${game.name}</span>
-    `;
-    gridEl.appendChild(card);
-  });
+  const h = String(Math.floor(diff / 3600000)).padStart(2, "0");
+  const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, "0");
+  const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, "0");
+
+  countdownEl.textContent = `Prochains jeux dans ${h}:${m}:${s}`;
 }
 
-renderGrid();
-searchEl.addEventListener("input", () => renderGrid(searchEl.value));
+updateCountdown();
+setInterval(updateCountdown, 1000);
