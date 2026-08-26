@@ -2,75 +2,52 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Cubiwear – Jeu du jour</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <h1 class="title">Cubiwear</h1>
-  <p class="subtitle">Scan. Play. Win.</p>
+  <div class="bg-glow"></div>
 
-  <p class="date" id="currentDate"></p>
+  <header class="hero">
+    <h1 class="title">🧊 Cubiwear</h1>
+    <p class="subtitle">Scan. Play. Win.</p>
+    <p class="date" id="currentDate"></p>
+  </header>
 
   <!-- JEU DU JOUR -->
-  <div class="big-card">
-    <h3>JEU DU JOUR</h3>
+  <div class="big-card daily-card">
+    <span class="daily-badge">🔥 JEU DU JOUR</span>
+    <div class="daily-icon" id="dailyIcon">🎮</div>
     <h2 id="dailyGame">Chargement...</h2>
     <p id="dailyDesc">Un nouveau défi chaque jour</p>
     <a id="playButton" href="#" class="btn-big">JOUER</a>
   </div>
 
+  <!-- TOUS LES JEUX -->
+  <section class="all-games">
+    <h3 class="section-title">🗂️ Tous les jeux</h3>
+    <input type="text" id="gameSearch" class="game-search" placeholder="Rechercher un jeu...">
+    <div class="game-grid" id="gameGrid"></div>
+  </section>
+
   <!-- SHOP -->
   <div class="big-card shop-card" onclick="window.location.href='https://cubiwear.ca/shop'">
-    <h3>BOUTIQUE</h3>
+    <h3>🛍️ BOUTIQUE</h3>
     <p>Découvre les hoodies Cubiwear</p>
   </div>
 
   <!-- MODE ADMIN -->
-  <div class="big-card admin-card">
-    <h3>Mode Test</h3>
-    <p>Choisir le jeu du jour :</p>
-
-    <select id="gameSelector">
-      <option value="memory">Memory</option>
-      <option value="tictactoe">Tic Tac Toe</option>
-      <option value="flappy">Flappy Bird</option>
-      <option value="sudoku">Sudoku</option>
-      <option value="pendu">Pendu</option>
-      <option value="mastermind">Mastermind</option>
-      <option value="2048">2048 Lite</option>
-      <option value="labyrinthe">Labyrinthe</option>
-      <option value="puzzle-glissant">Puzzle glissant</option>
-      <option value="reaction-tap">Reaction Tap</option>
-      <option value="aim-trainer">Aim Trainer</option>
-      <option value="swipe-runner">Swipe Runner</option>
-      <option value="speed-math">Speed Math</option>
-      <option value="catch-the-cube">Catch the Cube</option>
-      <option value="snake">Snake</option>
-      <option value="breakout">Breakout</option>
-      <option value="space-shooter">Space Shooter</option>
-      <option value="runner-2d">Runner 2D</option>
-      <option value="mini-tetris">Mini-Tetris</option>
-      <option value="trouve-objet">Trouve l'objet</option>
-      <option value="color-match">Color Match</option>
-      <option value="symetrie">Symétrie</option>
-      <option value="memory-duo">Memory Duo+</option>
-      <option value="bon-pixel">Bon pixel</option>
-      <option value="anagrammes">Anagrammes</option>
-      <option value="mot-flash">Mot Flash</option>
-      <option value="lettre-manquante">Lettre manquante</option>
-      <option value="mini-wordle">Mini-Wordle</option>
-      <option value="mini-othello">Mini-Othello</option>
-      <option value="connect4-lite">Connect 4 Lite</option>
-      <option value="hexa-path">Hexa-Path</option>
-    </select>
-
-    <button class="btn-big" onclick="setDailyGame()">Appliquer</button>
-  </div>
+  <details class="admin-card">
+    <summary>⚙️ Mode test — changer le jeu du jour</summary>
+    <div class="admin-body">
+      <select id="gameSelector"></select>
+      <button class="btn-big" onclick="setDailyGame()">Appliquer</button>
+    </div>
+  </details>
 
   <script src="main.js"></script>
 </body>
 </html>
-
-

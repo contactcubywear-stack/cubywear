@@ -10,12 +10,18 @@
   --shadow: 0 0 20px rgba(0,0,0,0.35);
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   background: var(--bg-main);
   color: var(--text-light);
   padding: 40px;
   text-align: center;
+  position: relative;
+  overflow-x: hidden;
 }
 
 h1 {
@@ -223,5 +229,198 @@ h1 {
   border: none;
   margin-bottom: 15px;
   font-size: 18px;
+}
+
+/* ============================================================
+   ACCUEIL — refonte visuelle
+   ============================================================ */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.bg-glow {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 18% 8%, rgba(31, 70, 144, 0.4), transparent 40%),
+    radial-gradient(circle at 85% 25%, rgba(232, 170, 66, 0.18), transparent 35%),
+    radial-gradient(circle at 50% 90%, rgba(31, 70, 144, 0.25), transparent 45%);
+  pointer-events: none;
+}
+
+.hero {
+  animation: fadeIn 0.6s ease;
+  margin-bottom: 10px;
+}
+
+.hero .title {
+  background: linear-gradient(135deg, var(--accent-gold), #ffe0a3);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 42px;
+  letter-spacing: 0.5px;
+}
+
+/* Carte du jeu du jour */
+.daily-card {
+  position: relative;
+  animation: fadeIn 0.7s ease;
+}
+
+.daily-badge {
+  display: inline-block;
+  background: rgba(232, 170, 66, 0.15);
+  color: var(--accent-gold);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+
+.daily-icon {
+  font-size: 46px;
+  margin-bottom: 6px;
+  animation: floaty 3s ease-in-out infinite;
+}
+
+.btn-big {
+  box-shadow: 0 4px 18px rgba(232, 170, 66, 0.35);
+}
+
+.btn-big:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 26px rgba(232, 170, 66, 0.5);
+}
+
+/* Section "Tous les jeux" */
+.all-games {
+  max-width: 460px;
+  margin: 10px auto 30px;
+  animation: fadeIn 0.8s ease;
+}
+
+.section-title {
+  color: var(--accent-gold);
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+
+.game-search {
+  width: 90%;
+  max-width: 340px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid var(--accent-blue);
+  background: var(--bg-card);
+  color: var(--text-white);
+  font-size: 15px;
+  margin-bottom: 18px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.game-search:focus {
+  border-color: var(--accent-gold);
+}
+
+.game-search::placeholder {
+  color: var(--text-light);
+  opacity: 0.6;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  width: 94%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.game-tile {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-blue);
+  border-radius: 14px;
+  padding: 14px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--text-white);
+  transition: 0.2s;
+}
+
+.game-tile:hover {
+  background: var(--accent-blue);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+.game-tile-icon {
+  font-size: 26px;
+}
+
+.game-tile-name {
+  font-size: 11.5px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.25;
+}
+
+/* Mode admin (repliable) */
+.admin-card {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-blue);
+  border-radius: 14px;
+  padding: 16px 20px;
+  width: 92%;
+  max-width: 420px;
+  margin: 0 auto 30px auto;
+  color: var(--text-light);
+  text-align: left;
+}
+
+.admin-card summary {
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--accent-gold);
+  list-style: none;
+  text-align: center;
+}
+
+.admin-card summary::-webkit-details-marker {
+  display: none;
+}
+
+.admin-body {
+  margin-top: 16px;
+  text-align: center;
+}
+
+@media (max-width: 380px) {
+  body {
+    padding: 24px 16px;
+  }
+
+  .game-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .hero .title {
+    font-size: 34px;
+  }
 }
 
