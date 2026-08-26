@@ -38,7 +38,19 @@ function entryFor(game) {
   return game.entry || `./games/${game.id}.html`;
 }
 
-let dailyGame = "memory";
+const DEFAULT_DAILY = ["memory", "tictactoe", "flappy"];
+
+function loadDailyGames() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("cubywearDailyGames"));
+    if (Array.isArray(saved) && saved.length === 3 && saved.every(id => GAMES_BY_ID[id])) {
+      return saved;
+    }
+  } catch (e) {}
+  return DEFAULT_DAILY;
+}
+
+let dailyGames = loadDailyGames();
 
 document.getElementById("currentDate").textContent =
   new Date().toLocaleDateString("fr-FR", {
@@ -48,31 +60,73 @@ document.getElementById("currentDate").textContent =
     year: "numeric"
   });
 
-function updateDailyGame() {
-  const game = GAMES_BY_ID[dailyGame];
-  document.getElementById("dailyIcon").textContent = game.icon;
-  document.getElementById("dailyGame").textContent = game.name;
-  document.getElementById("dailyDesc").textContent = game.desc;
-  document.getElementById("playButton").href = entryFor(game);
+// --- Thème clair / sombre ---
+const themeToggleEl = document.getElementById("themeToggle");
+
+function applyTheme(theme) {
+  if (theme === "light") {
+    document.documentElement.setAttribute("data-theme", "light");
+    themeToggleEl.textContent = "☀️";
+  } else {
+    document.documentElement.removeAttribute("data-theme");
+    themeToggleEl.textContent = "🌙";
+  }
 }
 
-updateDailyGame();
+let currentTheme = localStorage.getItem("cubywearTheme") === "light" ? "light" : "dark";
+applyTheme(currentTheme);
 
-function setDailyGame() {
-  const selector = document.getElementById("gameSelector");
-  dailyGame = selector.value;
-  updateDailyGame();
-}
-
-// Sélecteur admin, généré depuis la même liste (plus de doublon à maintenir).
-const selectorEl = document.getElementById("gameSelector");
-GAMES.forEach(game => {
-  const option = document.createElement("option");
-  option.value = game.id;
-  option.textContent = game.name;
-  selectorEl.appendChild(option);
+themeToggleEl.addEventListener("click", () => {
+  currentTheme = currentTheme === "light" ? "dark" : "light";
+  localStorage.setItem("cubywearTheme", currentTheme);
+  applyTheme(currentTheme);
 });
-selectorEl.value = dailyGame;
+
+// --- Jeux du jour (3 jeux, choisis par l'admin) ---
+const dailyGridEl = document.getElementById("dailyGamesGrid");
+
+function renderDailyGames() {
+  dailyGridEl.innerHTML = "";
+  dailyGames.forEach(id => {
+    const game = GAMES_BY_ID[id];
+    if (!game) return;
+    const card = document.createElement("a");
+    card.className = "daily-mini-card";
+    card.href = entryFor(game);
+    card.innerHTML = `
+      <div class="daily-mini-icon">${game.icon}</div>
+      <div class="daily-mini-name">${game.name}</div>
+      <div class="daily-mini-desc">${game.desc}</div>
+      <span class="daily-mini-play">JOUER</span>
+    `;
+    dailyGridEl.appendChild(card);
+  });
+}
+
+renderDailyGames();
+
+function setDailyGames() {
+  const ids = [
+    document.getElementById("gameSelector1").value,
+    document.getElementById("gameSelector2").value,
+    document.getElementById("gameSelector3").value
+  ];
+  dailyGames = ids;
+  localStorage.setItem("cubywearDailyGames", JSON.stringify(ids));
+  renderDailyGames();
+}
+
+// Sélecteurs admin, générés depuis la même liste (plus de doublon à maintenir).
+["gameSelector1", "gameSelector2", "gameSelector3"].forEach((selId, i) => {
+  const selectorEl = document.getElementById(selId);
+  GAMES.forEach(game => {
+    const option = document.createElement("option");
+    option.value = game.id;
+    option.textContent = game.name;
+    selectorEl.appendChild(option);
+  });
+  selectorEl.value = dailyGames[i];
+});
 
 // Grille "Tous les jeux" avec recherche.
 const gridEl = document.getElementById("gameGrid");

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <script>(function(){try{if(localStorage.getItem("cubywearTheme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
   <title>Cubiwear – Jeu du jour</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -11,20 +12,19 @@
 
   <div class="bg-glow"></div>
 
+  <button id="themeToggle" class="theme-toggle" aria-label="Changer de thème" title="Thème clair / sombre">🌙</button>
+
   <header class="hero">
     <h1 class="title">🧊 Cubiwear</h1>
     <p class="subtitle">Scan. Play. Win.</p>
     <p class="date" id="currentDate"></p>
   </header>
 
-  <!-- JEU DU JOUR -->
-  <div class="big-card daily-card">
-    <span class="daily-badge">🔥 JEU DU JOUR</span>
-    <div class="daily-icon" id="dailyIcon">🎮</div>
-    <h2 id="dailyGame">Chargement...</h2>
-    <p id="dailyDesc">Un nouveau défi chaque jour</p>
-    <a id="playButton" href="#" class="btn-big">JOUER</a>
-  </div>
+  <!-- JEUX DU JOUR -->
+  <section class="daily-section">
+    <span class="daily-badge">🔥 JEUX DU JOUR</span>
+    <div class="daily-games-grid" id="dailyGamesGrid"></div>
+  </section>
 
   <!-- TOUS LES JEUX -->
   <section class="all-games">
@@ -41,10 +41,12 @@
 
   <!-- MODE ADMIN -->
   <details class="admin-card">
-    <summary>⚙️ Mode test — changer le jeu du jour</summary>
+    <summary>⚙️ Admin — choisir les 3 jeux du jour</summary>
     <div class="admin-body">
-      <select id="gameSelector"></select>
-      <button class="btn-big" onclick="setDailyGame()">Appliquer</button>
+      <select id="gameSelector1"></select>
+      <select id="gameSelector2"></select>
+      <select id="gameSelector3"></select>
+      <button class="btn-big" onclick="setDailyGames()">Appliquer</button>
     </div>
   </details>
 
