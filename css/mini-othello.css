@@ -3,6 +3,18 @@ body {
   box-sizing: border-box;
 }
 
+.difficulty-select {
+  color: var(--text-light);
+}
+
+.difficulty-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
 #hud {
   color: var(--accent-gold);
   font-weight: bold;
@@ -17,10 +29,8 @@ body {
 
 .othello-board {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, minmax(0, 1fr));
   gap: 4px;
-  width: min(80vw, 280px);
+  width: min(80vw, 320px);
   aspect-ratio: 1 / 1;
   margin: 0 auto;
   background: #145a32;
@@ -53,6 +63,25 @@ body {
   height: 78%;
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.piece.piece-new {
+  animation: piecePop 0.25s cubic-bezier(.34,1.56,.64,1);
+}
+
+.piece.flipped {
+  animation: pieceFlip 0.35s ease;
+}
+
+@keyframes piecePop {
+  from { transform: scale(0.3); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pieceFlip {
+  0% { transform: scaleX(1); }
+  50% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
 }
 
 .piece.black {
