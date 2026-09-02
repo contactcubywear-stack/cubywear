@@ -25,10 +25,10 @@ function getLang() {
 let lang = getLang();
 
 const DIFFICULTIES = {
-  facile: { speed: 1.7, rot: 0.006, gap: 210, stroke: 34, wobble: 45 },
-  moyen: { speed: 2.2, rot: 0.011, gap: 190, stroke: 28, wobble: 55 },
-  difficile: { speed: 2.8, rot: 0.017, gap: 170, stroke: 22, wobble: 65 },
-  impossible: { speed: 3.5, rot: 0.026, gap: 155, stroke: 18, wobble: 75 }
+  facile: { gravity: 0.28, jump: -6.6, rot: 0.006, gap: 380, stroke: 34, orbChance: 0.45 },
+  moyen: { gravity: 0.32, jump: -6.6, rot: 0.011, gap: 340, stroke: 28, orbChance: 0.4 },
+  difficile: { gravity: 0.37, jump: -6.6, rot: 0.017, gap: 300, stroke: 22, orbChance: 0.35 },
+  impossible: { gravity: 0.43, jump: -6.6, rot: 0.026, gap: 260, stroke: 18, orbChance: 0.3 }
 };
 
 const canvas = document.getElementById("game");
@@ -39,45 +39,63 @@ const H = canvas.height;
 const theme = getComputedStyle(document.documentElement);
 const COLOR_BG = theme.getPropertyValue("--bg-main").trim() || "#130D33";
 const COLOR_TEXT = theme.getPropertyValue("--text-white").trim() || "#ffffff";
-const BALL_COLOR = "#E8AA42";
 const WHEEL_COLORS = ["#E8AA42", "#e74c3c", "#5AC8FA", "#2ecc71"];
 
-// La balle tombe/saute verticalement (gravité classique, comme Flappy Bird)
-// tout en dérivant légèrement à gauche/droite ; les anneaux descendent du
-// haut vers le bas, donc la progression se lit de bas en haut.
+// La balle reste toujours fixe au centre de l'écran : c'est le décor (anneaux,
+// orbes) qui défile en fonction de la propre vélocité de la balle (gravité +
+// sauts du joueur), jamais sur un minuteur indépendant.
 const CENTER_X = W / 2;
+const CENTER_Y = H / 2;
 const BALL_R = 13;
-const GRAVITY = 0.32;
-const JUMP = -6.2;
 const RING_R = 95;
-const WOBBLE_SPEED = 0.045;
+const ORB_R = 12;
+const FALL_LIMIT = H;
 
 let cfg = DIFFICULTIES.moyen;
-let ballY = H / 2;
-let ballX = CENTER_X;
+let ballColor = WHEEL_COLORS[0];
+let ballWorldY = 0;
+let peakWorldY = 0;
 let velocity = 0;
 let score = 0;
 let best = 0;
 let over = true;
 let started = false;
 let frame = 0;
-let framesSinceSpawn = 0;
+let nextSpawnWorldY = -260;
 let rings = [];
+let orbs = [];
 let particles = [];
 let flashAlpha = 0;
 
-function spawnRing() {
-  rings.push({
-    y: -RING_R - cfg.stroke,
-    rotation: Math.random() * Math.PI * 2,
-    passed: false
-  });
+function screenY(worldY) {
+  return worldY - ballWorldY + CENTER_Y;
+}
+
+function spawnAhead() {
+  while (ballWorldY - nextSpawnWorldY < H) {
+    rings.push({
+      worldY: nextSpawnWorldY,
+      rotation: Math.random() * Math.PI * 2,
+      passed: false
+    });
+
+    if (Math.random() < cfg.orbChance) {
+      const otherColors = WHEEL_COLORS.filter(c => c !== ballColor);
+      orbs.push({
+        worldY: nextSpawnWorldY + cfg.gap / 2,
+        color: otherColors[Math.floor(Math.random() * otherColors.length)],
+        collected: false
+      });
+    }
+
+    nextSpawnWorldY -= cfg.gap;
+  }
 }
 
 function jump() {
   if (over) return;
   started = true;
-  velocity = JUMP;
+  velocity = cfg.jump;
   if (window.CubySfx) CubySfx.tap();
 }
 
@@ -88,83 +106,90 @@ function quadrantColor(ring, angle) {
   return WHEEL_COLORS[idx];
 }
 
-function spawnBurst(x, y, color) {
+function spawnBurst(worldY, color) {
   for (let i = 0; i < 10; i++) {
     const angle = Math.random() * Math.PI * 2;
     const speed = 1.5 + Math.random() * 2.5;
-    particles.push({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, life: 1, color });
+    particles.push({ x: CENTER_X, worldY, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, life: 1, color });
   }
 }
 
 function update() {
   frame++;
-  ballX = CENTER_X + Math.sin(frame * WOBBLE_SPEED) * cfg.wobble;
 
   if (!started) {
-    ballY = H / 2 + Math.sin(frame / 15) * 8;
     return;
   }
   if (over) return;
 
-  velocity += GRAVITY;
-  ballY += velocity;
+  velocity += cfg.gravity;
+  ballWorldY += velocity;
+  peakWorldY = Math.min(peakWorldY, ballWorldY);
 
-  framesSinceSpawn++;
-  if (framesSinceSpawn >= cfg.gap) {
-    spawnRing();
-    framesSinceSpawn = 0;
-  }
+  spawnAhead();
 
-  rings.forEach(r => {
-    r.y += cfg.speed;
-    r.rotation += cfg.rot;
-  });
-  rings = rings.filter(r => r.y < H + RING_R + cfg.stroke);
+  rings.forEach(r => (r.rotation += cfg.rot));
+  rings = rings.filter(r => ballWorldY - r.worldY < H + RING_R);
 
   particles.forEach(p => {
     p.x += p.vx;
-    p.y += p.vy;
+    p.worldY += p.vy;
     p.life -= 0.03;
   });
   particles = particles.filter(p => p.life > 0);
 
+  orbs.forEach(o => {
+    if (o.collected) return;
+    if (Math.abs(ballWorldY - o.worldY) < ORB_R + BALL_R) {
+      o.collected = true;
+      ballColor = o.color;
+      spawnBurst(o.worldY, o.color);
+      if (window.CubySfx) CubySfx.coin();
+    }
+  });
+  orbs = orbs.filter(o => !o.collected && ballWorldY - o.worldY < H + ORB_R);
+
   for (const r of rings) {
     if (r.passed) continue;
 
-    const withinBand = ballY + BALL_R > r.y - cfg.stroke / 2 && ballY - BALL_R < r.y + cfg.stroke / 2;
-    if (withinBand) {
-      const dist = Math.hypot(ballX - CENTER_X, ballY - r.y);
-      const inner = RING_R - cfg.stroke / 2;
-      const outer = RING_R + cfg.stroke / 2;
-      if (dist >= inner && dist <= outer) {
-        const angle = Math.atan2(ballY - r.y, ballX - CENTER_X);
-        const color = quadrantColor(r, angle);
-        if (color !== BALL_COLOR) {
-          endGame();
-          return;
-        }
+    const dist = Math.abs(ballWorldY - r.worldY);
+    const inner = RING_R - cfg.stroke / 2;
+    const outer = RING_R + cfg.stroke / 2;
+
+    // Un seul contrôle de couleur au moment du contact (pas à chaque frame
+    // tant que la balle reste dans la bande), sinon la couleur devrait
+    // rester valide pendant plusieurs frames d'affilée au lieu d'un instant.
+    if (!r.checked && dist <= outer + BALL_R) {
+      r.checked = true;
+      const angle = ballWorldY < r.worldY ? -Math.PI / 2 : Math.PI / 2;
+      const color = quadrantColor(r, angle);
+      if (color !== ballColor) {
+        endGame();
+        return;
       }
     }
 
-    if (r.y - cfg.stroke / 2 > ballY + BALL_R) {
+    if (ballWorldY < r.worldY - outer) {
       r.passed = true;
       score++;
-      spawnBurst(CENTER_X, r.y, BALL_COLOR);
+      spawnBurst(r.worldY, ballColor);
       if (window.CubySfx) CubySfx.match();
     }
   }
 
-  if (ballY - BALL_R < 0 || ballY + BALL_R > H) {
+  if (ballWorldY - peakWorldY > FALL_LIMIT) {
     endGame();
   }
 }
 
 function drawRing(r) {
+  const y = screenY(r.worldY);
+  if (y < -RING_R - cfg.stroke || y > H + RING_R + cfg.stroke) return;
   const segments = 4;
   for (let i = 0; i < segments; i++) {
     const start = r.rotation + i * (Math.PI / 2);
     ctx.beginPath();
-    ctx.arc(CENTER_X, r.y, RING_R, start, start + Math.PI / 2);
+    ctx.arc(CENTER_X, y, RING_R, start, start + Math.PI / 2);
     ctx.strokeStyle = WHEEL_COLORS[i];
     ctx.lineWidth = cfg.stroke;
     ctx.lineCap = "butt";
@@ -172,24 +197,37 @@ function drawRing(r) {
   }
 }
 
+function drawOrb(o) {
+  const y = screenY(o.worldY);
+  if (y < -30 || y > H + 30) return;
+  ctx.fillStyle = o.color;
+  ctx.beginPath();
+  ctx.arc(CENTER_X, y, ORB_R, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = COLOR_TEXT;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
 function draw() {
   ctx.fillStyle = COLOR_BG;
   ctx.fillRect(0, 0, W, H);
 
   rings.forEach(drawRing);
+  orbs.forEach(drawOrb);
 
   particles.forEach(p => {
     ctx.globalAlpha = Math.max(p.life, 0);
     ctx.fillStyle = p.color;
     ctx.beginPath();
-    ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+    ctx.arc(p.x, screenY(p.worldY), 3, 0, Math.PI * 2);
     ctx.fill();
   });
   ctx.globalAlpha = 1;
 
-  ctx.fillStyle = BALL_COLOR;
+  ctx.fillStyle = ballColor;
   ctx.beginPath();
-  ctx.arc(ballX, ballY, BALL_R, 0, Math.PI * 2);
+  ctx.arc(CENTER_X, CENTER_Y, BALL_R, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.fillStyle = COLOR_TEXT;
@@ -236,17 +274,21 @@ async function endGame() {
 
 function startGame(level) {
   cfg = DIFFICULTIES[level] || DIFFICULTIES.moyen;
-  ballY = H / 2;
-  ballX = CENTER_X;
+  ballColor = WHEEL_COLORS[0];
+  ballWorldY = 0;
+  peakWorldY = 0;
   velocity = 0;
   score = 0;
   best = Number(localStorage.getItem("bestColorSwitch") || 0);
   frame = 0;
-  framesSinceSpawn = 0;
+  nextSpawnWorldY = -260;
   rings = [];
+  orbs = [];
   particles = [];
   over = false;
   started = false;
+
+  spawnAhead();
 
   document.getElementById("difficultySelect").hidden = true;
   document.getElementById("gameArea").hidden = false;
@@ -291,7 +333,7 @@ document.getElementById("langToggle").addEventListener("click", () => {
 // Hook de test/debug (aucun impact en jeu normal).
 window.__colorSwitchDebug = {
   jump, startGame, update, draw,
-  getState: () => ({ score, over, started, ballY, ballX, rings: rings.length })
+  getState: () => ({ score, over, started, ballWorldY, ballColor, rings: rings.length, orbs: orbs.length })
 };
 
 applyLang();
