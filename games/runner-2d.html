@@ -12,36 +12,63 @@
 
 <body>
 
-  <h1>🦘 Runner 2D</h1>
-  <p id="score">Score : 0</p>
+  <button id="langToggle" class="lang-toggle">FR</button>
 
-  <div class="runner2d-area" id="area">
-    <canvas id="gameCanvas"></canvas>
-    <div class="runner2d-start" id="startOverlay">
-      <button class="btn-small" id="startBtn">Commencer</button>
+  <h1>🦘 Runner 2D</h1>
+
+  <div class="difficulty-select" id="difficultySelect">
+    <p data-i18n="chooseDifficulty">Choisis la difficulté</p>
+    <div class="difficulty-buttons">
+      <button class="btn-small" data-difficulty="facile" data-i18n="easy">Facile</button>
+      <button class="btn-small" data-difficulty="moyen" data-i18n="medium">Moyen</button>
+      <button class="btn-small" data-difficulty="difficile" data-i18n="hard">Difficile</button>
+      <button class="btn-small" data-difficulty="impossible" data-i18n="impossible">Impossible</button>
+    </div>
+    <div class="actions">
+      <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
     </div>
   </div>
 
-  <p class="hint">Clique, appuie sur Espace ou touche l'écran pour sauter</p>
+  <div id="gameArea" hidden>
+    <div class="stat-bar">
+      <div class="stat-chip"><span class="stat-icon">⭐</span><span id="scoreVal">0</span></div>
+      <div class="stat-chip"><span class="stat-icon">🏆</span><span id="bestVal">0</span></div>
+    </div>
 
-  <div class="actions">
-    <a href="../index.html" class="btn-small">Accueil</a>
+    <div class="runner2d-area" id="area">
+      <canvas id="gameCanvas"></canvas>
+      <div class="runner2d-start" id="startOverlay">
+        <button class="btn-small" id="startBtn" data-i18n="start">Commencer</button>
+      </div>
+    </div>
+
+    <p class="hint" data-i18n="hint">Clique/Espace pour sauter, glisse vers le bas ou ↓ pour t'accroupir</p>
+
+    <div class="lane-buttons">
+      <button class="btn-small" id="btnDuck" aria-label="Accroupir">⬇</button>
+      <button class="btn-small" id="btnJump" aria-label="Sauter">⬆</button>
+    </div>
+
+    <div class="actions">
+      <a href="../index.html" class="btn-small" data-i18n="home">Accueil</a>
+    </div>
   </div>
 
   <div class="win-modal" id="resultModal" hidden>
     <div class="win-modal-content">
-      <h2>💥 Game Over !</h2>
+      <h2 data-i18n="gameOver">💥 Game Over !</h2>
       <div class="win-stats">
-        <p>Score : <span id="statScore"></span></p>
-        <p>Meilleur score : <span id="statBest"></span></p>
+        <p><span data-i18n="score">Score</span> : <span id="statScore"></span></p>
+        <p><span data-i18n="best">Meilleur score</span> : <span id="statBest"></span></p>
       </div>
       <div class="win-actions">
-        <button class="btn-small" id="replayBtn">Rejouer</button>
-        <a href="../index.html" class="btn-small">Menu principal</a>
+        <button class="btn-small" id="replayBtn" data-i18n="replay">Rejouer</button>
+        <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
       </div>
     </div>
   </div>
 
+  <script src="../js/sfx.js"></script>
   <script type="module" src="../js/runner-2d.js"></script>
 </body>
 </html>

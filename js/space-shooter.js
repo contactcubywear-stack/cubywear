@@ -1,5 +1,27 @@
 import { saveScore } from "../api.js";
 
+const T = {
+  fr: {
+    chooseDifficulty: "Choisis la difficulté",
+    easy: "Facile", medium: "Moyen", hard: "Difficile", impossible: "Impossible",
+    mainMenu: "Menu principal", home: "Accueil", start: "Commencer", replay: "Rejouer",
+    hint: "Glisse ou utilise les boutons pour te déplacer (tir automatique)",
+    destroyed: "💥 Vaisseau détruit !", finalScore: "Score final", best: "Meilleur score"
+  },
+  en: {
+    chooseDifficulty: "Choose a difficulty",
+    easy: "Easy", medium: "Medium", hard: "Hard", impossible: "Impossible",
+    mainMenu: "Main menu", home: "Home", start: "Start", replay: "Replay",
+    hint: "Swipe or use the buttons to move (auto-fire)",
+    destroyed: "💥 Ship destroyed!", finalScore: "Final score", best: "Best score"
+  }
+};
+
+function getLang() {
+  return localStorage.getItem("cubywearLang") === "en" ? "en" : "fr";
+}
+let lang = getLang();
+
 const DIFFICULTY_SETTINGS = {
   facile:     { lives: 3, w: 340, h: 500, bigFast: false, enemyHp: 1, bonus: false },
   moyen:      { lives: 3, w: 340, h: 500, bigFast: true,  enemyHp: 1, bonus: false },
@@ -10,7 +32,6 @@ const DIFFICULTY_SETTINGS = {
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const area = document.getElementById("area");
-const hudEl = document.getElementById("hud");
 
 const theme = getComputedStyle(document.documentElement);
 const COLOR_BG = theme.getPropertyValue("--bg-main").trim() || "#130D33";
@@ -31,8 +52,10 @@ let movingRight = false;
 let bullets = [];
 let enemies = [];
 let skyBonuses = [];
+let particles = [];
 let score = 0;
 let lives = 3;
+let best = 0;
 let over = true;
 let shootTimer = 0;
 let spawnTimer = 0;
@@ -40,7 +63,21 @@ let bonusTimer = 0;
 let invincibleTimer = 0;
 
 function updateHud() {
-  hudEl.textContent = `Score : ${score} · Vies : ${lives}`;
+  document.getElementById("scoreVal").textContent = score;
+  document.getElementById("livesVal").textContent = lives;
+}
+
+function spawnParticles(x, y, color) {
+  for (let i = 0; i < 10; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 70 + Math.random() * 90;
+    particles.push({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, life: 1, color });
+  }
+}
+
+function shakeCanvas() {
+  canvas.classList.add("shake");
+  setTimeout(() => canvas.classList.remove("shake"), 300);
 }
 
 function speedForScore() {
@@ -69,6 +106,8 @@ function loseLife() {
   lives--;
   invincibleTimer = 1.2;
   updateHud();
+  shakeCanvas();
+  if (window.CubySfx) CubySfx.hit();
   if (lives <= 0) endGame();
 }
 
@@ -79,10 +118,18 @@ function update(delta) {
   if (movingRight) player.x += PLAYER_SPEED * delta;
   player.x = Math.max(player.w / 2, Math.min(W - player.w / 2, player.x));
 
+  particles.forEach(p => {
+    p.x += p.vx * delta;
+    p.y += p.vy * delta;
+    p.life -= delta * 2;
+  });
+  particles = particles.filter(p => p.life > 0);
+
   shootTimer += delta;
   if (shootTimer > 0.35) {
     shootTimer = 0;
     bullets.push({ x: player.x, y: PLAYER_Y - 12 });
+    if (window.CubySfx) CubySfx.tap();
   }
   bullets.forEach(b => (b.y -= 320 * delta));
   bullets = bullets.filter(b => b.y > -10);
@@ -116,6 +163,8 @@ function update(delta) {
         if (e.hp <= 0) {
           e.alive = false;
           score += e.maxHp > 1 ? 15 : 5;
+          spawnParticles(e.x, e.y, COLOR_ENEMY);
+          if (window.CubySfx) CubySfx.match();
         } else {
           score += 2;
         }
@@ -139,6 +188,7 @@ function update(delta) {
   skyBonuses = skyBonuses.filter(b => {
     if (b.y > PLAYER_Y - 14 && b.y < PLAYER_Y + 14 && Math.abs(b.x - player.x) < 20) {
       lives++;
+      if (window.CubySfx) CubySfx.coin();
       updateHud();
       return false;
     }
@@ -187,6 +237,15 @@ function draw() {
   ctx.fillStyle = COLOR_BULLET;
   bullets.forEach(b => ctx.fillRect(b.x - 2, b.y - 6, 4, 10));
 
+  particles.forEach(p => {
+    ctx.globalAlpha = Math.max(p.life, 0);
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+
   if (invincibleTimer <= 0 || Math.floor(invincibleTimer * 10) % 2 === 0) {
     ctx.fillStyle = COLOR_SHIP;
     ctx.beginPath();
@@ -210,7 +269,13 @@ function loop(now) {
 
 async function endGame() {
   over = true;
+  if (window.CubySfx) CubySfx.lose();
+
+  best = Math.max(score, best);
+  localStorage.setItem("bestSpaceShooter", best);
+
   document.getElementById("statScore").textContent = score;
+  document.getElementById("statBest").textContent = best;
   document.getElementById("resultModal").hidden = false;
   await saveScore("CW-BLK-1-0001", "space-shooter", score);
 }
@@ -235,7 +300,9 @@ function startGame(level) {
   bullets = [];
   enemies = [];
   skyBonuses = [];
+  particles = [];
   score = 0;
+  best = Number(localStorage.getItem("bestSpaceShooter") || 0);
   lives = settings.lives;
   shootTimer = 0;
   spawnTimer = 0;
@@ -290,6 +357,21 @@ area.addEventListener("touchmove", e => {
   player.x = Math.max(player.w / 2, Math.min(W - player.w / 2, (touchX / rect.width) * W));
 }, { passive: true });
 
+function applyLang() {
+  document.documentElement.setAttribute("lang", lang);
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (T[lang][key] !== undefined) el.textContent = T[lang][key];
+  });
+  document.getElementById("langToggle").textContent = lang.toUpperCase();
+}
+
+document.getElementById("langToggle").addEventListener("click", () => {
+  lang = lang === "fr" ? "en" : "fr";
+  localStorage.setItem("cubywearLang", lang);
+  applyLang();
+});
+
 // Hook de test/debug (aucun impact en jeu normal).
 window.__spaceShooterDebug = {
   update, draw,
@@ -297,3 +379,5 @@ window.__spaceShooterDebug = {
   getEnemies: () => enemies, getBullets: () => bullets, getPlayer: () => player,
   getSkyBonuses: () => skyBonuses, spawnEnemy, spawnSkyBonus
 };
+
+applyLang();

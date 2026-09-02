@@ -1,5 +1,31 @@
 import { saveScore } from "../api.js";
 
+const T = {
+  fr: {
+    chooseDifficulty: "Choisis la difficulté",
+    easy: "Facile", medium: "Moyen", hard: "Difficile", impossible: "Impossible",
+    mainMenu: "Menu principal", home: "Accueil", replay: "Rejouer",
+    launch: "Lancer la balle",
+    hint: "Glisse, utilise les boutons ou les flèches pour déplacer la raquette",
+    finalScore: "Score final", best: "Meilleur score",
+    win: "🎉 Bravo, briques détruites !", lose: "💥 Perdu !"
+  },
+  en: {
+    chooseDifficulty: "Choose a difficulty",
+    easy: "Easy", medium: "Medium", hard: "Hard", impossible: "Impossible",
+    mainMenu: "Main menu", home: "Home", replay: "Replay",
+    launch: "Launch the ball",
+    hint: "Swipe, use the buttons, or the arrow keys to move the paddle",
+    finalScore: "Final score", best: "Best score",
+    win: "🎉 All bricks destroyed!", lose: "💥 Lost!"
+  }
+};
+
+function getLang() {
+  return localStorage.getItem("cubywearLang") === "en" ? "en" : "fr";
+}
+let lang = getLang();
+
 const DIFFICULTY_SETTINGS = {
   facile:     { lives: 3, w: 340, h: 500, brickHits: 1, bonus: false, cols: 6, rows: 4 },
   moyen:      { lives: 3, w: 340, h: 500, brickHits: 2, bonus: false, cols: 6, rows: 4 },
@@ -10,7 +36,6 @@ const DIFFICULTY_SETTINGS = {
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const area = document.getElementById("area");
-const hudEl = document.getElementById("hud");
 
 const theme = getComputedStyle(document.documentElement);
 const COLOR_BG = theme.getPropertyValue("--bg-main").trim() || "#130D33";
@@ -39,11 +64,21 @@ let movingRight = false;
 let ball;
 let bricks = [];
 let bonuses = [];
+let particles = [];
 let bricksDestroyed = 0;
 let score = 0;
 let lives = 3;
+let best = 0;
 let over = true;
 let started = false;
+
+function spawnParticles(x, y, color) {
+  for (let i = 0; i < 8; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 60 + Math.random() * 80;
+    particles.push({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, life: 1, color });
+  }
+}
 
 function speedMultiplier() {
   return Math.min(1 + bricksDestroyed * 0.04, 2.2);
@@ -73,7 +108,8 @@ function initBricks() {
 }
 
 function updateHud() {
-  hudEl.textContent = `Score : ${score} · Vies : ${lives}`;
+  document.getElementById("scoreVal").textContent = score;
+  document.getElementById("livesVal").textContent = lives;
 }
 
 function resetBall() {
@@ -81,12 +117,14 @@ function resetBall() {
   ball = { x: paddleX + PADDLE_W / 2, y: PADDLE_Y - BALL_R, vx: 0, vy: 0 };
 }
 
-function launchBall() {
+function launchBall(e) {
+  if (e) e.stopPropagation();
   if (over) return;
   started = true;
   ball.vx = (Math.random() < 0.5 ? -1 : 1) * 160;
   ball.vy = -220;
   document.getElementById("startOverlay").hidden = true;
+  if (window.CubySfx) CubySfx.tap();
 }
 
 function spawnBonus(x, y) {
@@ -100,10 +138,18 @@ function update(delta) {
   if (movingRight) paddleX += PADDLE_SPEED * delta;
   paddleX = Math.max(0, Math.min(W - PADDLE_W, paddleX));
 
+  particles.forEach(p => {
+    p.x += p.vx * delta;
+    p.y += p.vy * delta;
+    p.life -= delta * 2;
+  });
+  particles = particles.filter(p => p.life > 0);
+
   bonuses.forEach(b => (b.y += b.vy * delta));
   bonuses = bonuses.filter(b => {
     if (b.y > PADDLE_Y && b.y < PADDLE_Y + PADDLE_H && b.x > paddleX && b.x < paddleX + PADDLE_W) {
       lives++;
+      if (window.CubySfx) CubySfx.coin();
       updateHud();
       return false;
     }
@@ -122,13 +168,16 @@ function update(delta) {
   if (ball.x < BALL_R) {
     ball.x = BALL_R;
     ball.vx *= -1;
+    if (window.CubySfx) CubySfx.tap();
   } else if (ball.x > W - BALL_R) {
     ball.x = W - BALL_R;
     ball.vx *= -1;
+    if (window.CubySfx) CubySfx.tap();
   }
   if (ball.y < BALL_R) {
     ball.y = BALL_R;
     ball.vy *= -1;
+    if (window.CubySfx) CubySfx.tap();
   }
 
   if (
@@ -142,6 +191,7 @@ function update(delta) {
     const hitPos = (ball.x - (paddleX + PADDLE_W / 2)) / (PADDLE_W / 2);
     ball.vx = hitPos * 220;
     ball.vy = -Math.abs(ball.vy);
+    if (window.CubySfx) CubySfx.place();
   }
 
   bricks.forEach(b => {
@@ -153,8 +203,11 @@ function update(delta) {
         b.alive = false;
         bricksDestroyed++;
         score += 10;
+        spawnParticles(b.x + b.w / 2, b.y + b.h / 2, b.color);
+        if (window.CubySfx) CubySfx.match();
         if (b.bonus) spawnBonus(b.x + b.w / 2, b.y + b.h / 2);
       } else {
+        if (window.CubySfx) CubySfx.tap();
         score += 3;
       }
       updateHud();
@@ -164,6 +217,7 @@ function update(delta) {
   if (ball.y > H) {
     lives--;
     updateHud();
+    if (window.CubySfx) CubySfx.hit();
     if (lives <= 0) {
       endGame(false);
       return;
@@ -208,6 +262,15 @@ function draw() {
     ctx.fill();
   });
 
+  particles.forEach(p => {
+    ctx.globalAlpha = Math.max(p.life, 0);
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+
   ctx.fillStyle = COLOR_PADDLE;
   ctx.fillRect(paddleX, PADDLE_Y, PADDLE_W, PADDLE_H);
 
@@ -229,8 +292,14 @@ function loop(now) {
 
 async function endGame(won) {
   over = true;
-  document.getElementById("resultTitle").textContent = won ? "🎉 Bravo, briques détruites !" : "💥 Perdu !";
+  if (window.CubySfx) (won ? CubySfx.win() : CubySfx.lose());
+
+  best = Math.max(score, best);
+  localStorage.setItem("bestBreakout", best);
+
+  document.getElementById("resultTitle").textContent = won ? T[lang].win : T[lang].lose;
   document.getElementById("statScore").textContent = score;
+  document.getElementById("statBest").textContent = best;
   document.getElementById("resultModal").hidden = false;
   await saveScore("CW-BLK-1-0001", "breakout", score);
 }
@@ -253,9 +322,11 @@ function startGame(level) {
   applyAreaSize();
   initBricks();
   bonuses = [];
+  particles = [];
   bricksDestroyed = 0;
   paddleX = W / 2 - PADDLE_W / 2;
   score = 0;
+  best = Number(localStorage.getItem("bestBreakout") || 0);
   lives = settings.lives;
   over = false;
   updateHud();
@@ -275,6 +346,23 @@ document.querySelectorAll("[data-difficulty]").forEach(btn => {
 
 document.getElementById("startBtn").onclick = launchBall;
 document.getElementById("replayBtn").onclick = () => location.reload();
+
+function applyLang() {
+  document.documentElement.setAttribute("lang", lang);
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (T[lang][key] !== undefined) el.textContent = T[lang][key];
+  });
+  document.getElementById("langToggle").textContent = lang.toUpperCase();
+}
+
+document.getElementById("langToggle").addEventListener("click", () => {
+  lang = lang === "fr" ? "en" : "fr";
+  localStorage.setItem("cubywearLang", lang);
+  applyLang();
+});
+
+applyLang();
 
 function setMove(dir, active) {
   if (dir === "left") movingLeft = active;
