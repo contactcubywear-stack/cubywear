@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <script>(function(){try{if(localStorage.getItem("cubywearTheme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Cubiwear – Autour du Monde</title>
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/quiz-shared.css">
+</head>
+
+<body>
+
+  <button id="langToggle" class="lang-toggle">FR</button>
+
+  <h1>🌍 Autour du Monde</h1>
+
+  <div class="stat-bar">
+    <div class="stat-chip"><span class="stat-icon">🔁</span><span id="roundVal">1/10</span></div>
+    <div class="stat-chip"><span class="stat-icon">🔥</span><span id="streakVal">0</span></div>
+    <div class="stat-chip"><span class="stat-icon">🏆</span><span id="bestVal">0</span></div>
+  </div>
+
+  <p class="hint" data-i18n="hint">Dans quel pays voit-on ça ?</p>
+
+  <div class="quiz-stimulus postcard" id="stimulus"></div>
+
+  <div class="choice-grid" id="choices"></div>
+
+  <div class="actions">
+    <a href="../index.html" class="btn-small" data-i18n="home">Accueil</a>
+  </div>
+
+  <div class="win-modal" id="resultModal" hidden>
+    <div class="win-modal-content">
+      <h2 data-i18n="done">🌍 Terminé !</h2>
+      <div class="win-stats">
+        <p><span data-i18n="score">Score</span> : <span id="statScore"></span></p>
+        <p><span data-i18n="bestStreak">Meilleure série</span> : <span id="statStreak"></span></p>
+      </div>
+      <div class="win-actions">
+        <button class="btn-small" id="replayBtn" data-i18n="replay">Rejouer</button>
+        <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/sfx.js"></script>
+  <script type="module" src="../js/autour-du-monde.js"></script>
+</body>
+</html>

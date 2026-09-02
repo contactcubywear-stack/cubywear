@@ -60,7 +60,15 @@ const GAMES = [
   { id: "connect4-lite", icon: "🔴",
     fr: { name: "Connect 4 Lite", desc: "Aligne 4 pions avant le bot" }, en: { name: "Connect 4 Lite", desc: "Line up 4 pieces before the bot" } },
   { id: "hexa-path", icon: "🔷",
-    fr: { name: "Hexa-Path", desc: "Relie les deux côtés du plateau hexagonal" }, en: { name: "Hexa-Path", desc: "Connect both sides of the hex board" } }
+    fr: { name: "Hexa-Path", desc: "Relie les deux côtés du plateau hexagonal" }, en: { name: "Hexa-Path", desc: "Connect both sides of the hex board" } },
+  { id: "drapeaux", icon: "🚩",
+    fr: { name: "Drapeaux du Monde", desc: "Devine le pays à partir de son drapeau" }, en: { name: "World Flags", desc: "Guess the country from its flag" } },
+  { id: "autour-du-monde", icon: "🌍",
+    fr: { name: "Autour du Monde", desc: "Devine le pays à partir d'une carte postale" }, en: { name: "Around the World", desc: "Guess the country from a postcard" } },
+  { id: "zoom-animal", icon: "🔍",
+    fr: { name: "Zoom Animal", desc: "Devine l'animal avant le dézoom complet" }, en: { name: "Zoom Animal", desc: "Guess the animal before it fully zooms out" } },
+  { id: "cri-animal", icon: "🔊",
+    fr: { name: "Cri d'Animal", desc: "Devine l'animal à partir de son cri" }, en: { name: "Animal Sounds", desc: "Guess the animal from its sound" } }
 ];
 
 const GAMES_BY_ID = Object.fromEntries(GAMES.map(g => [g.id, g]));
