@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <script>(function(){try{if(localStorage.getItem("cubywearTheme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Cubiwear – Air Hockey</title>
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/arcade-shared.css">
+</head>
+
+<body style="--canvas-w: 320; --canvas-h: 520;">
+
+  <button id="langToggle" class="lang-toggle">FR</button>
+
+  <h1>🏒 Air Hockey</h1>
+
+  <div class="difficulty-select" id="difficultySelect">
+    <p data-i18n="chooseDifficulty">Choisis la difficulté</p>
+    <div class="difficulty-buttons">
+      <button class="btn-small" data-difficulty="facile" data-i18n="easy">Facile</button>
+      <button class="btn-small" data-difficulty="moyen" data-i18n="medium">Moyen</button>
+      <button class="btn-small" data-difficulty="difficile" data-i18n="hard">Difficile</button>
+      <button class="btn-small" data-difficulty="impossible" data-i18n="impossible">Impossible</button>
+    </div>
+    <div class="actions">
+      <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
+    </div>
+  </div>
+
+  <div id="gameArea" hidden>
+    <div class="stat-bar">
+      <div class="stat-chip"><span class="stat-icon">🥅</span><span data-i18n="you">Toi</span> : <span id="scorePlayerVal">0</span></div>
+      <div class="stat-chip"><span class="stat-icon">🤖</span><span data-i18n="ai">Bot</span> : <span id="scoreAiVal">0</span></div>
+    </div>
+
+    <p class="hint" data-i18n="hint">Glisse ton doigt pour déplacer ta raquette et marque des buts</p>
+
+    <canvas id="game" class="game-canvas" width="320" height="520"></canvas>
+
+    <div class="actions">
+      <a href="../index.html" class="btn-small" data-i18n="home">Accueil</a>
+    </div>
+  </div>
+
+  <div class="win-modal" id="resultModal" hidden>
+    <div class="win-modal-content">
+      <h2 id="resultTitle"></h2>
+      <div class="win-stats">
+        <p><span data-i18n="finalScore">Score final</span> : <span id="statScore"></span></p>
+      </div>
+      <div class="win-actions">
+        <button class="btn-small" id="replayBtn" data-i18n="replay">Rejouer</button>
+        <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/sfx.js"></script>
+  <script type="module" src="../js/air-hockey.js"></script>
+</body>
+</html>

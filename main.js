@@ -68,7 +68,19 @@ const GAMES = [
   { id: "zoom-animal", icon: "🔍",
     fr: { name: "Zoom Animal", desc: "Devine l'animal avant le dézoom complet" }, en: { name: "Zoom Animal", desc: "Guess the animal before it fully zooms out" } },
   { id: "cri-animal", icon: "🔊",
-    fr: { name: "Cri d'Animal", desc: "Devine l'animal à partir de son cri" }, en: { name: "Animal Sounds", desc: "Guess the animal from its sound" } }
+    fr: { name: "Cri d'Animal", desc: "Devine l'animal à partir de son cri" }, en: { name: "Animal Sounds", desc: "Guess the animal from its sound" } },
+  { id: "color-switch", icon: "🎡",
+    fr: { name: "Color Switch", desc: "Passe par la bonne couleur en sautant" }, en: { name: "Color Switch", desc: "Jump through the matching color" } },
+  { id: "water-sort", icon: "💧",
+    fr: { name: "Tri de l'Eau", desc: "Trie les couleurs dans les bons tubes" }, en: { name: "Water Sort", desc: "Sort the colors into the right tubes" } },
+  { id: "flow-free", icon: "🌈",
+    fr: { name: "Flow Libre", desc: "Relie les ronds de même couleur sans croiser les tuyaux" }, en: { name: "Flow Free", desc: "Connect matching dots without crossing pipes" } },
+  { id: "stack-tower", icon: "🧱",
+    fr: { name: "Stack Tower", desc: "Empile les blocs le plus haut possible" }, en: { name: "Stack Tower", desc: "Stack the blocks as high as possible" } },
+  { id: "piano-tiles", icon: "🎹",
+    fr: { name: "Piano Tiles", desc: "Touche les tuiles noires sans en rater une" }, en: { name: "Piano Tiles", desc: "Tap the black tiles without missing one" } },
+  { id: "air-hockey", icon: "🏒",
+    fr: { name: "Air Hockey", desc: "Marque plus de buts que le bot" }, en: { name: "Air Hockey", desc: "Score more goals than the bot" } }
 ];
 
 const GAMES_BY_ID = Object.fromEntries(GAMES.map(g => [g.id, g]));

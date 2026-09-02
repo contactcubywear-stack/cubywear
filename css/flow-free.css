@@ -1,0 +1,15 @@
+.flow-canvas-wrap {
+  width: min(calc(100vw - 40px), 360px);
+  margin: 0 auto 20px;
+}
+
+#game {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 2px solid var(--accent-blue);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  touch-action: none;
+  background: var(--bg-main);
+}

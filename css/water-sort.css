@@ -1,0 +1,35 @@
+.tubes-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  max-width: calc(100vw - 40px);
+  margin: 0 auto 25px;
+}
+
+.tube {
+  display: flex;
+  flex-direction: column;
+  width: 38px;
+  border: 3px solid var(--accent-blue);
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  overflow: hidden;
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.2s ease;
+}
+
+.tube.selected {
+  border-color: var(--accent-gold);
+  transform: translateY(-10px);
+}
+
+.tube-slot {
+  height: 30px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.tube-slot:last-child {
+  border-bottom: none;
+}

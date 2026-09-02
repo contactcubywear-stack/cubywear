@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <script>(function(){try{if(localStorage.getItem("cubywearTheme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Cubiwear – Tri de l'Eau</title>
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/arcade-shared.css">
+  <link rel="stylesheet" href="../css/water-sort.css">
+</head>
+
+<body>
+
+  <button id="langToggle" class="lang-toggle">FR</button>
+
+  <h1>💧 Tri de l'Eau</h1>
+
+  <div class="difficulty-select" id="difficultySelect">
+    <p data-i18n="chooseDifficulty">Choisis la difficulté</p>
+    <div class="difficulty-buttons">
+      <button class="btn-small" data-difficulty="facile" data-i18n="easy">Facile</button>
+      <button class="btn-small" data-difficulty="moyen" data-i18n="medium">Moyen</button>
+      <button class="btn-small" data-difficulty="difficile" data-i18n="hard">Difficile</button>
+      <button class="btn-small" data-difficulty="impossible" data-i18n="impossible">Impossible</button>
+    </div>
+    <div class="actions">
+      <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
+    </div>
+  </div>
+
+  <div id="gameArea" hidden>
+    <div class="stat-bar">
+      <div class="stat-chip"><span class="stat-icon">🔁</span><span id="movesVal">0</span></div>
+      <div class="stat-chip"><span class="stat-icon">🏆</span><span id="bestVal">–</span></div>
+    </div>
+
+    <p class="hint" data-i18n="hint">Touche un tube pour verser sa couleur du dessus dans un autre</p>
+
+    <div class="tubes-wrap" id="tubesWrap"></div>
+
+    <div class="actions">
+      <button class="btn-small" id="newGameBtn" data-i18n="newGame">Nouvelle grille</button>
+      <a href="../index.html" class="btn-small" data-i18n="home">Accueil</a>
+    </div>
+  </div>
+
+  <div class="win-modal" id="resultModal" hidden>
+    <div class="win-modal-content">
+      <h2 data-i18n="win">🎉 Résolu !</h2>
+      <div class="win-stats">
+        <p><span data-i18n="finalMoves">Nombre de coups</span> : <span id="statMoves"></span></p>
+      </div>
+      <div class="win-actions">
+        <button class="btn-small" id="replayBtn" data-i18n="replay">Rejouer</button>
+        <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/sfx.js"></script>
+  <script type="module" src="../js/water-sort.js"></script>
+</body>
+</html>
