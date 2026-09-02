@@ -25,10 +25,10 @@ function getLang() {
 let lang = getLang();
 
 const DIFFICULTIES = {
-  facile: { gravity: 0.28, jump: -6.6, rot: 0.006, gap: 380, stroke: 34, orbChance: 0.45 },
-  moyen: { gravity: 0.32, jump: -6.6, rot: 0.011, gap: 340, stroke: 28, orbChance: 0.4 },
-  difficile: { gravity: 0.37, jump: -6.6, rot: 0.017, gap: 300, stroke: 22, orbChance: 0.35 },
-  impossible: { gravity: 0.43, jump: -6.6, rot: 0.026, gap: 260, stroke: 18, orbChance: 0.3 }
+  facile: { gravity: 0.15, jump: -5.6, rot: 0.005, gap: 340, stroke: 38, orbChance: 0.45 },
+  moyen: { gravity: 0.18, jump: -5.8, rot: 0.009, gap: 310, stroke: 32, orbChance: 0.4 },
+  difficile: { gravity: 0.22, jump: -6.0, rot: 0.014, gap: 280, stroke: 26, orbChance: 0.35 },
+  impossible: { gravity: 0.27, jump: -6.3, rot: 0.02, gap: 250, stroke: 20, orbChance: 0.3 }
 };
 
 const canvas = document.getElementById("game");
@@ -47,8 +47,8 @@ const WHEEL_COLORS = ["#E8AA42", "#e74c3c", "#5AC8FA", "#2ecc71"];
 const CENTER_X = W / 2;
 const CENTER_Y = H / 2;
 const BALL_R = 13;
-const RING_R = 95;
-const ORB_R = 12;
+const RING_R = 130;
+const ORB_R = 14;
 const FALL_LIMIT = H;
 
 let cfg = DIFFICULTIES.moyen;
