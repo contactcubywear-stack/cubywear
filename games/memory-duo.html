@@ -12,44 +12,64 @@
 
 <body>
 
+  <button id="langToggle" class="lang-toggle">FR</button>
+
   <h1>🧠✨ Memory Duo+</h1>
-  <p id="timer">01:00</p>
-  <p id="info">0 coups</p>
-  <p class="hint">Attention, les cartes non trouvées bougent de temps en temps !</p>
 
-  <div class="memory-duo-container" id="gameBoard"></div>
+  <div class="difficulty-select" id="difficultySelect">
+    <p data-i18n="chooseDifficulty">Choisis la difficulté</p>
+    <div class="difficulty-buttons">
+      <button class="btn-small" data-difficulty="facile" data-i18n="easy">Facile</button>
+      <button class="btn-small" data-difficulty="moyen" data-i18n="medium">Moyen</button>
+      <button class="btn-small" data-difficulty="difficile" data-i18n="hard">Difficile</button>
+      <button class="btn-small" data-difficulty="impossible" data-i18n="impossible">Impossible</button>
+    </div>
+    <div class="actions">
+      <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
+    </div>
+  </div>
 
-  <div class="actions">
-    <a href="../index.html" class="btn-small">Accueil</a>
+  <div id="gameArea" hidden>
+    <p id="timer">01:00</p>
+    <p id="info">0</p>
+    <p class="hint" data-i18n="hint">Attention, les cartes non trouvées bougent de temps en temps !</p>
+
+    <div class="memory-duo-container" id="gameBoard"></div>
+
+    <div class="actions">
+      <a href="../index.html" class="btn-small" data-i18n="home">Accueil</a>
+    </div>
   </div>
 
   <div class="win-modal" id="winModal" hidden>
     <div class="win-modal-content">
-      <h2>🎉 Bravo, tu as gagné !</h2>
+      <h2 data-i18n="winTitle">🎉 Bravo, tu as gagné !</h2>
       <div class="win-stats">
-        <p>Coups joués : <span id="statMoves"></span></p>
-        <p>Temps restant : <span id="statTime"></span></p>
+        <p><span data-i18n="moves">Coups joués</span> : <span id="statMoves"></span></p>
+        <p><span data-i18n="timeLeft">Temps restant</span> : <span id="statTime"></span></p>
+        <p><span data-i18n="best">Meilleur score</span> : <span id="statBest"></span></p>
       </div>
       <div class="win-actions">
-        <button class="btn-small" id="replayBtn">Rejouer</button>
-        <a href="../index.html" class="btn-small">Menu principal</a>
+        <button class="btn-small" id="replayBtn" data-i18n="replay">Rejouer</button>
+        <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
       </div>
     </div>
   </div>
 
   <div class="win-modal" id="loseModal" hidden>
     <div class="win-modal-content">
-      <h2>😕 Temps écoulé !</h2>
+      <h2 data-i18n="loseTitle">😕 Temps écoulé !</h2>
       <div class="win-stats">
-        <p>Coups joués : <span id="loseStatMoves"></span></p>
+        <p><span data-i18n="moves">Coups joués</span> : <span id="loseStatMoves"></span></p>
       </div>
       <div class="win-actions">
-        <button class="btn-small" id="loseReplayBtn">Rejouer</button>
-        <a href="../index.html" class="btn-small">Menu principal</a>
+        <button class="btn-small" id="loseReplayBtn" data-i18n="replay">Rejouer</button>
+        <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
       </div>
     </div>
   </div>
 
+  <script src="../js/sfx.js"></script>
   <script type="module" src="../js/memory-duo.js"></script>
 </body>
 </html>

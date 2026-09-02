@@ -18,6 +18,18 @@ h1, #timer, #info {
   margin: 1px 0;
 }
 
+.difficulty-select {
+  color: var(--text-light);
+}
+
+.difficulty-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
 .hint {
   color: var(--text-light);
   font-size: 13px;

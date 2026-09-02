@@ -1,9 +1,40 @@
 import { saveScore } from "../api.js";
 
-const TOTAL_ROUNDS = 10;
+const T = {
+  fr: {
+    chooseDifficulty: "Choisis la difficulté",
+    easy: "Facile", medium: "Moyen", hard: "Difficile", impossible: "Impossible",
+    mainMenu: "Menu principal", home: "Accueil", replay: "Rejouer",
+    hint: "Cette forme est-elle symétrique (axe vertical) ?",
+    yes: "✅ Oui", no: "❌ Non",
+    done: "🦋 Terminé !", finalScore: "Score final", bestStreak: "Meilleure série"
+  },
+  en: {
+    chooseDifficulty: "Choose a difficulty",
+    easy: "Easy", medium: "Medium", hard: "Hard", impossible: "Impossible",
+    mainMenu: "Main menu", home: "Home", replay: "Replay",
+    hint: "Is this shape symmetric (vertical axis)?",
+    yes: "✅ Yes", no: "❌ No",
+    done: "🦋 Done!", finalScore: "Final score", bestStreak: "Best streak"
+  }
+};
+
+function getLang() {
+  return localStorage.getItem("cubywearLang") === "en" ? "en" : "fr";
+}
+let lang = getLang();
+
+const DIFFICULTIES = {
+  facile:     { rounds: 8,  timer: 0, strength: 1 },
+  moyen:      { rounds: 10, timer: 6, strength: 1 },
+  difficile:  { rounds: 12, timer: 4, strength: 0.4 },
+  impossible: { rounds: 15, timer: 3, strength: 0.15 }
+};
+
+let cfg = DIFFICULTIES.moyen;
+
 const canvas = document.getElementById("shapeCanvas");
 const ctx = canvas.getContext("2d");
-const hudEl = document.getElementById("hud");
 
 const theme = getComputedStyle(document.documentElement);
 const COLOR_FILL = theme.getPropertyValue("--accent-gold").trim() || "#E8AA42";
@@ -11,8 +42,12 @@ const COLOR_STROKE = theme.getPropertyValue("--accent-blue").trim() || "#1F4690"
 
 let round = 0;
 let score = 0;
+let streak = 0;
+let bestStreak = 0;
 let over = false;
 let currentIsSymmetric = false;
+let timeLeft = 0;
+let timerInterval = null;
 
 function randPointsHalf(cx, cy, sign) {
   const n = 8;
@@ -30,7 +65,20 @@ function randPointsHalf(cx, cy, sign) {
 function generateShapePoints(symmetric) {
   const cx = 120, cy = 120;
   const right = randPointsHalf(cx, cy, 1);
-  const left = symmetric ? right.map(([x, y]) => [cx - (x - cx), y]) : randPointsHalf(cx, cy, -1);
+  let left;
+
+  if (symmetric) {
+    left = right.map(([x, y]) => [cx - (x - cx), y]);
+  } else if (cfg.strength >= 1) {
+    left = randPointsHalf(cx, cy, -1);
+  } else {
+    const mirrored = right.map(([x, y]) => [cx - (x - cx), y]);
+    left = mirrored.map(([x, y]) => [
+      x + (Math.random() - 0.5) * 60 * cfg.strength,
+      y + (Math.random() - 0.5) * 40 * cfg.strength
+    ]);
+  }
+
   const all = [...right, ...left];
   all.sort((a, b) => Math.atan2(a[1] - cy, a[0] - cx) - Math.atan2(b[1] - cy, b[0] - cx));
   return all;
@@ -52,38 +100,118 @@ function drawShape(points) {
 }
 
 function updateHud() {
-  hudEl.textContent = `Manche ${round + 1}/${TOTAL_ROUNDS} · Score : ${score}`;
+  document.getElementById("roundVal").textContent = `${round + 1}/${cfg.rounds}`;
+  document.getElementById("scoreVal").textContent = score;
+  document.getElementById("streakVal").textContent = streak;
+}
+
+function updateTimerBar() {
+  const fill = document.getElementById("timerFill");
+  const ratio = Math.max(timeLeft / cfg.timer, 0);
+  fill.style.width = `${ratio * 100}%`;
+  fill.classList.toggle("warn", ratio <= 0.5 && ratio > 0.2);
+  fill.classList.toggle("danger", ratio <= 0.2);
 }
 
 function startRound() {
-  if (round >= TOTAL_ROUNDS) {
+  if (round >= cfg.rounds) {
     endGame();
     return;
   }
   updateHud();
+  canvas.classList.remove("correct", "wrong");
   currentIsSymmetric = Math.random() < 0.5;
   drawShape(generateShapePoints(currentIsSymmetric));
+
+  clearInterval(timerInterval);
+  const timerWrap = document.getElementById("timerBarWrap");
+  if (cfg.timer > 0) {
+    timerWrap.hidden = false;
+    timeLeft = cfg.timer;
+    updateTimerBar();
+    timerInterval = setInterval(() => {
+      timeLeft -= 0.1;
+      updateTimerBar();
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        answer(!currentIsSymmetric);
+      }
+    }, 100);
+  } else {
+    timerWrap.hidden = true;
+  }
 }
 
 function answer(saysSymmetric) {
   if (over) return;
-  if (saysSymmetric === currentIsSymmetric) score++;
+  clearInterval(timerInterval);
+  const isCorrect = saysSymmetric === currentIsSymmetric;
+
+  if (isCorrect) {
+    score++;
+    streak++;
+    bestStreak = Math.max(bestStreak, streak);
+    canvas.classList.add("correct");
+    if (window.CubySfx) CubySfx.match();
+  } else {
+    streak = 0;
+    canvas.classList.add("wrong");
+    if (window.CubySfx) CubySfx.fail();
+  }
+
   round++;
-  startRound();
+  setTimeout(startRound, 300);
 }
 
 async function endGame() {
   over = true;
+  clearInterval(timerInterval);
+  if (window.CubySfx) CubySfx.win();
+
   document.getElementById("statScore").textContent = score;
+  document.getElementById("statStreak").textContent = bestStreak;
   document.getElementById("resultModal").hidden = false;
   await saveScore("CW-BLK-1-0001", "symetrie", score * 10);
 }
+
+function startGame(diff) {
+  cfg = DIFFICULTIES[diff];
+  round = 0;
+  score = 0;
+  streak = 0;
+  bestStreak = 0;
+  over = false;
+
+  document.getElementById("difficultySelect").hidden = true;
+  document.getElementById("gameArea").hidden = false;
+
+  startRound();
+}
+
+document.querySelectorAll("[data-difficulty]").forEach(btn => {
+  btn.onclick = () => startGame(btn.dataset.difficulty);
+});
 
 document.getElementById("btnYes").onclick = () => answer(true);
 document.getElementById("btnNo").onclick = () => answer(false);
 document.getElementById("replayBtn").onclick = () => location.reload();
 
-// Hook de test/debug (aucun impact en jeu normal).
-window.__symetrieDebug = { answer, getState: () => ({ round, score, over, currentIsSymmetric }) };
+function applyLang() {
+  document.documentElement.setAttribute("lang", lang);
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (T[lang][key] !== undefined) el.textContent = T[lang][key];
+  });
+  document.getElementById("langToggle").textContent = lang.toUpperCase();
+}
 
-startRound();
+document.getElementById("langToggle").addEventListener("click", () => {
+  lang = lang === "fr" ? "en" : "fr";
+  localStorage.setItem("cubywearLang", lang);
+  applyLang();
+});
+
+// Hook de test/debug (aucun impact en jeu normal).
+window.__symetrieDebug = { answer, getState: () => ({ round, score, over, currentIsSymmetric, streak }) };
+
+applyLang();

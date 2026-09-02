@@ -3,10 +3,36 @@ body {
   box-sizing: border-box;
 }
 
-#hud {
-  color: var(--accent-gold);
+.difficulty-select {
+  color: var(--text-light);
+}
+
+.difficulty-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.stat-bar {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.stat-chip {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-blue);
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 14px;
   font-weight: bold;
-  margin-bottom: 8px;
+  color: var(--accent-gold);
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .hint {
@@ -23,6 +49,50 @@ body {
   margin: 0 auto;
   width: min(70vw, 240px);
   height: min(70vw, 240px);
+  transition: border-color 0.2s ease;
+}
+
+#shapeCanvas.correct {
+  border-color: #2ecc71;
+}
+
+#shapeCanvas.wrong {
+  border-color: #e74c3c;
+  animation: shakeCanvas 0.3s ease;
+}
+
+@keyframes shakeCanvas {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.timer-bar {
+  width: min(70vw, 240px);
+  height: 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  margin: 10px auto 0;
+}
+
+.timer-bar[hidden] {
+  display: none;
+}
+
+.timer-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #3CCF4E, #FFD93D);
+  transition: width 0.1s linear, background-color 0.3s ease;
+}
+
+.timer-fill.warn {
+  background: linear-gradient(90deg, #FFD93D, #FF8B13);
+}
+
+.timer-fill.danger {
+  background: linear-gradient(90deg, #FF8B13, #FF1E1E);
 }
 
 .choice-buttons {
