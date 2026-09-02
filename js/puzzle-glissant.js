@@ -24,21 +24,40 @@ const boardEl = document.getElementById("board");
 const movesEl = document.getElementById("moves");
 const sizeButtons = document.querySelectorAll(".size-btn");
 
-const PUZZLE_IMAGE = `data:image/svg+xml,${encodeURIComponent(`
+const EMOJI_POOL = [
+  "🎮","⭐","🔥","💀","⚡","🎲","🎹","🎧","🎯","🎁",
+  "🚀","🧩","🎈","🪄","🔮","🍀","🦄","🍩","🍕","🍔",
+  "🍟","🌮","🍎","🍇","🍉","🥑","🐶","🐱","🐵","🦊",
+  "🐸","🐧","🦁","🐢","🌟","🌈","☀️","🌙","⚽","🏀",
+  "🎾","🏈","🎳","🎱","🚗","✈️","🚁","🛸","⚓","🎸"
+];
+
+const GRADIENT_PAIRS = [
+  ["#1F4690", "#E8AA42"],
+  ["#9B59B6", "#F2811D"],
+  ["#2ECC71", "#1F4690"],
+  ["#E74C3C", "#E8AA42"],
+  ["#5AC8FA", "#FF6FA5"]
+];
+
+function buildPuzzleImage() {
+  const emoji = EMOJI_POOL[Math.floor(Math.random() * EMOJI_POOL.length)];
+  const [c1, c2] = GRADIENT_PAIRS[Math.floor(Math.random() * GRADIENT_PAIRS.length)];
+  const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#1F4690"/>
-      <stop offset="100%" stop-color="#E8AA42"/>
+      <stop offset="0%" stop-color="${c1}"/>
+      <stop offset="100%" stop-color="${c2}"/>
     </linearGradient>
   </defs>
   <rect width="400" height="400" fill="url(#g)"/>
-  <circle cx="200" cy="160" r="90" fill="#130D33" opacity="0.25"/>
-  <text x="200" y="175" font-size="46" font-family="Arial, sans-serif" font-weight="bold" fill="#ffffff" text-anchor="middle">CUBI</text>
-  <text x="200" y="225" font-size="46" font-family="Arial, sans-serif" font-weight="bold" fill="#ffffff" text-anchor="middle">WEAR</text>
-  <text x="200" y="320" font-size="90" text-anchor="middle">🧠</text>
-</svg>
-`)}`;
+  <text x="200" y="290" font-size="300" text-anchor="middle">${emoji}</text>
+</svg>`;
+  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+}
+
+let PUZZLE_IMAGE = buildPuzzleImage();
 
 let size = 4;
 let tiles = [];
@@ -117,6 +136,7 @@ function shuffleBoard() {
   over = false;
   moves = 0;
   movesEl.textContent = T[lang].movesText(0);
+  PUZZLE_IMAGE = buildPuzzleImage();
 
   for (let i = 0; i < size * size * 40; i++) {
     const neighbors = getAdjacentIndexes(emptyIndex);
