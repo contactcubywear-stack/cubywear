@@ -3,6 +3,18 @@ body {
   box-sizing: border-box;
 }
 
+.difficulty-select {
+  color: var(--text-light);
+}
+
+.difficulty-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
 #triesLeft {
   color: var(--accent-gold);
   font-weight: bold;
@@ -23,11 +35,30 @@ body {
   border-radius: 50%;
   border: 2px solid var(--accent-blue);
   cursor: pointer;
-  transition: 0.2s;
+  transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s ease;
 }
 
 .peg:hover {
   transform: scale(1.1);
+}
+
+.peg.pop-in {
+  animation: pegPop 0.3s cubic-bezier(.34,1.56,.64,1);
+}
+
+@keyframes pegPop {
+  from { transform: scale(0.3); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.history-row.latest {
+  border-color: var(--accent-gold);
+  animation: rowIn 0.3s ease;
+}
+
+@keyframes rowIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .current-guess {

@@ -1,5 +1,46 @@
 import { saveScore } from "../api.js";
 
+const T = {
+  fr: {
+    chooseDifficulty: "Choisis la difficulté",
+    easy: "Facile", medium: "Moyen", hard: "Difficile", impossible: "Impossible",
+    mainMenu: "Menu principal", home: "Accueil",
+    fillGrid: "Remplis la grille avec les chiffres de 1 à 9",
+    erase: "Effacer", replay: "Rejouer",
+    winTitle: "🎉 Bravo, grille résolue !",
+    time: "Temps", mistakesLabel: "Erreurs"
+  },
+  en: {
+    chooseDifficulty: "Choose a difficulty",
+    easy: "Easy", medium: "Medium", hard: "Hard", impossible: "Impossible",
+    mainMenu: "Main menu", home: "Home",
+    fillGrid: "Fill the grid with digits from 1 to 9",
+    erase: "Erase", replay: "Replay",
+    winTitle: "🎉 Grid solved!",
+    time: "Time", mistakesLabel: "Mistakes"
+  }
+};
+
+function getLang() {
+  return localStorage.getItem("cubywearLang") === "en" ? "en" : "fr";
+}
+let lang = getLang();
+
+function applyLang() {
+  document.documentElement.setAttribute("lang", lang);
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (T[lang][key] !== undefined) el.textContent = T[lang][key];
+  });
+  document.getElementById("langToggle").textContent = lang.toUpperCase();
+}
+
+document.getElementById("langToggle").addEventListener("click", () => {
+  lang = lang === "fr" ? "en" : "fr";
+  localStorage.setItem("cubywearLang", lang);
+  applyLang();
+});
+
 const BASE_SOLUTION = [
   [5,3,4,6,7,8,9,1,2],
   [6,7,2,1,9,5,3,4,8],
@@ -12,16 +53,12 @@ const BASE_SOLUTION = [
   [3,4,5,2,8,6,1,7,9]
 ];
 
-const CLUES = 36;
+const CLUES_BY_DIFFICULTY = { facile: 45, moyen: 36, difficile: 30, impossible: 24 };
 
 function shuffle(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
 }
 
-// Applique des transformations qui préservent la validité d'un Sudoku
-// (permutation des chiffres, des lignes/colonnes dans leurs bandes,
-// des bandes elles-mêmes, et transposition) pour varier la grille à
-// chaque partie sans avoir à écrire un générateur complet.
 function randomizeSolution(base) {
   let g = base.map(row => [...row]);
 
@@ -54,82 +91,174 @@ function makePuzzle(solution, clues) {
   return puzzle;
 }
 
-const solution = randomizeSolution(BASE_SOLUTION);
-const puzzle = makePuzzle(solution, CLUES);
+let solution, puzzle, values;
+let selected = null;
+let mistakes = 0;
+let seconds = 0;
+let timerInterval = null;
+let over = false;
 
 const gridEl = document.getElementById("grid");
-const statusEl = document.getElementById("status");
+const numpadEl = document.getElementById("numpad");
 
-puzzle.forEach((row, r) => {
-  row.forEach((value, c) => {
-    const input = document.createElement("input");
-    input.className = "sudoku-cell";
-    input.maxLength = 1;
-    input.inputMode = "numeric";
+function cellEl(r, c) {
+  return gridEl.children[r * 9 + c];
+}
 
-    if ((Math.floor(r / 3) + Math.floor(c / 3)) % 2 === 1) input.classList.add("box-shade");
-    if (c % 3 === 2 && c !== 8) input.classList.add("box-right");
-    if (r % 3 === 2 && r !== 8) input.classList.add("box-bottom");
+function buildGrid() {
+  gridEl.innerHTML = "";
+  puzzle.forEach((row, r) => {
+    row.forEach((value, c) => {
+      const cell = document.createElement("div");
+      cell.className = "sudoku-cell";
+      cell.dataset.r = r;
+      cell.dataset.c = c;
 
-    if (value !== 0) {
-      input.value = value;
-      input.disabled = true;
-    } else {
-      input.addEventListener("input", () => {
-        input.value = input.value.replace(/[^1-9]/g, "").slice(0, 1);
-      });
-    }
+      if ((Math.floor(r / 3) + Math.floor(c / 3)) % 2 === 1) cell.classList.add("box-shade");
+      if (c % 3 === 2 && c !== 8) cell.classList.add("box-right");
+      if (r % 3 === 2 && r !== 8) cell.classList.add("box-bottom");
 
-    gridEl.appendChild(input);
+      if (value !== 0) {
+        cell.classList.add("fixed");
+        cell.textContent = value;
+      }
+
+      cell.addEventListener("click", () => selectCell(r, c));
+      gridEl.appendChild(cell);
+    });
   });
+}
+
+function buildNumpad() {
+  numpadEl.innerHTML = "";
+  for (let n = 1; n <= 9; n++) {
+    const btn = document.createElement("button");
+    btn.className = "num-btn";
+    btn.textContent = n;
+    btn.onclick = () => placeValue(n);
+    numpadEl.appendChild(btn);
+  }
+  const eraseKey = document.createElement("button");
+  eraseKey.className = "num-btn";
+  eraseKey.textContent = "⌫";
+  eraseKey.onclick = () => placeValue(0);
+  numpadEl.appendChild(eraseKey);
+}
+
+function selectCell(r, c) {
+  if (over) return;
+  if (puzzle[r][c] !== 0) { selected = null; highlight(); return; }
+  selected = { r, c };
+  highlight();
+}
+
+function highlight() {
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      const el = cellEl(r, c);
+      el.classList.remove("selected", "peer", "same-value");
+    }
+  }
+  if (!selected) return;
+
+  const { r, c } = selected;
+  const boxR = Math.floor(r / 3) * 3, boxC = Math.floor(c / 3) * 3;
+  const val = values[r][c];
+
+  for (let rr = 0; rr < 9; rr++) {
+    for (let cc = 0; cc < 9; cc++) {
+      const sameRow = rr === r, sameCol = cc === c;
+      const sameBox = rr >= boxR && rr < boxR + 3 && cc >= boxC && cc < boxC + 3;
+      if (sameRow || sameCol || sameBox) cellEl(rr, cc).classList.add("peer");
+      if (val !== 0 && values[rr][cc] === val) cellEl(rr, cc).classList.add("same-value");
+    }
+  }
+  cellEl(r, c).classList.add("selected");
+}
+
+function placeValue(n) {
+  if (over || !selected) return;
+  const { r, c } = selected;
+  if (puzzle[r][c] !== 0) return;
+
+  values[r][c] = n;
+  const el = cellEl(r, c);
+  el.textContent = n === 0 ? "" : n;
+  el.classList.remove("error");
+
+  if (window.CubySfx) CubySfx.tap();
+
+  if (n !== 0 && n !== solution[r][c]) {
+    mistakes++;
+    document.getElementById("mistakes").textContent = mistakes;
+    el.classList.add("error");
+    if (window.CubySfx) CubySfx.fail();
+  }
+
+  highlight();
+  checkWin();
+}
+
+function checkWin() {
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      if (values[r][c] !== solution[r][c]) return;
+    }
+  }
+  over = true;
+  clearInterval(timerInterval);
+  if (window.CubySfx) CubySfx.win();
+
+  const min = String(Math.floor(seconds / 60)).padStart(2, "0");
+  const sec = String(seconds % 60).padStart(2, "0");
+  document.getElementById("statTime").textContent = `${min}:${sec}`;
+  document.getElementById("statMistakes").textContent = mistakes;
+  document.getElementById("resultModal").hidden = false;
+
+  saveScore("CW-BLK-1-0001", "sudoku", Math.max(30 - mistakes * 2, 5));
+}
+
+function tickTimer() {
+  seconds++;
+  const min = String(Math.floor(seconds / 60)).padStart(2, "0");
+  const sec = String(seconds % 60).padStart(2, "0");
+  document.getElementById("timer").textContent = `${min}:${sec}`;
+}
+
+function startGame(difficulty) {
+  solution = randomizeSolution(BASE_SOLUTION);
+  puzzle = makePuzzle(solution, CLUES_BY_DIFFICULTY[difficulty]);
+  values = puzzle.map(row => [...row]);
+  selected = null;
+  mistakes = 0;
+  seconds = 0;
+  over = false;
+
+  document.getElementById("mistakes").textContent = 0;
+  document.getElementById("timer").textContent = "00:00";
+
+  buildGrid();
+  buildNumpad();
+
+  document.getElementById("difficultySelect").hidden = true;
+  document.getElementById("gameArea").hidden = false;
+
+  clearInterval(timerInterval);
+  timerInterval = setInterval(tickTimer, 1000);
+}
+
+document.querySelectorAll("[data-difficulty]").forEach(btn => {
+  btn.onclick = () => startGame(btn.dataset.difficulty);
 });
 
-function isValidGroup(values) {
-  const filtered = values.filter(v => v !== "");
-  if (filtered.length !== 9) return false;
-  return new Set(filtered).size === 9;
-}
+document.getElementById("eraseBtn").onclick = () => placeValue(0);
 
-function readGrid() {
-  const cells = [...gridEl.querySelectorAll(".sudoku-cell")];
-  const rows = [];
-  for (let r = 0; r < 9; r++) {
-    rows.push(cells.slice(r * 9, r * 9 + 9).map(input => input.value));
-  }
-  return rows;
-}
-
-function isGridValid(rows) {
-  for (let r = 0; r < 9; r++) {
-    if (!isValidGroup(rows[r])) return false;
-  }
-  for (let c = 0; c < 9; c++) {
-    if (!isValidGroup(rows.map(row => row[c]))) return false;
-  }
-  for (let br = 0; br < 3; br++) {
-    for (let bc = 0; bc < 3; bc++) {
-      const box = [];
-      for (let r = 0; r < 3; r++) {
-        for (let c = 0; c < 3; c++) {
-          box.push(rows[br * 3 + r][bc * 3 + c]);
-        }
-      }
-      if (!isValidGroup(box)) return false;
-    }
-  }
-  return true;
-}
-
-document.getElementById("validate").onclick = async () => {
-  const rows = readGrid();
-  const correct = isGridValid(rows);
-
-  if (correct) {
-    document.getElementById("resultModal").hidden = false;
-    await saveScore("CW-BLK-1-0001", "sudoku", 20);
-  } else {
-    statusEl.textContent = "Il y a des erreurs ou des cases vides, continue !";
-  }
-};
+window.addEventListener("keydown", e => {
+  if (!selected || over) return;
+  if (e.key >= "1" && e.key <= "9") placeValue(Number(e.key));
+  if (e.key === "Backspace" || e.key === "Delete") placeValue(0);
+});
 
 document.getElementById("replayBtn").onclick = () => location.reload();
+
+applyLang();

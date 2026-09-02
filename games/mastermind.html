@@ -12,32 +12,50 @@
 
 <body>
 
+  <button id="langToggle" class="lang-toggle">FR</button>
+
   <h1>🎯 Mastermind</h1>
-  <p id="triesLeft">Essais restants : 10</p>
 
-  <div class="palette" id="palette"></div>
-
-  <div class="current-guess" id="currentGuess"></div>
-
-  <div class="guess-actions">
-    <button class="btn-small" id="clearBtn">Effacer</button>
-    <button class="btn-small" id="submitBtn">Valider</button>
+  <div class="difficulty-select" id="difficultySelect">
+    <p data-i18n="chooseDifficulty">Choisis la difficulté</p>
+    <div class="difficulty-buttons">
+      <button class="btn-small" data-difficulty="facile" data-i18n="easy">Facile</button>
+      <button class="btn-small" data-difficulty="moyen" data-i18n="medium">Moyen</button>
+      <button class="btn-small" data-difficulty="difficile" data-i18n="hard">Difficile</button>
+      <button class="btn-small" data-difficulty="impossible" data-i18n="impossible">Impossible</button>
+    </div>
+    <div class="actions">
+      <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
+    </div>
   </div>
 
-  <p class="legend">
-    <span class="legend-dot green"></span> bonne couleur, bonne place
-    &nbsp;·&nbsp;
-    <span class="legend-dot gold"></span> bonne couleur, mauvaise place
-    &nbsp;·&nbsp;
-    <span class="legend-dot red"></span> couleur absente
-    <br>
-    <small>(chaque point correspond à la pastille du même rang dans ta tentative)</small>
-  </p>
+  <div id="gameArea" hidden>
+    <p id="triesLeft">Essais restants : 10</p>
 
-  <div class="history" id="history"></div>
+    <div class="palette" id="palette"></div>
 
-  <div class="actions">
-    <a href="../index.html" class="btn-small">Accueil</a>
+    <div class="current-guess" id="currentGuess"></div>
+
+    <div class="guess-actions">
+      <button class="btn-small" id="clearBtn" data-i18n="clear">Effacer</button>
+      <button class="btn-small" id="submitBtn" data-i18n="submit">Valider</button>
+    </div>
+
+    <p class="legend">
+      <span class="legend-dot green"></span> <span data-i18n="legendGreen">bonne couleur, bonne place</span>
+      &nbsp;·&nbsp;
+      <span class="legend-dot gold"></span> <span data-i18n="legendGold">bonne couleur, mauvaise place</span>
+      &nbsp;·&nbsp;
+      <span class="legend-dot red"></span> <span data-i18n="legendRed">couleur absente</span>
+      <br>
+      <small data-i18n="legendNote">(chaque point correspond à la pastille du même rang dans ta tentative)</small>
+    </p>
+
+    <div class="history" id="history"></div>
+
+    <div class="actions">
+      <a href="../index.html" class="btn-small" data-i18n="home">Accueil</a>
+    </div>
   </div>
 
   <div class="win-modal" id="resultModal" hidden>
@@ -45,12 +63,13 @@
       <h2 id="resultTitle"></h2>
       <div class="reveal-combo" id="revealCombo" hidden></div>
       <div class="win-actions">
-        <button class="btn-small" id="replayBtn">Rejouer</button>
-        <a href="../index.html" class="btn-small">Menu principal</a>
+        <button class="btn-small" id="replayBtn" data-i18n="replay">Rejouer</button>
+        <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
       </div>
     </div>
   </div>
 
+  <script src="../js/sfx.js"></script>
   <script type="module" src="../js/mastermind.js"></script>
 </body>
 </html>

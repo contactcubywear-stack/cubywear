@@ -37,11 +37,15 @@ body {
 
 .hangman-figure .part {
   stroke: var(--accent-gold);
-  visibility: hidden;
+  opacity: 0;
+  stroke-dasharray: 120;
+  stroke-dashoffset: 120;
+  transition: opacity 0.2s ease, stroke-dashoffset 0.45s ease;
 }
 
 .hangman-figure .part.show {
-  visibility: visible;
+  opacity: 1;
+  stroke-dashoffset: 0;
 }
 
 .word-display {
@@ -52,10 +56,34 @@ body {
   margin: 10px 0;
 }
 
-#triesLeft {
-  color: var(--accent-gold);
-  font-weight: bold;
+.letter-pop {
+  display: inline-block;
+  animation: letterPop 0.3s cubic-bezier(.34,1.56,.64,1);
+}
+
+@keyframes letterPop {
+  from { transform: scale(0.4); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.stat-bar {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
   margin-bottom: 15px;
+}
+
+.stat-chip {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-blue);
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--accent-gold);
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .keyboard {
