@@ -12,33 +12,58 @@
 
 <body>
 
-  <h1>🧮 Speed Math</h1>
-  <p id="hud">Score : 0 · Temps : 60s</p>
+  <button id="langToggle" class="lang-toggle">FR</button>
 
-  <div class="math-box">
-    <p id="problem">3 + 4 = ?</p>
-    <input type="text" inputmode="numeric" id="answer" placeholder="Réponse">
-    <button class="btn-small" id="submitBtn">Valider</button>
+  <h1>🧮 Speed Math</h1>
+
+  <div class="difficulty-select" id="difficultySelect">
+    <p data-i18n="chooseDifficulty">Choisis la difficulté</p>
+    <div class="difficulty-buttons">
+      <button class="btn-small" data-difficulty="facile" data-i18n="easy">Facile</button>
+      <button class="btn-small" data-difficulty="moyen" data-i18n="medium">Moyen</button>
+      <button class="btn-small" data-difficulty="difficile" data-i18n="hard">Difficile</button>
+      <button class="btn-small" data-difficulty="impossible" data-i18n="impossible">Impossible</button>
+    </div>
+    <div class="actions">
+      <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
+    </div>
+  </div>
+
+  <div id="gameArea" hidden>
+    <div class="stat-bar">
+      <div class="stat-chip"><span class="stat-icon">⭐</span><span id="scoreVal">0</span></div>
+      <div class="stat-chip"><span class="stat-icon">🔥</span><span id="streakVal">0</span></div>
+      <div class="stat-chip"><span class="stat-icon">⏱️</span><span id="timeVal">60</span></div>
+    </div>
+
+    <div class="math-box" id="mathBox">
+      <p id="problem">3 + 4 = ?</p>
+      <div class="answer-display" id="answerDisplay">&nbsp;</div>
+    </div>
+
+    <div class="numpad" id="numpad"></div>
   </div>
 
   <div class="actions">
-    <a href="../index.html" class="btn-small">Accueil</a>
+    <a href="../index.html" class="btn-small" data-i18n="home">Accueil</a>
   </div>
 
   <div class="win-modal" id="resultModal" hidden>
     <div class="win-modal-content">
-      <h2>🧮 Temps écoulé !</h2>
+      <h2 data-i18n="timeUp">🧮 Temps écoulé !</h2>
       <div class="win-stats">
-        <p>Bonnes réponses : <span id="statCorrect"></span></p>
-        <p>Erreurs : <span id="statWrong"></span></p>
+        <p><span data-i18n="correct">Bonnes réponses</span> : <span id="statCorrect"></span></p>
+        <p><span data-i18n="wrong">Erreurs</span> : <span id="statWrong"></span></p>
+        <p><span data-i18n="bestStreak">Meilleure série</span> : <span id="statStreak"></span></p>
       </div>
       <div class="win-actions">
-        <button class="btn-small" id="replayBtn">Rejouer</button>
-        <a href="../index.html" class="btn-small">Menu principal</a>
+        <button class="btn-small" id="replayBtn" data-i18n="replay">Rejouer</button>
+        <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
       </div>
     </div>
   </div>
 
+  <script src="../js/sfx.js"></script>
   <script type="module" src="../js/speed-math.js"></script>
 </body>
 </html>
