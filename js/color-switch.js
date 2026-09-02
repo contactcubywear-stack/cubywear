@@ -5,7 +5,7 @@ const T = {
     home: "Accueil", mainMenu: "Menu principal", replay: "Rejouer",
     chooseDifficulty: "Choisis la difficulté",
     easy: "Facile", medium: "Moyen", hard: "Difficile", impossible: "Impossible",
-    hint: "Touche l'écran pour sauter, passe par la couleur qui correspond à ta balle",
+    hint: "Touche l'écran pour changer de direction, passe par la couleur qui correspond à ta balle",
     gameOver: "💥 Perdu !", score: "Score", best: "Meilleur score",
     startPrompt: "Touche pour commencer"
   },
@@ -13,7 +13,7 @@ const T = {
     home: "Home", mainMenu: "Main menu", replay: "Replay",
     chooseDifficulty: "Choose a difficulty",
     easy: "Easy", medium: "Medium", hard: "Hard", impossible: "Impossible",
-    hint: "Tap the screen to jump, pass through the color matching your ball",
+    hint: "Tap the screen to change direction, pass through the color matching your ball",
     gameOver: "💥 Lost!", score: "Score", best: "Best score",
     startPrompt: "Tap to start"
   }
@@ -42,14 +42,17 @@ const COLOR_TEXT = theme.getPropertyValue("--text-white").trim() || "#ffffff";
 const BALL_COLOR = "#E8AA42";
 const WHEEL_COLORS = ["#E8AA42", "#e74c3c", "#5AC8FA", "#2ecc71"];
 
-const BALL_X = 80;
+// La balle est fixe près du bas de l'écran ; elle rebondit horizontalement
+// pendant que les anneaux défilent du haut vers le bas (donc la progression
+// se lit visuellement de bas en haut, comme le vrai Color Switch).
+const BALL_Y = H - 110;
 const BALL_R = 13;
 const GRAVITY = 0.32;
 const JUMP = -6.2;
 const RING_R = 95;
 
 let cfg = DIFFICULTIES.moyen;
-let ballY = H / 2;
+let ballX = W / 2;
 let velocity = 0;
 let score = 0;
 let best = 0;
@@ -63,10 +66,10 @@ let flashAlpha = 0;
 
 function spawnRing() {
   const margin = RING_R + 20;
-  const centerY = margin + Math.random() * (H - margin * 2);
+  const centerX = margin + Math.random() * (W - margin * 2);
   rings.push({
-    x: W + RING_R + cfg.stroke,
-    centerY,
+    y: -RING_R - cfg.stroke,
+    centerX,
     rotation: Math.random() * Math.PI * 2,
     passed: false
   });
@@ -96,14 +99,14 @@ function spawnBurst(x, y, color) {
 
 function update() {
   if (!started) {
-    ballY = H / 2 + Math.sin(frame / 15) * 8;
+    ballX = W / 2 + Math.sin(frame / 15) * 8;
     frame++;
     return;
   }
   if (over) return;
 
   velocity += GRAVITY;
-  ballY += velocity;
+  ballX += velocity;
   frame++;
 
   framesSinceSpawn++;
@@ -113,10 +116,10 @@ function update() {
   }
 
   rings.forEach(r => {
-    r.x -= cfg.speed;
+    r.y += cfg.speed;
     r.rotation += cfg.rot;
   });
-  rings = rings.filter(r => r.x > -RING_R - cfg.stroke);
+  rings = rings.filter(r => r.y < H + RING_R + cfg.stroke);
 
   particles.forEach(p => {
     p.x += p.vx;
@@ -128,13 +131,13 @@ function update() {
   for (const r of rings) {
     if (r.passed) continue;
 
-    const withinBand = BALL_X + BALL_R > r.x - cfg.stroke / 2 && BALL_X - BALL_R < r.x + cfg.stroke / 2;
+    const withinBand = BALL_Y + BALL_R > r.y - cfg.stroke / 2 && BALL_Y - BALL_R < r.y + cfg.stroke / 2;
     if (withinBand) {
-      const dist = Math.hypot(BALL_X - r.x, ballY - r.centerY);
+      const dist = Math.hypot(ballX - r.centerX, BALL_Y - r.y);
       const inner = RING_R - cfg.stroke / 2;
       const outer = RING_R + cfg.stroke / 2;
       if (dist >= inner && dist <= outer) {
-        const angle = Math.atan2(ballY - r.centerY, BALL_X - r.x);
+        const angle = Math.atan2(BALL_Y - r.y, ballX - r.centerX);
         const color = quadrantColor(r, angle);
         if (color !== BALL_COLOR) {
           endGame();
@@ -143,15 +146,15 @@ function update() {
       }
     }
 
-    if (r.x + cfg.stroke / 2 < BALL_X - BALL_R) {
+    if (r.y - cfg.stroke / 2 > BALL_Y + BALL_R) {
       r.passed = true;
       score++;
-      spawnBurst(r.x, r.centerY, BALL_COLOR);
+      spawnBurst(r.centerX, r.y, BALL_COLOR);
       if (window.CubySfx) CubySfx.match();
     }
   }
 
-  if (ballY - BALL_R < 0 || ballY + BALL_R > H) {
+  if (ballX - BALL_R < 0 || ballX + BALL_R > W) {
     endGame();
   }
 }
@@ -161,7 +164,7 @@ function drawRing(r) {
   for (let i = 0; i < segments; i++) {
     const start = r.rotation + i * (Math.PI / 2);
     ctx.beginPath();
-    ctx.arc(r.x, r.centerY, RING_R, start, start + Math.PI / 2);
+    ctx.arc(r.centerX, r.y, RING_R, start, start + Math.PI / 2);
     ctx.strokeStyle = WHEEL_COLORS[i];
     ctx.lineWidth = cfg.stroke;
     ctx.lineCap = "butt";
@@ -186,7 +189,7 @@ function draw() {
 
   ctx.fillStyle = BALL_COLOR;
   ctx.beginPath();
-  ctx.arc(BALL_X, ballY, BALL_R, 0, Math.PI * 2);
+  ctx.arc(ballX, BALL_Y, BALL_R, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.fillStyle = COLOR_TEXT;
@@ -233,7 +236,7 @@ async function endGame() {
 
 function startGame(level) {
   cfg = DIFFICULTIES[level] || DIFFICULTIES.moyen;
-  ballY = H / 2;
+  ballX = W / 2;
   velocity = 0;
   score = 0;
   best = Number(localStorage.getItem("bestColorSwitch") || 0);
@@ -246,6 +249,7 @@ function startGame(level) {
 
   document.getElementById("difficultySelect").hidden = true;
   document.getElementById("gameArea").hidden = false;
+  document.getElementById("resultModal").hidden = true;
 
   requestAnimationFrame(loop);
 }
@@ -286,7 +290,7 @@ document.getElementById("langToggle").addEventListener("click", () => {
 // Hook de test/debug (aucun impact en jeu normal).
 window.__colorSwitchDebug = {
   jump, startGame, update, draw,
-  getState: () => ({ score, over, started, ballY, rings: rings.length })
+  getState: () => ({ score, over, started, ballX, rings: rings.length })
 };
 
 applyLang();
