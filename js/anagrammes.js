@@ -1,25 +1,64 @@
 import { saveScore } from "../api.js";
 
-const WORDS = [
-  "chat", "chien", "table", "lampe", "soleil", "montagne", "riviere", "fromage",
-  "voiture", "avion", "musique", "peinture", "jardin", "cuisine", "fenetre",
-  "cahier", "crayon", "bouteille", "chapeau", "gateau"
-];
+const T = {
+  fr: {
+    chooseDifficulty: "Choisis la difficulté",
+    easy: "Facile", medium: "Moyen", hard: "Difficile", impossible: "Impossible",
+    mainMenu: "Menu principal", home: "Accueil", replay: "Rejouer", clear: "Effacer",
+    done: "🔤 Terminé !", wordsFound: "Mots trouvés", bestStreak: "Meilleure série",
+    round: (n, total) => `${n}/${total}`
+  },
+  en: {
+    chooseDifficulty: "Choose a difficulty",
+    easy: "Easy", medium: "Medium", hard: "Hard", impossible: "Impossible",
+    mainMenu: "Main menu", home: "Home", replay: "Replay", clear: "Clear",
+    done: "🔤 Done!", wordsFound: "Words found", bestStreak: "Best streak",
+    round: (n, total) => `${n}/${total}`
+  }
+};
 
-const TOTAL_ROUNDS = 10;
-const TIME_LIMIT = 20;
+function getLang() {
+  return localStorage.getItem("cubywearLang") === "en" ? "en" : "fr";
+}
+let lang = getLang();
 
-const hudEl = document.getElementById("hud");
+const WORD_BANKS = {
+  fr: {
+    facile: ["chat", "velo", "lune", "jupe", "robe", "sofa", "gare", "table", "lampe", "radio", "stylo", "disco", "pomme", "poire", "melon", "sucre", "ecole", "porte", "route", "fleur", "livre", "tapis"],
+    moyen: ["jardin", "cahier", "crayon", "gateau", "cinema", "etoile", "riviere", "fromage", "voiture", "musique", "cuisine", "fenetre", "chapeau", "guitare", "docteur"],
+    difficile: ["montagne", "peinture", "bouteille", "chocolat", "parapluie", "telephone", "elephant", "escalier", "aeroport", "tournesol", "dinosaure", "programme", "poussiere"],
+    impossible: ["ordinateur", "dictionnaire", "anniversaire", "refrigerateur", "bibliotheque", "tremblement", "gouvernement", "appartement", "parachutiste", "informatique", "thermometre"]
+  },
+  en: {
+    facile: ["lamp", "sofa", "moon", "robe", "gate", "book", "road", "cake", "milk", "bread", "chair", "plate", "shirt", "mouse", "house"],
+    moyen: ["guitar", "camera", "garden", "pencil", "window", "bottle", "castle", "wallet", "jacket", "kitchen", "teacher", "rainbow", "diamond", "volcano", "dolphin"],
+    difficile: ["elephant", "mountain", "umbrella", "treasure", "triangle", "vacation", "sandwich", "butterfly", "chocolate", "telephone", "newspaper", "spaceship", "wonderful"],
+    impossible: ["dictionary", "restaurant", "helicopter", "caterpillar", "refrigerator", "extraordinary", "thermometer", "encyclopedia", "neighborhood", "grandmother", "watermelon"]
+  }
+};
+
+const DIFFICULTIES = {
+  facile:     { rounds: 10, time: 25 },
+  moyen:      { rounds: 10, time: 20 },
+  difficile:  { rounds: 8,  time: 15 },
+  impossible: { rounds: 6,  time: 12 }
+};
+
+let cfg = DIFFICULTIES.moyen;
+let difficulty = "moyen";
+
 const answerRow = document.getElementById("answerRow");
 const lettersRow = document.getElementById("lettersRow");
 
 let round = 0;
 let score = 0;
+let streak = 0;
+let bestStreak = 0;
 let over = false;
 let word = "";
 let letters = [];
 let answer = [];
-let timeLeft = TIME_LIMIT;
+let timeLeft = 0;
 let timerInterval = null;
 
 function shuffle(arr) {
@@ -27,14 +66,17 @@ function shuffle(arr) {
 }
 
 function updateHud() {
-  hudEl.textContent = `Mot ${round + 1}/${TOTAL_ROUNDS} · Temps : ${timeLeft}s`;
+  document.getElementById("roundVal").textContent = T[lang].round(round + 1, cfg.rounds);
+  document.getElementById("streakVal").textContent = streak;
+  document.getElementById("timeVal").textContent = `${timeLeft}s`;
 }
 
 function renderAnswer() {
+  answerRow.className = "answer-row";
   answerRow.innerHTML = "";
   for (let i = 0; i < word.length; i++) {
     const tile = document.createElement("div");
-    tile.className = "tile" + (answer[i] ? "" : " empty");
+    tile.className = "tile" + (answer[i] ? " pop" : " empty");
     tile.textContent = answer[i] ? answer[i].char.toUpperCase() : "";
     answerRow.appendChild(tile);
   }
@@ -59,12 +101,16 @@ function pickLetter(index) {
   answer.push({ char: entry.char, from: index });
   renderLetters();
   renderAnswer();
+  if (window.CubySfx) CubySfx.tap();
 
   if (answer.length === word.length) {
     const guess = answer.map(a => a.char).join("");
     if (guess === word) {
       handleCorrect();
     } else {
+      answerRow.classList.add("wrong");
+      if (window.CubySfx) CubySfx.fail();
+      streak = 0;
       setTimeout(resetAttempt, 500);
     }
   }
@@ -80,20 +126,25 @@ function resetAttempt() {
 function handleCorrect() {
   if (over) return;
   clearInterval(timerInterval);
+  answerRow.classList.add("correct");
+  if (window.CubySfx) CubySfx.match();
   score++;
+  streak++;
+  bestStreak = Math.max(bestStreak, streak);
   round++;
-  startRound();
+  setTimeout(startRound, 400);
 }
 
 function startRound() {
-  if (round >= TOTAL_ROUNDS) {
+  if (round >= cfg.rounds) {
     endGame();
     return;
   }
-  word = WORDS[Math.floor(Math.random() * WORDS.length)];
+  const pool = WORD_BANKS[lang][difficulty];
+  word = pool[Math.floor(Math.random() * pool.length)];
   letters = shuffle([...word].map(char => ({ char, used: false })));
   answer = [];
-  timeLeft = TIME_LIMIT;
+  timeLeft = cfg.time;
   updateHud();
   renderLetters();
   renderAnswer();
@@ -104,6 +155,8 @@ function startRound() {
     updateHud();
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
+      streak = 0;
+      if (window.CubySfx) CubySfx.fail();
       round++;
       startRound();
     }
@@ -113,15 +166,54 @@ function startRound() {
 async function endGame() {
   over = true;
   clearInterval(timerInterval);
+  if (window.CubySfx) CubySfx.win();
+
   document.getElementById("statScore").textContent = score;
+  document.getElementById("statStreak").textContent = bestStreak;
   document.getElementById("resultModal").hidden = false;
   await saveScore("CW-BLK-1-0001", "anagrammes", score * 10);
 }
 
+function startGame(diff) {
+  difficulty = diff;
+  cfg = DIFFICULTIES[diff];
+  round = 0;
+  score = 0;
+  streak = 0;
+  bestStreak = 0;
+  over = false;
+
+  document.getElementById("difficultySelect").hidden = true;
+  document.getElementById("gameArea").hidden = false;
+
+  startRound();
+}
+
+document.querySelectorAll("[data-difficulty]").forEach(btn => {
+  btn.onclick = () => startGame(btn.dataset.difficulty);
+});
+
 document.getElementById("clearBtn").onclick = resetAttempt;
 document.getElementById("replayBtn").onclick = () => location.reload();
 
-// Hook de test/debug (aucun impact en jeu normal).
-window.__anagrammesDebug = { handleCorrect, resetAttempt, getState: () => ({ round, score, over, word }) };
+function applyLang() {
+  document.documentElement.setAttribute("lang", lang);
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (T[lang][key] !== undefined) el.textContent = T[lang][key];
+  });
+  document.getElementById("langToggle").textContent = lang.toUpperCase();
+}
 
-startRound();
+document.getElementById("langToggle").addEventListener("click", () => {
+  lang = lang === "fr" ? "en" : "fr";
+  localStorage.setItem("cubywearLang", lang);
+  applyLang();
+  if (!document.getElementById("difficultySelect").hidden) return;
+  startGame(difficulty);
+});
+
+// Hook de test/debug (aucun impact en jeu normal).
+window.__anagrammesDebug = { handleCorrect, resetAttempt, getState: () => ({ round, score, over, word, streak }) };
+
+applyLang();

@@ -3,10 +3,36 @@ body {
   box-sizing: border-box;
 }
 
-#hud {
-  color: var(--accent-gold);
+.difficulty-select {
+  color: var(--text-light);
+}
+
+.difficulty-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.stat-bar {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.stat-chip {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-blue);
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 14px;
   font-weight: bold;
-  margin-bottom: 20px;
+  color: var(--accent-gold);
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .answer-row,
@@ -31,7 +57,32 @@ body {
   border-radius: 8px;
   cursor: pointer;
   user-select: none;
-  transition: 0.15s;
+  transition: transform 0.15s cubic-bezier(.34,1.56,.64,1), background-color 0.15s ease;
+}
+
+.tile.pop {
+  animation: tilePop 0.2s cubic-bezier(.34,1.56,.64,1);
+}
+
+@keyframes tilePop {
+  from { transform: scale(0.4); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.answer-row.correct .tile {
+  background: #2ecc71 !important;
+  border-color: #2ecc71 !important;
+}
+
+.answer-row.wrong .tile {
+  animation: rowShake 0.3s ease;
+  background: rgba(231, 76, 60, 0.5) !important;
+}
+
+@keyframes rowShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
 }
 
 .answer-row .tile {
