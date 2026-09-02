@@ -55,7 +55,7 @@ body {
   position: relative;
   display: grid;
   gap: 10px;
-  width: min(92vw, 380px);
+  width: min(calc(100vw - 40px), 380px);
   aspect-ratio: 1 / 1;
   margin: 0 auto;
   background: var(--bg-card);

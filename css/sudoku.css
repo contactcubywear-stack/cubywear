@@ -45,7 +45,7 @@ body {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   grid-template-rows: repeat(9, minmax(0, 1fr));
-  width: min(94vw, 400px);
+  width: min(calc(100vw - 40px), 400px);
   aspect-ratio: 1 / 1;
   margin: 0 auto;
   border: 3px solid var(--accent-gold);
@@ -117,7 +117,7 @@ body {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 8px;
-  width: min(94vw, 400px);
+  width: min(calc(100vw - 40px), 400px);
   margin: 14px auto 0;
 }
 

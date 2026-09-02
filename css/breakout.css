@@ -43,7 +43,7 @@ body {
 
 .breakout-area {
   position: relative;
-  width: min(92vw, 340px);
+  width: min(calc(100vw - 40px), 340px);
   margin: 0 auto;
   border: 2px solid var(--accent-blue);
   border-radius: 12px;

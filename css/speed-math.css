@@ -87,7 +87,7 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
-  width: min(94vw, 320px);
+  width: min(calc(100vw - 40px), 320px);
   margin: 16px auto 0;
 }
 

@@ -50,7 +50,7 @@ body {
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: repeat(5, minmax(0, 1fr));
   gap: 5px;
-  width: min(92vw, 340px);
+  width: min(calc(100vw - 40px), 340px);
   aspect-ratio: 6 / 5;
   margin: 0 auto;
   background: var(--accent-blue);

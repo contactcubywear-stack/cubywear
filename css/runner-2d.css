@@ -57,7 +57,7 @@ body {
 
 .runner2d-area {
   position: relative;
-  width: min(92vw, 380px);
+  width: min(calc(100vw - 40px), 380px);
   height: min(70vw, 260px);
   margin: 0 auto;
   border: 2px solid var(--accent-blue);

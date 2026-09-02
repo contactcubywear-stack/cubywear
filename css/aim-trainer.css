@@ -38,7 +38,7 @@ body {
 
 .aim-area {
   position: relative;
-  width: min(92vw, 400px);
+  width: min(calc(100vw - 40px), 400px);
   height: min(120vw, 480px);
   margin: 0 auto;
   background: var(--bg-card);

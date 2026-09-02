@@ -307,7 +307,7 @@ async function endGame(won) {
 function applyAreaSize() {
   canvas.width = W;
   canvas.height = H;
-  area.style.width = `min(92vw, ${W}px)`;
+  area.style.width = `min(calc(100vw - 40px), ${W}px)`;
   area.style.aspectRatio = `${W} / ${H}`;
   area.style.height = "auto";
 }
