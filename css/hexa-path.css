@@ -3,6 +3,18 @@ body {
   box-sizing: border-box;
 }
 
+.difficulty-select {
+  color: var(--text-light);
+}
+
+.difficulty-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
 #status {
   color: var(--accent-gold);
   font-weight: bold;
@@ -16,11 +28,16 @@ body {
 }
 
 .hexa-wrap {
+  --cell-w: 38px;
+  --cell-h: 44px;
   display: flex;
   justify-content: center;
   padding: 10px;
   border-top: 4px solid #e74c3c;
   border-bottom: 4px solid #e74c3c;
+  border-left: 4px solid #5AC8FA;
+  border-right: 4px solid #5AC8FA;
+  border-radius: 4px;
 }
 
 .hexa-board {
@@ -35,16 +52,17 @@ body {
 }
 
 .hexa-row:not(:first-child) {
-  margin-top: -9px;
+  margin-top: calc(var(--cell-h) * -0.2);
 }
 
 .hexa-cell {
-  width: 38px;
-  height: 44px;
+  width: var(--cell-w);
+  height: var(--cell-h);
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   background: var(--bg-card);
   cursor: pointer;
   flex-shrink: 0;
+  transition: background-color 0.15s ease;
 }
 
 .hexa-cell:hover {
@@ -54,11 +72,27 @@ body {
 .hexa-cell.player {
   background: #e74c3c;
   cursor: default;
+  animation: hexPop 0.25s cubic-bezier(.34,1.56,.64,1);
 }
 
 .hexa-cell.bot {
   background: #5AC8FA;
   cursor: default;
+  animation: hexPop 0.25s cubic-bezier(.34,1.56,.64,1);
+}
+
+@keyframes hexPop {
+  from { transform: scale(0.5); opacity: 0.4; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.hexa-cell.win-path {
+  animation: hexWinGlow 0.9s ease-in-out infinite;
+}
+
+@keyframes hexWinGlow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.5); }
 }
 
 .actions {
