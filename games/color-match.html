@@ -12,31 +12,55 @@
 
 <body>
 
+  <button id="langToggle" class="lang-toggle">FR</button>
+
   <h1>🎨 Color Match</h1>
-  <p id="hud">Manche 1/10 · Score : 0</p>
 
-  <div class="target-swatch" id="targetSwatch"></div>
-  <p class="hint">Clique la nuance identique</p>
+  <div class="difficulty-select" id="difficultySelect">
+    <p data-i18n="chooseDifficulty">Choisis la difficulté</p>
+    <div class="difficulty-buttons">
+      <button class="btn-small" data-difficulty="facile" data-i18n="easy">Facile</button>
+      <button class="btn-small" data-difficulty="moyen" data-i18n="medium">Moyen</button>
+      <button class="btn-small" data-difficulty="difficile" data-i18n="hard">Difficile</button>
+      <button class="btn-small" data-difficulty="impossible" data-i18n="impossible">Impossible</button>
+    </div>
+    <div class="actions">
+      <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
+    </div>
+  </div>
 
-  <div class="swatch-grid" id="grid"></div>
+  <div id="gameArea" hidden>
+    <div class="stat-bar">
+      <div class="stat-chip"><span class="stat-icon">🔁</span><span id="roundVal">1/10</span></div>
+      <div class="stat-chip"><span class="stat-icon">⭐</span><span id="scoreVal">0</span></div>
+      <div class="stat-chip"><span class="stat-icon">🔥</span><span id="streakVal">0</span></div>
+    </div>
 
-  <div class="actions">
-    <a href="../index.html" class="btn-small">Accueil</a>
+    <div class="target-swatch" id="targetSwatch"></div>
+    <p class="hint" data-i18n="hint">Clique la nuance identique</p>
+
+    <div class="swatch-grid" id="grid"></div>
+
+    <div class="actions">
+      <a href="../index.html" class="btn-small" data-i18n="home">Accueil</a>
+    </div>
   </div>
 
   <div class="win-modal" id="resultModal" hidden>
     <div class="win-modal-content">
-      <h2>🎨 Terminé !</h2>
+      <h2 data-i18n="done">🎨 Terminé !</h2>
       <div class="win-stats">
-        <p>Score final : <span id="statScore"></span></p>
+        <p><span data-i18n="finalScore">Score final</span> : <span id="statScore"></span></p>
+        <p><span data-i18n="bestStreak">Meilleure série</span> : <span id="statStreak"></span></p>
       </div>
       <div class="win-actions">
-        <button class="btn-small" id="replayBtn">Rejouer</button>
-        <a href="../index.html" class="btn-small">Menu principal</a>
+        <button class="btn-small" id="replayBtn" data-i18n="replay">Rejouer</button>
+        <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
       </div>
     </div>
   </div>
 
+  <script src="../js/sfx.js"></script>
   <script type="module" src="../js/color-match.js"></script>
 </body>
 </html>
