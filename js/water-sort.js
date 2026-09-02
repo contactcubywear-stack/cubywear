@@ -8,7 +8,7 @@ const T = {
     hint: "Touche un tube pour verser sa couleur du dessus dans un autre",
     moves: "Coups", best: "Meilleur (coups)",
     win: "🎉 Résolu !", newGame: "Nouvelle grille",
-    finalMoves: "Nombre de coups"
+    finalMoves: "Nombre de coups", loading: "Préparation de la grille"
   },
   en: {
     home: "Home", mainMenu: "Main menu", replay: "Replay",
@@ -17,7 +17,7 @@ const T = {
     hint: "Tap a tube to pour its top color into another",
     moves: "Moves", best: "Best (moves)",
     win: "🎉 Solved!", newGame: "New puzzle",
-    finalMoves: "Number of moves"
+    finalMoves: "Number of moves", loading: "Preparing the grid"
   }
 };
 
@@ -219,12 +219,23 @@ function startGame(level) {
   moves = 0;
   selected = -1;
   over = false;
-  generatePuzzle();
-  updateHud();
-  render();
 
   document.getElementById("difficultySelect").hidden = true;
   document.getElementById("gameArea").hidden = false;
+  document.getElementById("resultModal").hidden = true;
+
+  // La génération (avec vérification de solvabilité) peut prendre jusqu'à
+  // ~0.5s sur les grandes grilles : on affiche un indicateur pour que ça ne
+  // paraisse pas figé, et on laisse le temps au navigateur de l'afficher
+  // avant de lancer le calcul bloquant.
+  const wrap = document.getElementById("tubesWrap");
+  wrap.innerHTML = `<p class="loading-text">${T[lang].loading}</p>`;
+
+  setTimeout(() => {
+    generatePuzzle();
+    updateHud();
+    render();
+  }, 30);
 }
 
 document.querySelectorAll("[data-difficulty]").forEach(btn => {

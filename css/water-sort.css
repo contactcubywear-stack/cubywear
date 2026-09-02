@@ -33,3 +33,22 @@
 .tube-slot:last-child {
   border-bottom: none;
 }
+
+.loading-text {
+  color: var(--text-light);
+  font-size: 15px;
+  font-weight: bold;
+  margin: 40px 0;
+}
+
+.loading-text::after {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  text-align: left;
+  animation: waterSortDots 1.2s steps(4) infinite;
+}
+
+@keyframes waterSortDots {
+  0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; }
+}
