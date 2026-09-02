@@ -3,10 +3,24 @@ body {
   box-sizing: border-box;
 }
 
-#score {
-  color: var(--accent-gold);
+.stat-bar {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.stat-chip {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-blue);
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 14px;
   font-weight: bold;
-  margin-bottom: 15px;
+  color: var(--accent-gold);
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .hint {

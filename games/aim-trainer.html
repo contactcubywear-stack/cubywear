@@ -12,33 +12,58 @@
 
 <body>
 
-  <h1>🎯 Aim Trainer</h1>
-  <p id="stats">Touchés : 0 · Ratés : 0 · Temps : 30s</p>
+  <button id="langToggle" class="lang-toggle">FR</button>
 
-  <div class="aim-area" id="area">
-    <div class="aim-start" id="startOverlay">
-      <button class="btn-small" id="startBtn">Commencer</button>
+  <h1>🎯 Aim Trainer</h1>
+
+  <div class="difficulty-select" id="difficultySelect">
+    <p data-i18n="chooseDifficulty">Choisis la difficulté</p>
+    <div class="difficulty-buttons">
+      <button class="btn-small" data-difficulty="facile" data-i18n="easy">Facile</button>
+      <button class="btn-small" data-difficulty="moyen" data-i18n="medium">Moyen</button>
+      <button class="btn-small" data-difficulty="difficile" data-i18n="hard">Difficile</button>
+      <button class="btn-small" data-difficulty="impossible" data-i18n="impossible">Impossible</button>
+    </div>
+    <div class="actions">
+      <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
     </div>
   </div>
 
-  <div class="actions">
-    <a href="../index.html" class="btn-small">Accueil</a>
+  <div id="gameArea" hidden>
+    <div class="stat-bar">
+      <div class="stat-chip"><span class="stat-icon">✅</span><span id="hits">0</span></div>
+      <div class="stat-chip"><span class="stat-icon">❌</span><span id="misses">0</span></div>
+      <div class="stat-chip"><span class="stat-icon">🔥</span><span id="combo">0</span></div>
+      <div class="stat-chip"><span class="stat-icon">⏱️</span><span id="timeLeft">30</span></div>
+    </div>
+
+    <div class="aim-area" id="area">
+      <div class="aim-start" id="startOverlay">
+        <button class="btn-small" id="startBtn" data-i18n="start">Commencer</button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a href="../index.html" class="btn-small" data-i18n="home">Accueil</a>
+    </div>
   </div>
 
   <div class="win-modal" id="resultModal" hidden>
     <div class="win-modal-content">
-      <h2>🎯 Résultats</h2>
+      <h2 data-i18n="results">🎯 Résultats</h2>
       <div class="win-stats">
-        <p>Cibles touchées : <span id="statHits"></span></p>
-        <p>Précision : <span id="statAccuracy"></span>%</p>
+        <p><span data-i18n="targetsHit">Cibles touchées</span> : <span id="statHits"></span></p>
+        <p><span data-i18n="accuracy">Précision</span> : <span id="statAccuracy"></span>%</p>
+        <p><span data-i18n="bestCombo">Meilleur combo</span> : <span id="statCombo"></span></p>
       </div>
       <div class="win-actions">
-        <button class="btn-small" id="replayBtn">Rejouer</button>
-        <a href="../index.html" class="btn-small">Menu principal</a>
+        <button class="btn-small" id="replayBtn" data-i18n="replay">Rejouer</button>
+        <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
       </div>
     </div>
   </div>
 
+  <script src="../js/sfx.js"></script>
   <script type="module" src="../js/aim-trainer.js"></script>
 </body>
 </html>

@@ -12,32 +12,36 @@
 
 <body>
 
+  <button id="langToggle" class="lang-toggle">FR</button>
+
   <h1>⚡ Reaction Tap</h1>
   <p id="roundInfo">Manche 0/5</p>
 
   <div class="tap-box idle" id="box">
-    <span id="status">Clique pour commencer</span>
+    <span id="status" data-i18n="clickToStart">Clique pour commencer</span>
   </div>
 
   <div class="actions">
-    <a href="../index.html" class="btn-small">Accueil</a>
+    <a href="../index.html" class="btn-small" data-i18n="home">Accueil</a>
   </div>
 
   <div class="win-modal" id="resultModal" hidden>
     <div class="win-modal-content">
-      <h2>⚡ Résultats</h2>
+      <h2 data-i18n="results">⚡ Résultats</h2>
+      <div class="round-bars" id="roundBars"></div>
       <div class="win-stats">
-        <p>Temps moyen : <span id="statAvg"></span> s</p>
-        <p>Meilleur temps : <span id="statBest"></span> s</p>
-        <p>Record personnel : <span id="statRecord"></span> s</p>
+        <p><span data-i18n="avgTime">Temps moyen</span> : <span id="statAvg"></span> s</p>
+        <p><span data-i18n="bestTime">Meilleur temps</span> : <span id="statBest"></span> s</p>
+        <p><span data-i18n="record">Record personnel</span> : <span id="statRecord"></span> s <span id="newRecordBadge" hidden>🏆</span></p>
       </div>
       <div class="win-actions">
-        <button class="btn-small" id="replayBtn">Rejouer</button>
-        <a href="../index.html" class="btn-small">Menu principal</a>
+        <button class="btn-small" id="replayBtn" data-i18n="replay">Rejouer</button>
+        <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
       </div>
     </div>
   </div>
 
+  <script src="../js/sfx.js"></script>
   <script type="module" src="../js/reaction-tap.js"></script>
 </body>
 </html>

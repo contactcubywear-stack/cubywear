@@ -40,10 +40,43 @@ body {
 .tap-box.ready {
   background: #2ecc71;
   color: var(--bg-main);
+  animation: readyPulse 0.6s ease-in-out infinite;
+}
+
+@keyframes readyPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.6); }
+  50% { box-shadow: 0 0 0 20px rgba(46, 204, 113, 0); }
 }
 
 .tap-box.toosoon {
   background: #7a1f1f;
+}
+
+.round-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+  height: 60px;
+  margin-bottom: 16px;
+}
+
+.round-bar {
+  width: 16px;
+  background: var(--accent-blue);
+  border-radius: 4px 4px 0 0;
+  min-height: 4px;
+  animation: barGrow 0.4s ease forwards;
+  transform-origin: bottom;
+}
+
+.round-bar.best {
+  background: var(--accent-gold);
+}
+
+@keyframes barGrow {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
 }
 
 .actions {

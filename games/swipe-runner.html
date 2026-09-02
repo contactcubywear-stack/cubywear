@@ -12,40 +12,50 @@
 
 <body>
 
+  <button id="langToggle" class="lang-toggle">FR</button>
+
   <h1>🏃 Swipe Runner</h1>
-  <p id="score">Score : 0</p>
+  <div class="stat-bar">
+    <div class="stat-chip"><span class="stat-icon">⭐</span><span id="scoreVal">0</span></div>
+    <div class="stat-chip"><span class="stat-icon">🪙</span><span id="coinVal">0</span></div>
+    <div class="stat-chip"><span class="stat-icon">🏆</span><span id="bestVal">0</span></div>
+  </div>
 
   <div class="runner-area" id="area">
     <canvas id="gameCanvas"></canvas>
     <div class="runner-start" id="startOverlay">
-      <button class="btn-small" id="startBtn">Commencer</button>
+      <button class="btn-small" id="startBtn" data-i18n="start">Commencer</button>
     </div>
   </div>
 
-  <p class="hint">Glisse (ou utilise les boutons) gauche/droite pour changer de voie</p>
+  <p class="hint" data-i18n="hint">Glisse, utilise les flèches ou les boutons — gauche/droite pour changer de voie, haut pour sauter</p>
 
   <div class="lane-buttons">
     <button class="btn-small" id="btnLeft" aria-label="Gauche">◀</button>
+    <button class="btn-small" id="btnJump" aria-label="Sauter">⬆</button>
     <button class="btn-small" id="btnRight" aria-label="Droite">▶</button>
   </div>
 
   <div class="actions">
-    <a href="../index.html" class="btn-small">Accueil</a>
+    <a href="../index.html" class="btn-small" data-i18n="home">Accueil</a>
   </div>
 
   <div class="win-modal" id="resultModal" hidden>
     <div class="win-modal-content">
-      <h2>💥 Touché !</h2>
+      <h2 data-i18n="hit">💥 Touché !</h2>
       <div class="win-stats">
-        <p>Score final : <span id="statScore"></span></p>
+        <p><span data-i18n="finalScore">Score final</span> : <span id="statScore"></span></p>
+        <p><span data-i18n="coins">Pièces</span> : <span id="statCoins"></span></p>
+        <p><span data-i18n="best">Meilleur score</span> : <span id="statBest"></span></p>
       </div>
       <div class="win-actions">
-        <button class="btn-small" id="replayBtn">Rejouer</button>
-        <a href="../index.html" class="btn-small">Menu principal</a>
+        <button class="btn-small" id="replayBtn" data-i18n="replay">Rejouer</button>
+        <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
       </div>
     </div>
   </div>
 
+  <script src="../js/sfx.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script type="module" src="../js/swipe-runner.js"></script>
 </body>

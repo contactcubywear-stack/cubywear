@@ -1,5 +1,38 @@
 import { saveScore } from "../api.js";
 
+const T = {
+  fr: {
+    start: "Commencer", home: "Accueil", mainMenu: "Menu principal", replay: "Rejouer",
+    hint: "Glisse, utilise les flèches ou les boutons — gauche/droite pour changer de voie, haut pour sauter",
+    hit: "💥 Touché !", finalScore: "Score final", coins: "Pièces", best: "Meilleur score"
+  },
+  en: {
+    start: "Start", home: "Home", mainMenu: "Main menu", replay: "Replay",
+    hint: "Swipe, use the arrow keys, or the buttons — left/right to change lane, up to jump",
+    hit: "💥 Hit!", finalScore: "Final score", coins: "Coins", best: "Best score"
+  }
+};
+
+function getLang() {
+  return localStorage.getItem("cubywearLang") === "en" ? "en" : "fr";
+}
+let lang = getLang();
+
+function applyLang() {
+  document.documentElement.setAttribute("lang", lang);
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (T[lang][key] !== undefined) el.textContent = T[lang][key];
+  });
+  document.getElementById("langToggle").textContent = lang.toUpperCase();
+}
+
+document.getElementById("langToggle").addEventListener("click", () => {
+  lang = lang === "fr" ? "en" : "fr";
+  localStorage.setItem("cubywearLang", lang);
+  applyLang();
+});
+
 const LANES = 3;
 const LANE_WIDTH = 2.4;
 const LANE_X = [-LANE_WIDTH, 0, LANE_WIDTH];
@@ -7,11 +40,9 @@ const WORLD_LENGTH = 200;
 
 const area = document.getElementById("area");
 const canvas = document.getElementById("gameCanvas");
-const scoreEl = document.getElementById("score");
 
 const scene = new THREE.Scene();
 
-// --- Ciel en dégradé (texture canvas, pas de couleur plate) ---
 function makeSkyTexture() {
   const c = document.createElement("canvas");
   c.width = 8;
@@ -44,7 +75,6 @@ function resize() {
 }
 window.addEventListener("resize", resize);
 
-// --- Éclairage ---
 scene.add(new THREE.HemisphereLight(0x8fa7ff, 0x14172c, 0.7));
 const dirLight = new THREE.DirectionalLight(0xffffff, 1.1);
 dirLight.position.set(4, 12, 6);
@@ -58,7 +88,6 @@ dirLight.shadow.camera.top = 12;
 dirLight.shadow.camera.bottom = -12;
 scene.add(dirLight);
 
-// --- Textures procédurales (canvas) : pas d'assets externes disponibles ---
 function makeAsphaltTexture() {
   const c = document.createElement("canvas");
   c.width = 128;
@@ -119,7 +148,6 @@ function makeCubeLogoTexture() {
   return new THREE.CanvasTexture(c);
 }
 
-// --- Décor : route + immeubles qui défilent ---
 const track = new THREE.Mesh(
   new THREE.PlaneGeometry(LANE_WIDTH * 3 + 2, WORLD_LENGTH),
   new THREE.MeshStandardMaterial({ map: makeAsphaltTexture(), roughness: 0.9 })
@@ -156,7 +184,6 @@ for (let i = 0; i < 24; i++) {
   buildings.push(mesh);
 }
 
-// --- Personnage : petit bonhomme low-poly articulé, avec logo texturé ---
 function createCharacter() {
   const group = new THREE.Group();
   const skin = new THREE.MeshStandardMaterial({ color: 0xe8aa42 });
@@ -208,20 +235,40 @@ scene.add(character.group);
 let playerLane = 1;
 let targetX = LANE_X[1];
 
-// --- Obstacles ---
-const obstacleMat = new THREE.MeshStandardMaterial({ color: 0xe74c3c, roughness: 0.6 });
+// --- Saut ---
+const GRAVITY = -18;
+const JUMP_FORCE = 7;
+const JUMP_CLEAR_HEIGHT = 0.55;
+let isJumping = false;
+let jumpY = 0;
+let jumpVel = 0;
+
+function jump() {
+  if (over || isJumping) return;
+  isJumping = true;
+  jumpVel = JUMP_FORCE;
+  if (window.CubySfx) CubySfx.tap();
+}
+
+// --- Obstacles : "block" (changer de voie) ou "jump" (sauter par-dessus) ---
+const blockMat = new THREE.MeshStandardMaterial({ color: 0xe74c3c, roughness: 0.6 });
+const jumpMat = new THREE.MeshStandardMaterial({ color: 0xe8aa42, roughness: 0.5, emissive: 0x4a2f00 });
 let obstacles = [];
 
 function spawnObstacle() {
   const lane = Math.floor(Math.random() * LANES);
-  const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), obstacleMat);
-  mesh.position.set(LANE_X[lane], 0.5, -55);
+  const isJumpType = Math.random() < 0.35;
+  const height = isJumpType ? 0.5 : 1;
+  const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(1, height, 1),
+    isJumpType ? jumpMat : blockMat
+  );
+  mesh.position.set(LANE_X[lane], height / 2, -55);
   mesh.castShadow = true;
   scene.add(mesh);
-  obstacles.push({ lane, mesh });
+  obstacles.push({ lane, mesh, type: isJumpType ? "jump" : "block" });
 }
 
-// --- Pièces à ramasser (élément emblématique façon Subway Surfers) ---
 const coinGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.08, 20);
 const coinMat = new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.7, roughness: 0.25, emissive: 0x553d00 });
 let coins = [];
@@ -238,6 +285,7 @@ function spawnCoin() {
 }
 
 let score = 0;
+let best = Number(localStorage.getItem("bestSwipeRunner") || 0);
 let over = true;
 let runTime = 0;
 let spawnTimer = 0;
@@ -245,7 +293,9 @@ let coinTimer = 0;
 const clock = new THREE.Clock();
 
 function updateHud() {
-  scoreEl.textContent = `Score : ${score} · 🪙 ${coinsCollected}`;
+  document.getElementById("scoreVal").textContent = score;
+  document.getElementById("coinVal").textContent = coinsCollected;
+  document.getElementById("bestVal").textContent = best;
 }
 
 function speedForScore() {
@@ -259,17 +309,30 @@ function update(delta) {
   const newScore = Math.floor(runTime * 10) + coinsCollected * 5;
   if (newScore !== score) {
     score = newScore;
+    if (score > best) best = score;
     updateHud();
   }
 
   character.group.position.x += (targetX - character.group.position.x) * Math.min(delta * 10, 1);
+  character.group.rotation.z = (targetX - character.group.position.x) * -0.15;
+
+  if (isJumping) {
+    jumpVel += GRAVITY * delta;
+    jumpY += jumpVel * delta;
+    if (jumpY <= 0) {
+      jumpY = 0;
+      isJumping = false;
+      jumpVel = 0;
+    }
+  }
 
   const swing = Math.sin(runTime * 10) * 0.7;
   character.armL.rotation.x = swing;
   character.armR.rotation.x = -swing;
   character.legL.rotation.x = -swing;
   character.legR.rotation.x = swing;
-  character.group.position.y = Math.abs(Math.sin(runTime * 10)) * 0.08;
+  const bob = isJumping ? 0 : Math.abs(Math.sin(runTime * 10)) * 0.08;
+  character.group.position.y = jumpY + bob;
 
   const speed = speedForScore();
 
@@ -292,9 +355,11 @@ function update(delta) {
     c.mesh.rotation.z += delta * 6;
   });
 
-  const collided = obstacles.some(
-    o => o.lane === playerLane && o.mesh.position.z > -1.2 && o.mesh.position.z < 0.6
-  );
+  const collided = obstacles.some(o => {
+    if (o.lane !== playerLane || o.mesh.position.z <= -1.2 || o.mesh.position.z >= 0.6) return false;
+    if (o.type === "jump" && jumpY > JUMP_CLEAR_HEIGHT) return false;
+    return true;
+  });
   if (collided) {
     endGame();
     return;
@@ -308,6 +373,7 @@ function update(delta) {
     coins.splice(collectedIndex, 1);
     coinsCollected++;
     score += 5;
+    if (window.CubySfx) CubySfx.coin();
     updateHud();
   }
 
@@ -358,8 +424,15 @@ function moveLane(dir) {
 
 async function endGame() {
   over = true;
+  if (window.CubySfx) CubySfx.hit();
+  if (score > best) best = score;
+  localStorage.setItem("bestSwipeRunner", best);
+
   document.getElementById("statScore").textContent = score;
+  document.getElementById("statCoins").textContent = coinsCollected;
+  document.getElementById("statBest").textContent = best;
   document.getElementById("resultModal").hidden = false;
+
   await saveScore("CW-BLK-1-0001", "swipe-runner", score);
 }
 
@@ -370,7 +443,11 @@ function startGame() {
   coins = [];
   playerLane = 1;
   targetX = LANE_X[1];
+  isJumping = false;
+  jumpY = 0;
+  jumpVel = 0;
   character.group.position.set(0, 0, 0);
+  character.group.rotation.z = 0;
   score = 0;
   coinsCollected = 0;
   runTime = 0;
@@ -388,23 +465,40 @@ document.getElementById("startBtn").onclick = startGame;
 document.getElementById("replayBtn").onclick = () => location.reload();
 document.getElementById("btnLeft").onclick = () => moveLane("left");
 document.getElementById("btnRight").onclick = () => moveLane("right");
+document.getElementById("btnJump").onclick = () => jump();
 
-let touchStartX = 0;
+window.addEventListener("keydown", e => {
+  if (e.code === "ArrowLeft") moveLane("left");
+  if (e.code === "ArrowRight") moveLane("right");
+  if (e.code === "ArrowUp" || e.code === "Space") {
+    e.preventDefault();
+    jump();
+  }
+});
+
+let touchStartX = 0, touchStartY = 0;
 area.addEventListener("touchstart", e => {
   touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
 }, { passive: true });
 
 area.addEventListener("touchend", e => {
   const dx = e.changedTouches[0].clientX - touchStartX;
-  if (Math.abs(dx) < 30) return;
-  moveLane(dx > 0 ? "right" : "left");
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if (Math.abs(dx) > Math.abs(dy)) {
+    if (Math.abs(dx) < 30) return;
+    moveLane(dx > 0 ? "right" : "left");
+  } else {
+    if (dy < -30) jump();
+  }
 }, { passive: true });
 
-// Hooks de test/debug (aucun impact en jeu normal).
 window.__swipeRunnerDebug = {
-  scene, camera, character, update, render, spawnObstacle, spawnCoin,
+  scene, camera, character, update, render, spawnObstacle, spawnCoin, jump,
   obstacles: () => obstacles, coins: () => coins
 };
 
+applyLang();
+updateHud();
 resize();
 render();

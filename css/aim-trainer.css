@@ -3,10 +3,37 @@ body {
   box-sizing: border-box;
 }
 
-#stats {
-  color: var(--accent-gold);
+.difficulty-select {
+  color: var(--text-light);
+}
+
+.difficulty-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.stat-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.stat-chip {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-blue);
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 14px;
   font-weight: bold;
-  margin-bottom: 15px;
+  color: var(--accent-gold);
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .aim-area {
@@ -37,12 +64,29 @@ body {
 
 .target {
   position: absolute;
-  width: 44px;
-  height: 44px;
   border-radius: 50%;
   background: var(--accent-gold);
   border: 3px solid var(--text-white);
   cursor: pointer;
+  animation: targetPop 0.18s cubic-bezier(.34,1.56,.64,1);
+}
+
+@keyframes targetPop {
+  from { transform: scale(0.3); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.hit-burst {
+  position: absolute;
+  border-radius: 50%;
+  border: 3px solid var(--accent-gold);
+  pointer-events: none;
+  animation: burstOut 0.4s ease forwards;
+}
+
+@keyframes burstOut {
+  from { transform: scale(0.5); opacity: 1; }
+  to { transform: scale(2.2); opacity: 0; }
 }
 
 .actions {
