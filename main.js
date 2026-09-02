@@ -94,7 +94,7 @@ const UI_TEXT = {
     "daily.play": "JOUER",
     "daily.countdownPrefix": "Prochains jeux dans",
     "shop.title": "🛍️ BOUTIQUE",
-    "shop.desc": "Découvre les hoodies Cubiwear",
+    "shop.desc": "Découvre les hoodies CubyWear",
     "admin.summary": "⚙️ Admin — choisir les 3 jeux du jour",
     "admin.apply": "Appliquer",
     dateLocale: "fr-FR"
@@ -107,7 +107,7 @@ const UI_TEXT = {
     "daily.play": "PLAY",
     "daily.countdownPrefix": "Next games in",
     "shop.title": "🛍️ SHOP",
-    "shop.desc": "Discover Cubiwear hoodies",
+    "shop.desc": "Discover CubyWear hoodies",
     "admin.summary": "⚙️ Admin — pick the 3 daily games",
     "admin.apply": "Apply",
     dateLocale: "en-US"

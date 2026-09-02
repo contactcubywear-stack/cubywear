@@ -1,7 +1,7 @@
 {
-  "name": "Cubiwear",
-  "short_name": "Cubiwear",
-  "description": "Jeux du jour et mini-jeux Cubiwear",
+  "name": "CubyWear",
+  "short_name": "CubyWear",
+  "description": "Jeux du jour et mini-jeux CubyWear",
   "start_url": "/index.html",
   "scope": "/",
   "display": "standalone",
