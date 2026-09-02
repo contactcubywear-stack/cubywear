@@ -3,11 +3,11 @@ import { saveScore } from "../api.js";
 const T = {
   fr: {
     home: "Accueil", mainMenu: "Menu principal", replay: "Rejouer",
-    done: "🔍 Terminé !", finalScore: "Score final"
+    done: "🔍 Terminé !", finalScore: "Score final", loading: "Chargement"
   },
   en: {
     home: "Home", mainMenu: "Main menu", replay: "Replay",
-    done: "🔍 Done!", finalScore: "Final score"
+    done: "🔍 Done!", finalScore: "Final score", loading: "Loading"
   }
 };
 
@@ -16,39 +16,40 @@ function getLang() {
 }
 let lang = getLang();
 
+// Titres Wikipédia (anglais) vérifiés à l'avance pour garantir une vraie photo.
 const ANIMALS = [
-  { emoji: "🐶", fr: "Chien", en: "Dog" },
-  { emoji: "🐱", fr: "Chat", en: "Cat" },
-  { emoji: "🦁", fr: "Lion", en: "Lion" },
-  { emoji: "🐯", fr: "Tigre", en: "Tiger" },
-  { emoji: "🐘", fr: "Éléphant", en: "Elephant" },
-  { emoji: "🦒", fr: "Girafe", en: "Giraffe" },
-  { emoji: "🐵", fr: "Singe", en: "Monkey" },
-  { emoji: "🦊", fr: "Renard", en: "Fox" },
-  { emoji: "🐼", fr: "Panda", en: "Panda" },
-  { emoji: "🐨", fr: "Koala", en: "Koala" },
-  { emoji: "🐧", fr: "Pingouin", en: "Penguin" },
-  { emoji: "🦉", fr: "Hibou", en: "Owl" },
-  { emoji: "🐺", fr: "Loup", en: "Wolf" },
-  { emoji: "🐰", fr: "Lapin", en: "Rabbit" },
-  { emoji: "🐴", fr: "Cheval", en: "Horse" },
-  { emoji: "🐄", fr: "Vache", en: "Cow" },
-  { emoji: "🐷", fr: "Cochon", en: "Pig" },
-  { emoji: "🐑", fr: "Mouton", en: "Sheep" },
-  { emoji: "🐢", fr: "Tortue", en: "Turtle" },
-  { emoji: "🐬", fr: "Dauphin", en: "Dolphin" },
-  { emoji: "🦈", fr: "Requin", en: "Shark" },
-  { emoji: "🦅", fr: "Aigle", en: "Eagle" },
-  { emoji: "🦓", fr: "Zèbre", en: "Zebra" },
-  { emoji: "🐊", fr: "Crocodile", en: "Crocodile" },
-  { emoji: "🦔", fr: "Hérisson", en: "Hedgehog" },
-  { emoji: "🐸", fr: "Grenouille", en: "Frog" }
+  { title: "Dog", fr: "Chien", en: "Dog" },
+  { title: "Cat", fr: "Chat", en: "Cat" },
+  { title: "Lion", fr: "Lion", en: "Lion" },
+  { title: "Tiger", fr: "Tigre", en: "Tiger" },
+  { title: "African elephant", fr: "Éléphant", en: "Elephant" },
+  { title: "Giraffe", fr: "Girafe", en: "Giraffe" },
+  { title: "Chimpanzee", fr: "Singe", en: "Monkey" },
+  { title: "Red fox", fr: "Renard", en: "Fox" },
+  { title: "Giant panda", fr: "Panda", en: "Panda" },
+  { title: "Koala", fr: "Koala", en: "Koala" },
+  { title: "King penguin", fr: "Pingouin", en: "Penguin" },
+  { title: "Owl", fr: "Hibou", en: "Owl" },
+  { title: "Wolf", fr: "Loup", en: "Wolf" },
+  { title: "Rabbit", fr: "Lapin", en: "Rabbit" },
+  { title: "Horse", fr: "Cheval", en: "Horse" },
+  { title: "Cattle", fr: "Vache", en: "Cow" },
+  { title: "Domestic pig", fr: "Cochon", en: "Pig" },
+  { title: "Sheep", fr: "Mouton", en: "Sheep" },
+  { title: "Sea turtle", fr: "Tortue", en: "Turtle" },
+  { title: "Common bottlenose dolphin", fr: "Dauphin", en: "Dolphin" },
+  { title: "Great white shark", fr: "Requin", en: "Shark" },
+  { title: "Bald eagle", fr: "Aigle", en: "Eagle" },
+  { title: "Plains zebra", fr: "Zèbre", en: "Zebra" },
+  { title: "Nile crocodile", fr: "Crocodile", en: "Crocodile" },
+  { title: "Hedgehog", fr: "Hérisson", en: "Hedgehog" },
+  { title: "Frog", fr: "Grenouille", en: "Frog" }
 ];
 
 const TOTAL_ROUNDS = 8;
-const ZOOM_STEPS = [0.12, 0.18, 0.28, 0.42, 0.6, 1.0];
+const ZOOM_STEPS = [0.1, 0.16, 0.25, 0.4, 0.6, 1.0];
 const STEP_INTERVAL = 2200;
-const RENDER_SIZE = 320;
+const RENDER_SIZE = 400;
 
 const canvas = document.getElementById("zoomCanvas");
 const ctx = canvas.getContext("2d");
@@ -64,8 +65,35 @@ let score = 0;
 let best = 0;
 let over = false;
 let current = null;
+let loadedImg = null;
 let stepIndex = 0;
 let stepTimer = null;
+
+const imgCache = new Map();
+
+async function fetchWikiImage(title, size = 500) {
+  if (imgCache.has(title)) return imgCache.get(title);
+  try {
+    const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(title)}&prop=pageimages&format=json&pithumbsize=${size}&origin=*&redirects=1`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const page = Object.values(data.query.pages)[0];
+    const src = page?.thumbnail?.source || null;
+    imgCache.set(title, src);
+    return src;
+  } catch (e) {
+    return null;
+  }
+}
+
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
 
 function updateHud() {
   document.getElementById("roundVal").textContent = `${round + 1}/${TOTAL_ROUNDS}`;
@@ -73,57 +101,98 @@ function updateHud() {
   document.getElementById("bestVal").textContent = best;
 }
 
-function renderZoom(emoji, cropFraction) {
+function renderZoom(img, cropFraction) {
   offCtx.clearRect(0, 0, RENDER_SIZE, RENDER_SIZE);
-  offCtx.font = `${RENDER_SIZE * 0.8}px Arial`;
-  offCtx.textAlign = "center";
-  offCtx.textBaseline = "middle";
-  offCtx.fillText(emoji, RENDER_SIZE / 2, RENDER_SIZE / 2 + RENDER_SIZE * 0.05);
+  const scale = Math.max(RENDER_SIZE / img.width, RENDER_SIZE / img.height);
+  const dw = img.width * scale, dh = img.height * scale;
+  offCtx.drawImage(img, (RENDER_SIZE - dw) / 2, (RENDER_SIZE - dh) / 2, dw, dh);
 
   const cropSize = RENDER_SIZE * cropFraction;
   const cropX = (RENDER_SIZE - cropSize) / 2;
   const cropY = (RENDER_SIZE - cropSize) / 2;
 
-  ctx.imageSmoothingEnabled = cropFraction > 0.3;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(offCanvas, cropX, cropY, cropSize, cropSize, 0, 0, canvas.width, canvas.height);
 }
 
 function pickChoices(correct) {
-  const others = ANIMALS.filter(a => a.fr !== correct.fr).sort(() => Math.random() - 0.5).slice(0, 3);
+  const others = ANIMALS.filter(a => a.title !== correct.title).sort(() => Math.random() - 0.5).slice(0, 3);
   return [...others, correct].sort(() => Math.random() - 0.5);
+}
+
+function showLoading(show) {
+  canvas.hidden = show;
+  let loadingEl = document.getElementById("quizLoading");
+  if (show) {
+    if (!loadingEl) {
+      loadingEl = document.createElement("p");
+      loadingEl.id = "quizLoading";
+      loadingEl.className = "quiz-loading";
+      stimulusEl.appendChild(loadingEl);
+    }
+    loadingEl.textContent = T[lang].loading;
+    loadingEl.hidden = false;
+  } else if (loadingEl) {
+    loadingEl.hidden = true;
+  }
 }
 
 function nextStep() {
   if (over) return;
   if (stepIndex < ZOOM_STEPS.length - 1) {
     stepIndex++;
-    renderZoom(current.emoji, ZOOM_STEPS[stepIndex]);
+    renderZoom(loadedImg, ZOOM_STEPS[stepIndex]);
     stepTimer = setTimeout(nextStep, STEP_INTERVAL);
   }
 }
 
-function startRound() {
+async function startRound() {
   if (round >= TOTAL_ROUNDS) {
     endGame();
     return;
   }
   stimulusEl.className = "quiz-stimulus";
   updateHud();
+  choicesEl.innerHTML = "";
+  showLoading(true);
 
-  current = ANIMALS[Math.floor(Math.random() * ANIMALS.length)];
+  let attempts = 0;
+  let src = null;
+  let animal = null;
+  while (attempts < 4 && !src) {
+    animal = ANIMALS[Math.floor(Math.random() * ANIMALS.length)];
+    src = await fetchWikiImage(animal.title);
+    attempts++;
+  }
+
+  if (!src) {
+    // Réseau indisponible : on arrête proprement plutôt que de bloquer.
+    showLoading(false);
+    stimulusEl.innerHTML = `<canvas id="zoomCanvas" width="200" height="200"></canvas>`;
+    return;
+  }
+
+  try {
+    loadedImg = await loadImage(src);
+  } catch (e) {
+    round++;
+    startRound();
+    return;
+  }
+
+  current = animal;
+  showLoading(false);
   stepIndex = 0;
-  renderZoom(current.emoji, ZOOM_STEPS[0]);
+  renderZoom(loadedImg, ZOOM_STEPS[0]);
   clearTimeout(stepTimer);
   stepTimer = setTimeout(nextStep, STEP_INTERVAL);
 
   const choices = pickChoices(current);
-  choicesEl.innerHTML = "";
   choices.forEach(choice => {
     const btn = document.createElement("button");
     btn.className = "choice-btn";
     btn.textContent = choice[lang];
-    btn.onclick = () => handleGuess(choice.fr === current.fr, btn);
+    btn.onclick = () => handleGuess(choice.title === current.title, btn);
     choicesEl.appendChild(btn);
   });
 }
@@ -148,9 +217,9 @@ function handleGuess(correct, btn) {
     if (window.CubySfx) CubySfx.fail();
   }
 
-  renderZoom(current.emoji, 1.0);
+  renderZoom(loadedImg, 1.0);
   round++;
-  setTimeout(startRound, 900);
+  setTimeout(startRound, 1000);
 }
 
 async function endGame() {

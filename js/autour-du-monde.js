@@ -3,14 +3,16 @@ import { saveScore } from "../api.js";
 const T = {
   fr: {
     home: "Accueil", mainMenu: "Menu principal", replay: "Rejouer",
-    hint: "Dans quel pays voit-on ça ?",
+    hint: "Reconnais-tu cet endroit ?",
     done: "🌍 Terminé !", score: "Score", bestStreak: "Meilleure série",
+    loading: "Chargement",
     round: (n, total) => `${n}/${total}`
   },
   en: {
     home: "Home", mainMenu: "Main menu", replay: "Replay",
-    hint: "Which country is this?",
+    hint: "Do you recognize this place?",
     done: "🌍 Done!", score: "Score", bestStreak: "Best streak",
+    loading: "Loading",
     round: (n, total) => `${n}/${total}`
   }
 };
@@ -20,31 +22,29 @@ function getLang() {
 }
 let lang = getLang();
 
+// Titres Wikipédia vérifiés à l'avance pour garantir une vraie photo du lieu.
 const PLACES = [
-  { scene: "🗼🥐", fr: "France", en: "France" },
-  { scene: "🗽🦅", fr: "États-Unis", en: "United States" },
-  { scene: "🍁🦫", fr: "Canada", en: "Canada" },
-  { scene: "🌮🌵", fr: "Mexique", en: "Mexico" },
-  { scene: "⚽🌴", fr: "Brésil", en: "Brazil" },
-  { scene: "🥩💃", fr: "Argentine", en: "Argentina" },
-  { scene: "☂️👑", fr: "Royaume-Uni", en: "United Kingdom" },
-  { scene: "🍺🥨", fr: "Allemagne", en: "Germany" },
-  { scene: "🍕🍝", fr: "Italie", en: "Italy" },
-  { scene: "💃🐂", fr: "Espagne", en: "Spain" },
-  { scene: "🌷🧀", fr: "Pays-Bas", en: "Netherlands" },
-  { scene: "🏔️🍫", fr: "Suisse", en: "Switzerland" },
-  { scene: "🏛️🌊", fr: "Grèce", en: "Greece" },
-  { scene: "❄️🪆", fr: "Russie", en: "Russia" },
-  { scene: "🐉🥢", fr: "Chine", en: "China" },
-  { scene: "🗻🍣", fr: "Japon", en: "Japan" },
-  { scene: "🎤🍜", fr: "Corée du Sud", en: "South Korea" },
-  { scene: "🐘🍛", fr: "Inde", en: "India" },
-  { scene: "🦘🐨", fr: "Australie", en: "Australia" },
-  { scene: "🐫☀️", fr: "Égypte", en: "Egypt" },
-  { scene: "🦁🏃", fr: "Kenya", en: "Kenya" },
-  { scene: "🕌☕", fr: "Turquie", en: "Turkey" },
-  { scene: "🎻☘️", fr: "Irlande", en: "Ireland" },
-  { scene: "🦙⛰️", fr: "Pérou", en: "Peru" }
+  { title: "Eiffel Tower", fr: "Tour Eiffel (France)", en: "Eiffel Tower (France)" },
+  { title: "Statue of Liberty", fr: "Statue de la Liberté (États-Unis)", en: "Statue of Liberty (USA)" },
+  { title: "Big Ben", fr: "Big Ben (Royaume-Uni)", en: "Big Ben (UK)" },
+  { title: "Christ the Redeemer (statue)", fr: "Christ Rédempteur (Brésil)", en: "Christ the Redeemer (Brazil)" },
+  { title: "Great Wall of China", fr: "Grande Muraille (Chine)", en: "Great Wall (China)" },
+  { title: "Taj Mahal", fr: "Taj Mahal (Inde)", en: "Taj Mahal (India)" },
+  { title: "Colosseum", fr: "Colisée (Italie)", en: "Colosseum (Italy)" },
+  { title: "Sydney Opera House", fr: "Opéra de Sydney (Australie)", en: "Sydney Opera House (Australia)" },
+  { title: "Great Pyramid of Giza", fr: "Pyramides de Gizeh (Égypte)", en: "Pyramids of Giza (Egypt)" },
+  { title: "Machu Picchu", fr: "Machu Picchu (Pérou)", en: "Machu Picchu (Peru)" },
+  { title: "Golden Gate Bridge", fr: "Golden Gate (États-Unis)", en: "Golden Gate Bridge (USA)" },
+  { title: "Burj Khalifa", fr: "Burj Khalifa (Émirats)", en: "Burj Khalifa (UAE)" },
+  { title: "Leaning Tower of Pisa", fr: "Tour de Pise (Italie)", en: "Tower of Pisa (Italy)" },
+  { title: "Neuschwanstein Castle", fr: "Château de Neuschwanstein (Allemagne)", en: "Neuschwanstein Castle (Germany)" },
+  { title: "Petra", fr: "Pétra (Jordanie)", en: "Petra (Jordan)" },
+  { title: "Mount Fuji", fr: "Mont Fuji (Japon)", en: "Mount Fuji (Japan)" },
+  { title: "Kinderdijk", fr: "Moulins de Kinderdijk (Pays-Bas)", en: "Windmills of Kinderdijk (Netherlands)" },
+  { title: "Sagrada Família", fr: "Sagrada Família (Espagne)", en: "Sagrada Família (Spain)" },
+  { title: "Angkor Wat", fr: "Angkor Vat (Cambodge)", en: "Angkor Wat (Cambodia)" },
+  { title: "Stonehenge", fr: "Stonehenge (Royaume-Uni)", en: "Stonehenge (UK)" },
+  { title: "Table Mountain", fr: "Montagne de la Table (Afrique du Sud)", en: "Table Mountain (South Africa)" }
 ];
 
 const TOTAL_ROUNDS = 10;
@@ -62,8 +62,25 @@ let current = null;
 let timeLeft = 0;
 let timerInterval = null;
 
+const imgCache = new Map();
+
+async function fetchWikiImage(title, size = 500) {
+  if (imgCache.has(title)) return imgCache.get(title);
+  try {
+    const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(title)}&prop=pageimages&format=json&pithumbsize=${size}&origin=*&redirects=1`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const page = Object.values(data.query.pages)[0];
+    const src = page?.thumbnail?.source || null;
+    imgCache.set(title, src);
+    return src;
+  } catch (e) {
+    return null;
+  }
+}
+
 function timeForRound() {
-  return Math.max(10 - round * 0.4, 5);
+  return Math.max(12 - round * 0.4, 7);
 }
 
 function updateHud() {
@@ -83,28 +100,57 @@ function updateTimerBar() {
 }
 
 function pickChoices(correct) {
-  const others = PLACES.filter(p => p.fr !== correct.fr).sort(() => Math.random() - 0.5).slice(0, 3);
+  const others = PLACES.filter(p => p.title !== correct.title).sort(() => Math.random() - 0.5).slice(0, 3);
   return [...others, correct].sort(() => Math.random() - 0.5);
 }
 
-function startRound() {
+function showLoading(show) {
+  let loadingEl = document.getElementById("quizLoading");
+  if (show) {
+    stimulusEl.innerHTML = "";
+    loadingEl = document.createElement("p");
+    loadingEl.id = "quizLoading";
+    loadingEl.className = "quiz-loading";
+    loadingEl.textContent = T[lang].loading;
+    stimulusEl.appendChild(loadingEl);
+  }
+}
+
+async function startRound() {
   if (round >= TOTAL_ROUNDS) {
     endGame();
     return;
   }
-  stimulusEl.className = "quiz-stimulus postcard";
+  clearInterval(timerInterval);
+  stimulusEl.className = "quiz-stimulus";
   updateHud();
+  choicesEl.innerHTML = "";
+  showLoading(true);
 
-  current = PLACES[Math.floor(Math.random() * PLACES.length)];
-  stimulusEl.textContent = current.scene;
+  let attempts = 0;
+  let src = null;
+  let place = null;
+  while (attempts < 4 && !src) {
+    place = PLACES[Math.floor(Math.random() * PLACES.length)];
+    src = await fetchWikiImage(place.title);
+    attempts++;
+  }
+
+  if (!src) {
+    stimulusEl.innerHTML = "";
+    return;
+  }
+
+  current = place;
+  stimulusEl.className = "quiz-stimulus photo-quiz";
+  stimulusEl.innerHTML = `<img src="${src}" alt="">`;
 
   const choices = pickChoices(current);
-  choicesEl.innerHTML = "";
   choices.forEach(choice => {
     const btn = document.createElement("button");
     btn.className = "choice-btn";
     btn.textContent = choice[lang];
-    btn.onclick = () => handlePick(choice.fr === current.fr, btn);
+    btn.onclick = () => handlePick(choice.title === current.title, btn);
     choicesEl.appendChild(btn);
   });
 
@@ -144,7 +190,7 @@ function handlePick(correct, btn) {
   }
 
   round++;
-  setTimeout(startRound, 700);
+  setTimeout(startRound, 1000);
 }
 
 async function endGame() {

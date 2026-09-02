@@ -20,88 +20,24 @@ function getLang() {
 }
 let lang = getLang();
 
-// --- Synthèse des cris (aucun fichier audio requis) ---
-let audioCtx = null;
-function ensureCtx() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  if (audioCtx.state === "suspended") audioCtx.resume();
-  return audioCtx;
-}
-
-function playTone({ freq, start = 0, dur = 0.3, type = "sine", vol = 0.16, bendTo = null, vibrato = 0 }) {
-  const ctx = ensureCtx();
-  const t0 = ctx.currentTime + start;
-  const osc = ctx.createOscillator();
-  osc.type = type;
-  osc.frequency.setValueAtTime(freq, t0);
-  if (bendTo) osc.frequency.linearRampToValueAtTime(bendTo, t0 + dur);
-
-  const gain = ctx.createGain();
-  gain.gain.setValueAtTime(0, t0);
-  gain.gain.linearRampToValueAtTime(vol, t0 + Math.min(0.05, dur / 4));
-  gain.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
-
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-
-  if (vibrato) {
-    const lfo = ctx.createOscillator();
-    lfo.frequency.value = vibrato;
-    const lfoGain = ctx.createGain();
-    lfoGain.gain.value = freq * 0.08;
-    lfo.connect(lfoGain);
-    lfoGain.connect(osc.frequency);
-    lfo.start(t0);
-    lfo.stop(t0 + dur + 0.1);
-  }
-
-  osc.start(t0);
-  osc.stop(t0 + dur + 0.08);
-}
-
-function playNoise({ start = 0, dur = 0.8, filterFreq = 3500, vol = 0.14 }) {
-  const ctx = ensureCtx();
-  const t0 = ctx.currentTime + start;
-  const bufferSize = Math.floor(ctx.sampleRate * dur);
-  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-  const data = buffer.getChannelData(0);
-  for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-
-  const noise = ctx.createBufferSource();
-  noise.buffer = buffer;
-  const filter = ctx.createBiquadFilter();
-  filter.type = "highpass";
-  filter.frequency.value = filterFreq;
-
-  const gain = ctx.createGain();
-  gain.gain.setValueAtTime(0, t0);
-  gain.gain.linearRampToValueAtTime(vol, t0 + 0.06);
-  gain.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
-
-  noise.connect(filter);
-  filter.connect(gain);
-  gain.connect(ctx.destination);
-  noise.start(t0);
-  noise.stop(t0 + dur + 0.05);
-}
-
-const ANIMAL_SOUNDS = {
-  dog: () => { playTone({ freq: 220, dur: 0.15, type: "square" }); playTone({ freq: 220, dur: 0.15, type: "square", start: 0.22 }); },
-  cat: () => { playTone({ freq: 600, bendTo: 900, dur: 0.25, type: "sine" }); playTone({ freq: 900, bendTo: 500, dur: 0.35, type: "sine", start: 0.22 }); },
-  cow: () => playTone({ freq: 110, dur: 1.1, type: "sawtooth", vol: 0.16, vibrato: 5 }),
-  duck: () => [0, 0.16, 0.32].forEach(s => playTone({ freq: 300, bendTo: 260, dur: 0.13, type: "square", start: s, vol: 0.18 })),
-  rooster: () => [400, 600, 850, 650, 950].forEach((f, i) => playTone({ freq: f, dur: 0.14, type: "sawtooth", start: i * 0.15, vol: 0.15 })),
-  lion: () => playTone({ freq: 90, bendTo: 140, dur: 1.5, type: "sawtooth", vol: 0.2, vibrato: 6 }),
-  owl: () => { playTone({ freq: 300, dur: 0.4, type: "sine", vol: 0.15 }); playTone({ freq: 250, dur: 0.5, type: "sine", start: 0.5, vol: 0.15 }); },
-  sheep: () => playTone({ freq: 300, bendTo: 220, dur: 0.5, type: "sawtooth", vibrato: 8, vol: 0.16 }),
-  pig: () => { playTone({ freq: 200, dur: 0.15, type: "square", vol: 0.15 }); playTone({ freq: 180, dur: 0.15, type: "square", start: 0.2, vol: 0.15 }); },
-  horse: () => { playTone({ freq: 300, bendTo: 650, dur: 0.15, type: "sawtooth", vol: 0.15 }); playTone({ freq: 650, bendTo: 300, dur: 0.5, type: "sawtooth", start: 0.15, vibrato: 12, vol: 0.15 }); },
-  frog: () => [0, 0.15, 0.3].forEach(s => playTone({ freq: 150, dur: 0.1, type: "square", start: s, vol: 0.17 })),
-  wolf: () => playTone({ freq: 300, bendTo: 750, dur: 1.6, type: "sine", vol: 0.16 }),
-  elephant: () => playTone({ freq: 200, bendTo: 550, dur: 0.9, type: "sawtooth", vibrato: 10, vol: 0.16 }),
-  bird: () => [1200, 1500, 1300].forEach((f, i) => playTone({ freq: f, dur: 0.08, type: "sine", start: i * 0.12, vol: 0.14 })),
-  bee: () => playTone({ freq: 250, dur: 1.0, type: "sawtooth", vibrato: 20, vol: 0.12 }),
-  snake: () => playNoise({ dur: 1.0, filterFreq: 4000 })
+// Vrais enregistrements (Wikimedia Commons), vérifiés lisibles.
+const ANIMAL_SOUNDS_URL = {
+  dog: "https://upload.wikimedia.org/wikipedia/commons/a/a2/Barking_of_a_dog.ogg",
+  cat: "https://upload.wikimedia.org/wikipedia/commons/0/0c/Meow_domestic_cat.ogg",
+  cow: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Single_Cow_Moo.ogg",
+  duck: "https://upload.wikimedia.org/wikipedia/commons/3/39/Pekin_duck_%26_mallard.ogg",
+  rooster: "https://upload.wikimedia.org/wikipedia/commons/c/c5/Rooster_crowing.ogg",
+  lion: "https://upload.wikimedia.org/wikipedia/commons/d/d3/Lionroar.wav",
+  owl: "https://upload.wikimedia.org/wikipedia/commons/9/94/Maghreb_owl_hooting.wav",
+  sheep: "https://upload.wikimedia.org/wikipedia/commons/1/13/Sheep_bleating.ogg",
+  pig: "https://upload.wikimedia.org/wikipedia/commons/7/73/Mudchute_pig_1.ogg",
+  horse: "https://upload.wikimedia.org/wikipedia/commons/d/db/Wiehern.ogg",
+  frog: "https://upload.wikimedia.org/wikipedia/commons/9/9f/Single_Frog_Croak.oga",
+  wolf: "https://upload.wikimedia.org/wikipedia/commons/8/87/Wolf_howls.ogg",
+  elephant: "https://upload.wikimedia.org/wikipedia/commons/4/40/Elephant_voice_-_trumpeting.ogg",
+  bird: "https://upload.wikimedia.org/wikipedia/commons/4/4c/Juvenile_white-backed_Australian_magpie_%28Gymnorhina_tibicen_tyrannica%29_song.ogg",
+  bee: "https://upload.wikimedia.org/wikipedia/commons/7/77/Buzzing_bees.ogg",
+  donkey: "https://upload.wikimedia.org/wikipedia/commons/2/25/157763_felix-blume_a-donkey-is-braying-in-his-enclosure-in-south-of-france.wav"
 };
 
 const ANIMALS = [
@@ -120,10 +56,11 @@ const ANIMALS = [
   { key: "elephant", emoji: "🐘", fr: "Éléphant", en: "Elephant" },
   { key: "bird", emoji: "🐦", fr: "Oiseau", en: "Bird" },
   { key: "bee", emoji: "🐝", fr: "Abeille", en: "Bee" },
-  { key: "snake", emoji: "🐍", fr: "Serpent", en: "Snake" }
+  { key: "donkey", emoji: "🫏", fr: "Âne", en: "Donkey" }
 ];
 
 const TOTAL_ROUNDS = 10;
+const MAX_PLAY_MS = 4000;
 
 const stimulusEl = document.getElementById("stimulus");
 const choicesEl = document.getElementById("choices");
@@ -136,6 +73,8 @@ let bestStreak = 0;
 let best = 0;
 let over = false;
 let current = null;
+let audioEl = null;
+let stopTimer = null;
 
 function updateHud() {
   document.getElementById("roundVal").textContent = T[lang].round(round + 1, TOTAL_ROUNDS);
@@ -145,9 +84,17 @@ function updateHud() {
 
 function playCurrentSound() {
   if (!current) return;
-  ANIMAL_SOUNDS[current.key]();
+  if (audioEl) { audioEl.pause(); audioEl = null; }
+  clearTimeout(stopTimer);
+
+  audioEl = new Audio(ANIMAL_SOUNDS_URL[current.key]);
+  audioEl.play().catch(() => {});
   playBtn.classList.add("playing");
-  setTimeout(() => playBtn.classList.remove("playing"), 1000);
+  stopTimer = setTimeout(() => {
+    if (audioEl) audioEl.pause();
+    playBtn.classList.remove("playing");
+  }, MAX_PLAY_MS);
+  audioEl.addEventListener("ended", () => playBtn.classList.remove("playing"));
 }
 
 function pickChoices(correct) {
@@ -181,6 +128,9 @@ function startRound() {
 function handlePick(correct, btn) {
   if (over) return;
   document.querySelectorAll(".choice-btn").forEach(b => (b.onclick = null));
+  if (audioEl) { audioEl.pause(); audioEl = null; }
+  clearTimeout(stopTimer);
+  playBtn.classList.remove("playing");
 
   if (correct) {
     score++;
