@@ -3,18 +3,25 @@ body {
   box-sizing: border-box;
 }
 
-#timer {
-  color: var(--accent-gold);
-  font-weight: bold;
-  font-size: 22px;
-  margin-bottom: 10px;
+.stat-bar {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
 }
 
-#keysStatus,
-#badgeStatus {
-  color: var(--text-light);
+.stat-chip {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-blue);
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 14px;
   font-weight: bold;
-  margin-bottom: 10px;
+  color: var(--accent-gold);
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .hint {
@@ -62,17 +69,41 @@ body {
 .maze-cell.wall-E { border-right-color: var(--accent-blue); }
 .maze-cell.wall-W { border-left-color: var(--accent-blue); }
 
+.maze-cell.gate-N { border-top: 2px dashed #FF5C5C; }
+.maze-cell.gate-S { border-bottom: 2px dashed #FF5C5C; }
+.maze-cell.gate-E { border-right: 2px dashed #FF5C5C; }
+.maze-cell.gate-W { border-left: 2px dashed #FF5C5C; }
+
 .maze-cell.player {
   background: var(--accent-gold);
+  border-radius: 50%;
+  animation: playerPulse 0.2s ease;
+}
+
+@keyframes playerPulse {
+  from { transform: scale(0.6); }
+  to { transform: scale(1); }
 }
 
 .maze-cell.goal {
   font-size: 14px;
+  animation: goalGlow 1.6s ease-in-out infinite;
+}
+
+@keyframes goalGlow {
+  0%, 100% { filter: drop-shadow(0 0 2px var(--accent-gold)); }
+  50% { filter: drop-shadow(0 0 8px var(--accent-gold)); }
 }
 
 .maze-cell.key,
 .maze-cell.badge {
   font-size: 12px;
+  animation: itemBob 1.4s ease-in-out infinite;
+}
+
+@keyframes itemBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
 }
 
 .dpad {

@@ -12,16 +12,20 @@
 
 <body>
 
+  <button id="langToggle" class="lang-toggle">FR</button>
+
   <h1>🧩 Puzzle glissant</h1>
-  <p id="moves">0 coups</p>
+  <p id="moves">0</p>
 
   <div class="size-toggle">
-    <button class="btn-small size-btn active" data-size="3">3×3</button>
-    <button class="btn-small size-btn" data-size="4">4×4</button>
+    <button class="btn-small size-btn" data-size="3">3×3</button>
+    <button class="btn-small size-btn active" data-size="4">4×4</button>
     <button class="btn-small size-btn" data-size="5">5×5</button>
   </div>
 
   <div class="puzzle-board" id="board"></div>
+
+  <p class="hint" data-i18n="hint">Glisse, utilise les flèches ou les boutons pour déplacer les pièces</p>
 
   <div class="dpad">
     <button class="btn-small dpad-up" id="btnUp" aria-label="Haut">▲</button>
@@ -33,10 +37,25 @@
   </div>
 
   <div class="actions">
-    <button class="btn-small" id="shuffleBtn">Mélanger</button>
-    <a href="../index.html" class="btn-small">Accueil</a>
+    <button class="btn-small" id="shuffleBtn" data-i18n="shuffle">Mélanger</button>
+    <a href="../index.html" class="btn-small" data-i18n="home">Accueil</a>
   </div>
 
+  <div class="win-modal" id="resultModal" hidden>
+    <div class="win-modal-content">
+      <h2 data-i18n="winTitle">🎉 Résolu !</h2>
+      <div class="stars" id="starsRow">☆☆☆</div>
+      <div class="win-stats">
+        <p><span data-i18n="movesLabel">Coups</span> : <span id="statMoves"></span></p>
+      </div>
+      <div class="win-actions">
+        <button class="btn-small" id="replayBtn" data-i18n="replay">Rejouer</button>
+        <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/sfx.js"></script>
   <script type="module" src="../js/puzzle-glissant.js"></script>
 </body>
 </html>

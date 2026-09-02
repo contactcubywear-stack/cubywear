@@ -22,27 +22,53 @@ body {
 }
 
 .puzzle-board {
-  display: grid;
-  gap: 4px;
+  position: relative;
   width: min(92vw, 380px);
   aspect-ratio: 1 / 1;
   margin: 0 auto;
   background: var(--bg-main);
   border: 2px solid var(--accent-blue);
   border-radius: 10px;
-  padding: 4px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .puzzle-tile {
-  border-radius: 6px;
-  cursor: pointer;
-  background-repeat: no-repeat;
+  position: absolute;
+  width: calc(100% / var(--size));
+  height: calc(100% / var(--size));
+  box-sizing: border-box;
+  padding: 3px;
+  transition: left 0.18s ease, top 0.18s ease;
 }
 
 .puzzle-tile.empty {
+  pointer-events: none;
+}
+
+.tile-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  transition: transform 0.15s ease;
+}
+
+.puzzle-tile.empty .tile-inner {
   background: transparent;
   cursor: default;
+}
+
+.puzzle-tile:not(.empty) .tile-inner:hover {
+  transform: scale(0.96);
+}
+
+.hint {
+  color: var(--text-light);
+  font-size: 14px;
+  margin-top: 15px;
+  text-align: center;
 }
 
 .dpad {
@@ -70,4 +96,60 @@ body {
   justify-content: center;
   gap: 10px;
   margin-top: 20px;
+}
+
+.win-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.win-modal[hidden] {
+  display: none;
+}
+
+.win-modal-content {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-gold);
+  border-radius: 14px;
+  padding: 25px;
+  max-width: 320px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.win-modal-content h2 {
+  color: var(--accent-gold);
+  margin: 0 0 10px;
+}
+
+.stars {
+  font-size: 30px;
+  letter-spacing: 4px;
+  margin-bottom: 12px;
+  color: var(--accent-gold);
+}
+
+.win-stats {
+  color: var(--text-light);
+  margin-bottom: 15px;
+}
+
+.win-stats span {
+  color: var(--text-white);
+  font-weight: bold;
+}
+
+.win-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }

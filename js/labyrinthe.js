@@ -1,5 +1,33 @@
 import { saveScore } from "../api.js";
 
+const T = {
+  fr: {
+    chooseDifficulty: "Choisis la difficulté",
+    easy: "Facile", medium: "Moyen", hard: "Difficile", impossible: "Impossible",
+    mainMenu: "Menu principal", home: "Accueil", replay: "Rejouer",
+    hint: "Glisse, utilise les flèches ou les boutons pour te déplacer jusqu'à 🏁",
+    keys: (n, total) => `${n}/${total}`,
+    badgeMissing: "Pas trouvé", badgeFound: "Débloqué !",
+    won: s => `🎉 Trouvé avec ${s}s restantes !`,
+    lost: "😕 Temps écoulé !"
+  },
+  en: {
+    chooseDifficulty: "Choose a difficulty",
+    easy: "Easy", medium: "Medium", hard: "Hard", impossible: "Impossible",
+    mainMenu: "Main menu", home: "Home", replay: "Replay",
+    hint: "Swipe, use the arrow keys, or the buttons to reach 🏁",
+    keys: (n, total) => `${n}/${total}`,
+    badgeMissing: "Not found", badgeFound: "Unlocked!",
+    won: s => `🎉 Found it with ${s}s left!`,
+    lost: "😕 Time's up!"
+  }
+};
+
+function getLang() {
+  return localStorage.getItem("cubywearLang") === "en" ? "en" : "fr";
+}
+let lang = getLang();
+
 const DIFFICULTY_SETTINGS = {
   facile:     { size: 5,  time: 45, keys: 0, badge: false },
   moyen:      { size: 8,  time: 30, keys: 0, badge: false },
@@ -13,7 +41,9 @@ const DIR_LETTER = { up: "N", down: "S", left: "W", right: "E" };
 
 const mazeEl = document.getElementById("maze");
 const timerEl = document.getElementById("timer");
+const keysChipEl = document.getElementById("keysChip");
 const keysStatusEl = document.getElementById("keysStatus");
+const badgeChipEl = document.getElementById("badgeChip");
 const badgeStatusEl = document.getElementById("badgeStatus");
 
 let difficulty;
@@ -86,8 +116,6 @@ function getDeadEnds(exclude) {
 function placeKeys() {
   const exclude = [[0, 0], [goalR, goalC]];
 
-  // En difficile/impossible, on privilégie les culs-de-sac pour forcer
-  // des détours plutôt que de laisser les clés sur le chemin direct.
   let candidates;
   if (difficulty === "difficile" || difficulty === "impossible") {
     const deadEnds = shuffle(getDeadEnds(exclude));
@@ -113,8 +141,6 @@ function placeBadgeAndGate() {
   const candidates = shuffle(allCandidates(exclude));
   badgePosition = candidates[0];
 
-  // Verrouille une des sorties de la case d'arrivée : tant que le
-  // badge n'est pas ramassé, cette portion du labyrinthe reste bloquée.
   const goalCell = cells[goalR][goalC];
   const openDirs = ["N", "S", "E", "W"].filter(d => !goalCell[d]);
   const dir = openDirs[Math.floor(Math.random() * openDirs.length)];
@@ -139,10 +165,11 @@ function render() {
     row.forEach((cell, c) => {
       const div = document.createElement("div");
       div.className = "maze-cell";
-      if (cell.N || isGateBlocking(r, c, "N")) div.classList.add("wall-N");
-      if (cell.S || isGateBlocking(r, c, "S")) div.classList.add("wall-S");
-      if (cell.E || isGateBlocking(r, c, "E")) div.classList.add("wall-E");
-      if (cell.W || isGateBlocking(r, c, "W")) div.classList.add("wall-W");
+
+      ["N", "S", "E", "W"].forEach(dir => {
+        if (cell[dir]) div.classList.add(`wall-${dir}`);
+        else if (isGateBlocking(r, c, dir)) div.classList.add(`gate-${dir}`);
+      });
 
       if (r === playerR && c === playerC) {
         div.classList.add("player");
@@ -167,24 +194,31 @@ function move(dir) {
   const dirLetter = DIR_LETTER[dir];
   const cell = cells[playerR][playerC];
 
-  if (cell[dirLetter] || isGateBlocking(playerR, playerC, dirLetter)) return;
+  if (cell[dirLetter] || isGateBlocking(playerR, playerC, dirLetter)) {
+    if (window.CubySfx) CubySfx.fail();
+    return;
+  }
 
   if (dir === "up") playerR--;
   if (dir === "down") playerR++;
   if (dir === "left") playerC--;
   if (dir === "right") playerC++;
 
+  if (window.CubySfx) CubySfx.tap();
+
   const keyIndex = keyPositions.findIndex(([r, c]) => r === playerR && c === playerC);
   if (keyIndex !== -1) {
     keyPositions.splice(keyIndex, 1);
     keysCollected++;
-    keysStatusEl.textContent = `🔑 Clés : ${keysCollected}/${KEYS_NEEDED}`;
+    keysStatusEl.textContent = T[lang].keys(keysCollected, KEYS_NEEDED);
+    if (window.CubySfx) CubySfx.coin();
   }
 
   if (badgePosition && badgePosition[0] === playerR && badgePosition[1] === playerC) {
     badgeCollected = true;
     badgePosition = null;
-    badgeStatusEl.textContent = "🏅 Badge trouvé, passage débloqué !";
+    badgeStatusEl.textContent = T[lang].badgeFound;
+    if (window.CubySfx) CubySfx.coin();
   }
 
   render();
@@ -197,24 +231,30 @@ function move(dir) {
 async function win() {
   over = true;
   clearInterval(timerInterval);
-  document.getElementById("resultTitle").textContent = `🎉 Trouvé avec ${timeLeft}s restantes !`;
+  if (window.CubySfx) CubySfx.win();
+  document.getElementById("resultTitle").textContent = T[lang].won(timeLeft);
   document.getElementById("resultModal").hidden = false;
   await saveScore("CW-BLK-1-0001", "labyrinthe", timeLeft);
 }
 
 async function lose() {
   over = true;
-  document.getElementById("resultTitle").textContent = "😕 Temps écoulé !";
+  if (window.CubySfx) CubySfx.lose();
+  document.getElementById("resultTitle").textContent = T[lang].lost;
   document.getElementById("resultModal").hidden = false;
   await saveScore("CW-BLK-1-0001", "labyrinthe", 0);
+}
+
+function renderTimer() {
+  const min = String(Math.floor(timeLeft / 60)).padStart(2, "0");
+  const sec = String(timeLeft % 60).padStart(2, "0");
+  timerEl.textContent = `${min}:${sec}`;
 }
 
 function startTimer() {
   timerInterval = setInterval(() => {
     timeLeft--;
-    const min = String(Math.floor(timeLeft / 60)).padStart(2, "0");
-    const sec = String(timeLeft % 60).padStart(2, "0");
-    timerEl.textContent = `${min}:${sec}`;
+    renderTimer();
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
       lose();
@@ -246,20 +286,19 @@ function startGame(level) {
   placeKeys();
   placeBadgeAndGate();
 
-  keysStatusEl.hidden = KEYS_NEEDED === 0;
-  keysStatusEl.textContent = `🔑 Clés : 0/${KEYS_NEEDED}`;
+  keysChipEl.hidden = KEYS_NEEDED === 0;
+  keysStatusEl.textContent = T[lang].keys(0, KEYS_NEEDED);
 
-  badgeStatusEl.hidden = !BADGE_REQUIRED;
-  badgeStatusEl.textContent = "🏅 Badge non trouvé";
+  badgeChipEl.hidden = !BADGE_REQUIRED;
+  badgeStatusEl.textContent = T[lang].badgeMissing;
 
-  const min = String(Math.floor(timeLeft / 60)).padStart(2, "0");
-  const sec = String(timeLeft % 60).padStart(2, "0");
-  timerEl.textContent = `${min}:${sec}`;
+  renderTimer();
 
   document.getElementById("difficultySelect").hidden = true;
   document.getElementById("gameArea").hidden = false;
 
   render();
+  clearInterval(timerInterval);
   startTimer();
 }
 
@@ -273,3 +312,49 @@ document.getElementById("btnLeft").onclick = () => move("left");
 document.getElementById("btnRight").onclick = () => move("right");
 
 document.getElementById("replayBtn").onclick = () => location.reload();
+
+window.addEventListener("keydown", e => {
+  const map = { ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right" };
+  if (map[e.key] && !document.getElementById("gameArea").hidden) {
+    e.preventDefault();
+    move(map[e.key]);
+  }
+});
+
+let touchStartX = 0, touchStartY = 0;
+mazeEl.addEventListener("touchstart", e => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+mazeEl.addEventListener("touchend", e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if (Math.max(Math.abs(dx), Math.abs(dy)) < 20) return;
+  if (Math.abs(dx) > Math.abs(dy)) {
+    move(dx > 0 ? "right" : "left");
+  } else {
+    move(dy > 0 ? "down" : "up");
+  }
+}, { passive: true });
+
+function applyLang() {
+  document.documentElement.setAttribute("lang", lang);
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (T[lang][key] !== undefined) el.textContent = T[lang][key];
+  });
+  document.getElementById("langToggle").textContent = lang.toUpperCase();
+  if (!document.getElementById("gameArea").hidden && !over) {
+    keysStatusEl.textContent = T[lang].keys(keysCollected, KEYS_NEEDED);
+    badgeStatusEl.textContent = badgeCollected ? T[lang].badgeFound : T[lang].badgeMissing;
+  }
+}
+
+document.getElementById("langToggle").addEventListener("click", () => {
+  lang = lang === "fr" ? "en" : "fr";
+  localStorage.setItem("cubywearLang", lang);
+  applyLang();
+});
+
+applyLang();
