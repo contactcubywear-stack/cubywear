@@ -12,27 +12,53 @@
 
 <body>
 
+  <button id="langToggle" class="lang-toggle">FR</button>
+
   <h1>❌⭕ Tic Tac Toe</h1>
 
-  <div class="difficulty-select" id="difficultySelect">
-    <p>Choisis la difficulté</p>
-    <div class="difficulty-buttons">
-      <button class="btn-small" data-difficulty="facile">Facile</button>
-      <button class="btn-small" data-difficulty="moyen">Moyen</button>
-      <button class="btn-small" data-difficulty="difficile">Difficile</button>
+  <div class="mode-select" id="modeSelect">
+    <p data-i18n="chooseMode">Choisis un mode</p>
+    <div class="mode-buttons">
+      <button class="mode-btn" data-mode="bot">
+        <span class="mode-icon">🤖</span>
+        <span data-i18n="vsBot">Contre le bot</span>
+      </button>
+      <button class="mode-btn" data-mode="2p">
+        <span class="mode-icon">🧑‍🤝‍🧑</span>
+        <span data-i18n="vs2p">2 joueurs</span>
+      </button>
     </div>
     <div class="actions">
-      <a href="../index.html" class="btn-small">Menu principal</a>
+      <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
+    </div>
+  </div>
+
+  <div class="difficulty-select" id="difficultySelect" hidden>
+    <p data-i18n="chooseDifficulty">Choisis la difficulté</p>
+    <div class="difficulty-buttons">
+      <button class="btn-small" data-difficulty="facile" data-i18n="easy">Facile</button>
+      <button class="btn-small" data-difficulty="moyen" data-i18n="medium">Moyen</button>
+      <button class="btn-small" data-difficulty="difficile" data-i18n="hard">Difficile</button>
+    </div>
+    <div class="actions">
+      <button class="btn-small" id="backToModeBtn" data-i18n="back">Retour</button>
     </div>
   </div>
 
   <div id="gameArea" hidden>
+    <div class="scoreboard" id="scoreboard"></div>
     <p id="status">À toi de jouer (X)</p>
 
-    <div class="ttt-grid" id="grid"></div>
+    <div class="ttt-wrap">
+      <div class="ttt-grid" id="grid"></div>
+      <svg class="win-line-svg" id="winLineSvg" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <line id="winLine" x1="0" y1="0" x2="0" y2="0" />
+      </svg>
+    </div>
 
     <div class="actions">
-      <a href="../index.html" class="btn-small">Accueil</a>
+      <button class="btn-small" id="changeModeBtn" data-i18n="changeMode">Changer mode</button>
+      <a href="../index.html" class="btn-small" data-i18n="home">Accueil</a>
     </div>
   </div>
 
@@ -40,12 +66,13 @@
     <div class="win-modal-content">
       <h2 id="resultTitle"></h2>
       <div class="win-actions">
-        <button class="btn-small" id="replayBtn">Rejouer</button>
-        <a href="../index.html" class="btn-small">Menu principal</a>
+        <button class="btn-small" id="replayBtn" data-i18n="replay">Rejouer</button>
+        <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
       </div>
     </div>
   </div>
 
+  <script src="../js/sfx.js"></script>
   <script type="module" src="../js/tictactoe.js"></script>
 </body>
 </html>

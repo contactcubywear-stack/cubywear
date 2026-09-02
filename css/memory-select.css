@@ -26,14 +26,39 @@
   background: var(--bg-card);
   border: 2px solid var(--accent-blue);
   border-radius: 16px;
-  padding: 20px;
+  padding: 18px 20px;
   color: var(--text-white);
   text-align: left;
   cursor: pointer;
-  transition: 0.25s;
+  transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), background-color 0.25s ease, box-shadow 0.25s ease;
   width: 100%;
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  opacity: 0;
+  animation: diffIn 0.5s ease forwards;
+}
+
+.difficulty-container .difficulty-btn:nth-child(1) { animation-delay: 0.05s; }
+.difficulty-container .difficulty-btn:nth-child(2) { animation-delay: 0.15s; }
+.difficulty-container .difficulty-btn:nth-child(3) { animation-delay: 0.25s; }
+.difficulty-container .difficulty-btn:nth-child(4) { animation-delay: 0.35s; }
+
+@keyframes diffIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.diff-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.diff-text {
+  flex: 1;
+  min-width: 0;
 }
 
 .difficulty-btn h2 {
@@ -48,9 +73,14 @@
   font-size: 14px;
 }
 
-.difficulty-btn:hover,
-.difficulty-btn:active {
+.difficulty-btn:hover {
   background: var(--accent-blue);
+  transform: translateX(4px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.difficulty-btn:active {
+  transform: scale(0.97);
 }
 
 /* FACILE = VERT */

@@ -7,34 +7,45 @@
   <title>Cubiwear – Memory</title>
 
   <link rel="stylesheet" href="../style.css">
-  <link rel="stylesheet" href="../css/memory.css?v=3">
+  <link rel="stylesheet" href="../css/memory.css?v=4">
 </head>
 
 <body>
 
+  <button id="langToggle" class="lang-toggle">FR</button>
+
   <h1>🧠 Memory</h1>
-  <p id="timer">00:00</p>
-  <p id="info">0 coups</p>
-  <p id="triesLeft"></p>
+
+  <div class="stat-bar">
+    <div class="stat-chip"><span class="stat-icon">⏱️</span><span id="timer">00:00</span></div>
+    <div class="stat-chip"><span class="stat-icon">🔁</span><span id="info">0</span></div>
+    <div class="stat-chip"><span id="triesHearts"></span></div>
+    <div class="stat-chip score-chip"><span class="stat-icon">⭐</span><span id="scoreVal">0</span></div>
+  </div>
+  <div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
 
   <div class="memory-container" id="gameBoard"></div>
 
+  <div class="combo-popup" id="comboPopup" hidden></div>
+
   <div class="actions">
-    <a href="memory-select.html" class="btn-small">Changer niveau</a>
-    <a href="../index.html" class="btn-small">Accueil</a>
+    <a href="memory-select.html" class="btn-small" data-i18n="changeLevel">Changer niveau</a>
+    <a href="../index.html" class="btn-small" data-i18n="home">Accueil</a>
   </div>
 
   <div class="win-modal" id="winModal" hidden>
     <div class="win-modal-content">
-      <h2>🎉 Bravo, tu as gagné !</h2>
+      <h2 data-i18n="winTitle">🎉 Bravo, tu as gagné !</h2>
+      <div class="stars" id="starsRow">☆☆☆</div>
       <div class="win-stats">
-        <p>Niveau : <span id="statLevel"></span></p>
-        <p>Coups joués : <span id="statMoves"></span></p>
-        <p>Temps restant : <span id="statTime"></span></p>
+        <p><span data-i18n="level">Niveau</span> : <span id="statLevel"></span></p>
+        <p><span data-i18n="moves">Coups joués</span> : <span id="statMoves"></span></p>
+        <p><span data-i18n="timeLeft">Temps restant</span> : <span id="statTime"></span></p>
+        <p><span data-i18n="score">Score</span> : <span id="statScore"></span></p>
       </div>
       <div class="win-actions">
-        <button class="btn-small" id="replayBtn">Rejouer</button>
-        <a href="../index.html" class="btn-small">Menu principal</a>
+        <button class="btn-small" id="replayBtn" data-i18n="replay">Rejouer</button>
+        <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
       </div>
     </div>
   </div>
@@ -43,18 +54,18 @@
     <div class="win-modal-content">
       <h2 id="loseTitle">😕 Perdu !</h2>
       <div class="win-stats">
-        <p>Niveau : <span id="loseStatLevel"></span></p>
-        <p>Coups joués : <span id="loseStatMoves"></span></p>
+        <p><span data-i18n="level">Niveau</span> : <span id="loseStatLevel"></span></p>
+        <p><span data-i18n="moves">Coups joués</span> : <span id="loseStatMoves"></span></p>
       </div>
       <div class="win-actions">
-        <button class="btn-small" id="loseReplayBtn">Rejouer</button>
-        <a href="memory-select.html" class="btn-small">Changer niveau</a>
-        <a href="../index.html" class="btn-small">Menu principal</a>
+        <button class="btn-small" id="loseReplayBtn" data-i18n="replay">Rejouer</button>
+        <a href="memory-select.html" class="btn-small" data-i18n="changeLevel">Changer niveau</a>
+        <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
       </div>
     </div>
   </div>
 
+  <script src="../js/sfx.js"></script>
   <script src="../js/memory.js"></script>
 </body>
 </html>
-

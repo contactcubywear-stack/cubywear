@@ -12,29 +12,33 @@
 
 <body>
 
+  <button id="langToggle" class="lang-toggle">FR</button>
+
   <h1>🐤 Flappy Bird</h1>
-  <p class="hint">Clique, appuie sur Espace ou touche l'écran pour voler</p>
+  <p class="hint" data-i18n="hint">Clique, appuie sur Espace ou touche l'écran pour voler</p>
 
   <canvas id="game" width="360" height="560"></canvas>
 
   <div class="actions">
-    <a href="../index.html" class="btn-small">Accueil</a>
+    <a href="../index.html" class="btn-small" data-i18n="home">Accueil</a>
   </div>
 
   <div class="win-modal" id="resultModal" hidden>
     <div class="win-modal-content">
-      <h2>💥 Game Over !</h2>
+      <h2 data-i18n="gameOver">💥 Game Over !</h2>
       <div class="win-stats">
-        <p>Score : <span id="statScore"></span></p>
-        <p>Meilleur score : <span id="statBest"></span></p>
+        <p><span data-i18n="score">Score</span> : <span id="statScore"></span></p>
+        <p><span data-i18n="coins">Pièces</span> : <span id="statCoins"></span></p>
+        <p><span data-i18n="best">Meilleur score</span> : <span id="statBest"></span></p>
       </div>
       <div class="win-actions">
-        <button class="btn-small" id="replayBtn">Rejouer</button>
-        <a href="../index.html" class="btn-small">Menu principal</a>
+        <button class="btn-small" id="replayBtn" data-i18n="replay">Rejouer</button>
+        <a href="../index.html" class="btn-small" data-i18n="mainMenu">Menu principal</a>
       </div>
     </div>
   </div>
 
+  <script src="../js/sfx.js"></script>
   <script type="module" src="../js/flappy.js"></script>
 </body>
 </html>

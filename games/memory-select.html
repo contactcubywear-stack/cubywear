@@ -12,34 +12,48 @@
 
 <body>
 
+  <button id="langToggle" class="lang-toggle">FR</button>
+
   <h1 class="title">🧠 Memory</h1>
-  <p class="subtitle">Choisis ton niveau</p>
+  <p class="subtitle" data-i18n="chooseLevel">Choisis ton niveau</p>
 
   <div class="difficulty-container">
 
     <button class="difficulty-btn facile" onclick="startMemory('facile')">
-      <h2>Facile</h2>
-      <p>5 minutes · 30 essais · 4×4</p>
+      <span class="diff-icon">🟢</span>
+      <div class="diff-text">
+        <h2 data-i18n="easy">Facile</h2>
+        <p data-i18n="easyDesc">5 minutes · 30 essais · 4×4</p>
+      </div>
     </button>
 
     <button class="difficulty-btn moyen" onclick="startMemory('moyen')">
-      <h2>Moyen</h2>
-      <p>3 minutes · 10 essais · 4×4</p>
+      <span class="diff-icon">🟡</span>
+      <div class="diff-text">
+        <h2 data-i18n="medium">Moyen</h2>
+        <p data-i18n="mediumDesc">3 minutes · 10 essais · 4×4</p>
+      </div>
     </button>
 
     <button class="difficulty-btn difficile" onclick="startMemory('difficile')">
-      <h2>Difficile</h2>
-      <p>1 minute · 5 essais · 6×6</p>
+      <span class="diff-icon">🟠</span>
+      <div class="diff-text">
+        <h2 data-i18n="hard">Difficile</h2>
+        <p data-i18n="hardDesc">1 minute · 5 essais · 6×6</p>
+      </div>
     </button>
 
     <button class="difficulty-btn impossible" onclick="startMemory('impossible')">
-      <h2>Impossible</h2>
-      <p>30 secondes · 3 essais · 6×6</p>
+      <span class="diff-icon">🔴</span>
+      <div class="diff-text">
+        <h2 data-i18n="impossible">Impossible</h2>
+        <p data-i18n="impossibleDesc">30 secondes · 3 essais · 6×6</p>
+      </div>
     </button>
 
   </div>
 
-  <a href="../index.html" class="btn-small">Retour</a>
+  <a href="../index.html" class="btn-small" data-i18n="back">Retour</a>
 
   <script src="../js/memory-select.js"></script>
 </body>

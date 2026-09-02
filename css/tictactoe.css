@@ -7,11 +7,49 @@ body {
   color: var(--accent-gold);
   font-weight: bold;
   font-size: 18px;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
+.mode-select,
 .difficulty-select {
   color: var(--text-light);
+}
+
+.mode-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.mode-btn {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-blue);
+  border-radius: 16px;
+  padding: 20px 26px;
+  color: var(--text-white);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 15px;
+  transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), background-color 0.25s ease;
+}
+
+.mode-btn:hover {
+  background: var(--accent-blue);
+  transform: translateY(-4px) scale(1.03);
+}
+
+.mode-btn:active {
+  transform: scale(0.96);
+}
+
+.mode-icon {
+  font-size: 34px;
 }
 
 .difficulty-buttons {
@@ -22,14 +60,69 @@ body {
   margin-top: 15px;
 }
 
+.scoreboard {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.score-chip {
+  background: var(--bg-card);
+  border: 2px solid var(--accent-blue);
+  border-radius: 12px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--text-light);
+}
+
+.score-chip .val {
+  color: var(--accent-gold);
+  font-size: 16px;
+  margin-left: 4px;
+}
+
+.ttt-wrap {
+  position: relative;
+  width: min(90vw, 330px);
+  margin: 0 auto;
+}
+
 .ttt-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, minmax(0, 1fr));
   gap: 10px;
-  width: min(90vw, 330px);
+  width: 100%;
   aspect-ratio: 1 / 1;
-  margin: 0 auto;
+}
+
+.win-line-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#winLine {
+  stroke: var(--accent-gold);
+  stroke-width: 3;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+}
+
+#winLine.show {
+  opacity: 1;
+  animation: drawLine 0.4s ease forwards;
+}
+
+@keyframes drawLine {
+  from { stroke-dasharray: 0 200; }
+  to { stroke-dasharray: 200 0; }
 }
 
 .cell {
@@ -42,11 +135,16 @@ body {
   font-size: 42px;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.15s;
+  transition: background-color 0.15s ease, transform 0.15s ease;
 }
 
 .cell:not(.filled):hover {
   background: var(--accent-blue);
+  transform: scale(1.03);
+}
+
+.cell.filled {
+  cursor: default;
 }
 
 .cell.x {
@@ -58,13 +156,22 @@ body {
 }
 
 .cell.win {
-  background: var(--accent-gold);
-  color: var(--bg-main);
+  background: rgba(232, 170, 66, 0.18);
   border-color: var(--accent-gold);
+}
+
+.mark-in {
+  animation: markIn 0.25s cubic-bezier(.34,1.56,.64,1);
+}
+
+@keyframes markIn {
+  from { transform: scale(0.4); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
   margin-top: 25px;

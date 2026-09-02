@@ -559,6 +559,42 @@ h1 {
 }
 
 /* ============================================================
+   LANG TOGGLE (pages de jeu — bouton isolé FR/EN)
+   ============================================================ */
+
+.lang-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 6;
+  min-width: 44px;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 20px;
+  border: 2px solid var(--accent-blue);
+  background: var(--bg-card);
+  color: var(--text-light);
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), box-shadow 0.25s ease;
+}
+
+.lang-toggle:hover {
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 6px 18px rgba(232, 170, 66, 0.35);
+}
+
+.lang-toggle:active {
+  transform: scale(0.92);
+}
+
+/* ============================================================
    JEUX DU JOUR (x3)
    ============================================================ */
 
