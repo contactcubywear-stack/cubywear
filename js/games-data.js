@@ -83,8 +83,14 @@ const GAMES = [
     fr: { name: "Piano Tiles", desc: "Touche les tuiles noires sans en rater une" }, en: { name: "Piano Tiles", desc: "Tap the black tiles without missing one" } },
   { id: "air-hockey", icon: "🏒",
     fr: { name: "Air Hockey", desc: "Marque plus de buts que le bot" }, en: { name: "Air Hockey", desc: "Score more goals than the bot" } },
-  { id: "quiz-culture", icon: "🎭",
-    fr: { name: "Quiz Culture", desc: "Musique, art, citations : teste tes connaissances" }, en: { name: "Culture Quiz", desc: "Music, art, quotes: test your knowledge" } }
+  { id: "devine-artiste", icon: "🖌️",
+    fr: { name: "Devine l'Artiste", desc: "Reconnais le peintre ou le musicien sur la photo" }, en: { name: "Guess the Artist", desc: "Recognize the painter or musician in the photo" } },
+  { id: "chef-doeuvre", icon: "🖼️",
+    fr: { name: "Chef-d'Œuvre", desc: "Devine qui a créé cette œuvre d'art" }, en: { name: "Masterpiece", desc: "Guess who created this artwork" } },
+  { id: "blind-test", icon: "🎧",
+    fr: { name: "Blind Test", desc: "Écoute l'extrait et devine la chanson" }, en: { name: "Blind Test", desc: "Listen to the clip and guess the song" } },
+  { id: "complete-citation", icon: "💬",
+    fr: { name: "Complète la Citation", desc: "Choisis la bonne suite de la phrase" }, en: { name: "Finish the Line", desc: "Pick the right ending to the phrase" } }
 ];
 
 const GAMES_BY_ID = Object.fromEntries(GAMES.map(g => [g.id, g]));

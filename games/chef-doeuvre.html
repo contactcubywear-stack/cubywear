@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <script>(function(){try{if(localStorage.getItem("cubywearTheme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
-  <title>CubyWear – Quiz Culture</title>
+  <title>CubyWear – Chef-d'Œuvre</title>
   <link rel="icon" type="image/png" href="/assets/logo_dark.png">
 
   <link rel="stylesheet" href="../style.css">
@@ -15,7 +15,7 @@
 
   <button id="langToggle" class="lang-toggle">FR</button>
 
-  <h1>🎭 Quiz Culture</h1>
+  <h1>🖼️ Chef-d'Œuvre</h1>
 
   <div class="difficulty-select" id="difficultySelect">
     <p data-i18n="chooseDifficulty">Choisis la difficulté</p>
@@ -37,7 +37,7 @@
       <div class="stat-chip"><span class="stat-icon">🏆</span><span id="bestVal">0</span></div>
     </div>
 
-    <p class="hint" id="hintText" data-i18n="hint">Musique, art, citations : teste ta culture !</p>
+    <p class="hint" data-i18n="hint">De qui vient cette œuvre ?</p>
 
     <div class="quiz-stimulus" id="stimulus"></div>
 
@@ -50,7 +50,7 @@
 
   <div class="win-modal" id="resultModal" hidden>
     <div class="win-modal-content">
-      <h2 data-i18n="done">🎭 Terminé !</h2>
+      <h2 data-i18n="done">🖼️ Terminé !</h2>
       <div class="win-stats">
         <p><span data-i18n="score">Score</span> : <span id="statScore"></span></p>
         <p><span data-i18n="bestStreak">Meilleure série</span> : <span id="statStreak"></span></p>
@@ -63,6 +63,6 @@
   </div>
 
   <script src="../js/sfx.js"></script>
-  <script type="module" src="../js/quiz-culture.js"></script>
+  <script type="module" src="../js/chef-doeuvre.js"></script>
 </body>
 </html>
