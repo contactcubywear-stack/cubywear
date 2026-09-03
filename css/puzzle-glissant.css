@@ -23,7 +23,7 @@ body {
 
 .puzzle-board {
   position: relative;
-  width: min(calc(100vw - 40px), 380px);
+  width: min(calc(100vw - 120px), 380px);
   aspect-ratio: 1 / 1;
   margin: 0 auto;
   background: var(--bg-main);

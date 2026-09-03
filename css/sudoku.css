@@ -116,13 +116,13 @@ body {
 .numpad {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
+  gap: 6px;
   width: min(calc(100vw - 40px), 400px);
-  margin: 14px auto 0;
+  margin: 10px auto 0;
 }
 
 .num-btn {
-  padding: 12px 0;
+  padding: 9px 0;
   background: var(--bg-card);
   border: 2px solid var(--accent-blue);
   border-radius: 10px;

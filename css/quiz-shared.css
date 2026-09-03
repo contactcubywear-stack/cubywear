@@ -101,7 +101,7 @@ body {
 
 .quiz-stimulus.photo-quiz img {
   width: 100%;
-  height: 220px;
+  height: 190px;
   object-fit: cover;
   border-radius: 14px;
   display: block;

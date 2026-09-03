@@ -44,7 +44,7 @@ body {
 
 .tetris-board {
   display: grid;
-  width: min(58vw, 220px);
+  width: min(50vw, 184px);
   margin: 0;
   background: var(--bg-card);
   border: 2px solid var(--accent-blue);

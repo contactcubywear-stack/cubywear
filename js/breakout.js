@@ -304,7 +304,7 @@ async function endGame(won) {
   await saveScore("CW-BLK-1-0001", "breakout", score);
 }
 
-const DISPLAY_MAX_W = 300;
+const DISPLAY_MAX_W = 230;
 
 function applyAreaSize() {
   canvas.width = W;

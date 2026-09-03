@@ -37,9 +37,9 @@ body {
 
 .wordle-grid {
   display: grid;
-  gap: 8px;
-  width: min(70vw, 260px);
-  margin: 0 auto 25px;
+  gap: 6px;
+  width: min(56vw, 210px);
+  margin: 0 auto 18px;
 }
 
 .wordle-cell {
