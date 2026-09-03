@@ -26,7 +26,54 @@ const ITEMS = [
   { emoji: "🎁", fr: "Cadeau", en: "Gift" }, { emoji: "🍩", fr: "Donut", en: "Donut" }, { emoji: "🚁", fr: "Hélicoptère", en: "Helicopter" },
   { emoji: "🐸", fr: "Grenouille", en: "Frog" }, { emoji: "🎯", fr: "Cible", en: "Target" }, { emoji: "🧩", fr: "Puzzle", en: "Puzzle" },
   { emoji: "🦁", fr: "Lion", en: "Lion" }, { emoji: "⚓", fr: "Ancre", en: "Anchor" }, { emoji: "🎃", fr: "Citrouille", en: "Pumpkin" },
-  { emoji: "🐢", fr: "Tortue", en: "Turtle" }, { emoji: "🍉", fr: "Pastèque", en: "Watermelon" }, { emoji: "🎈", fr: "Ballon", en: "Balloon" }
+  { emoji: "🐢", fr: "Tortue", en: "Turtle" }, { emoji: "🍉", fr: "Pastèque", en: "Watermelon" }, { emoji: "🎈", fr: "Ballon", en: "Balloon" },
+
+  { emoji: "🍎", fr: "Pomme", en: "Apple" }, { emoji: "🍌", fr: "Banane", en: "Banana" }, { emoji: "🍇", fr: "Raisin", en: "Grapes" },
+  { emoji: "🍓", fr: "Fraise", en: "Strawberry" }, { emoji: "🍒", fr: "Cerise", en: "Cherry" }, { emoji: "🍑", fr: "Pêche", en: "Peach" },
+  { emoji: "🍍", fr: "Ananas", en: "Pineapple" }, { emoji: "🥑", fr: "Avocat", en: "Avocado" }, { emoji: "🥕", fr: "Carotte", en: "Carrot" },
+  { emoji: "🌽", fr: "Maïs", en: "Corn" }, { emoji: "🍔", fr: "Burger", en: "Burger" }, { emoji: "🍟", fr: "Frites", en: "Fries" },
+  { emoji: "🌭", fr: "Hot-dog", en: "Hot Dog" }, { emoji: "🍿", fr: "Popcorn", en: "Popcorn" }, { emoji: "🧀", fr: "Fromage", en: "Cheese" },
+  { emoji: "🍦", fr: "Crème glacée", en: "Ice Cream" }, { emoji: "🍪", fr: "Biscuit", en: "Cookie" }, { emoji: "🎂", fr: "Gâteau", en: "Cake" },
+  { emoji: "🍭", fr: "Sucette", en: "Lollipop" }, { emoji: "☕", fr: "Café", en: "Coffee" },
+
+  { emoji: "🐱", fr: "Chat", en: "Cat" }, { emoji: "🐭", fr: "Souris", en: "Mouse" }, { emoji: "🐹", fr: "Hamster", en: "Hamster" },
+  { emoji: "🐰", fr: "Lapin", en: "Rabbit" }, { emoji: "🦊", fr: "Renard", en: "Fox" }, { emoji: "🐻", fr: "Ours", en: "Bear" },
+  { emoji: "🐼", fr: "Panda", en: "Panda" }, { emoji: "🐨", fr: "Koala", en: "Koala" }, { emoji: "🐯", fr: "Tigre", en: "Tiger" },
+  { emoji: "🐮", fr: "Vache", en: "Cow" }, { emoji: "🐷", fr: "Cochon", en: "Pig" }, { emoji: "🐵", fr: "Singe", en: "Monkey" },
+  { emoji: "🐔", fr: "Poule", en: "Chicken" }, { emoji: "🐧", fr: "Manchot", en: "Penguin" }, { emoji: "🐦", fr: "Oiseau", en: "Bird" },
+  { emoji: "🦉", fr: "Hibou", en: "Owl" }, { emoji: "🦋", fr: "Papillon", en: "Butterfly" }, { emoji: "🐝", fr: "Abeille", en: "Bee" },
+  { emoji: "🐌", fr: "Escargot", en: "Snail" }, { emoji: "🐙", fr: "Poulpe", en: "Octopus" }, { emoji: "🐠", fr: "Poisson", en: "Fish" },
+  { emoji: "🦈", fr: "Requin", en: "Shark" }, { emoji: "🐳", fr: "Baleine", en: "Whale" }, { emoji: "🦒", fr: "Girafe", en: "Giraffe" },
+  { emoji: "🦓", fr: "Zèbre", en: "Zebra" }, { emoji: "🐘", fr: "Éléphant", en: "Elephant" }, { emoji: "🦘", fr: "Kangourou", en: "Kangaroo" },
+  { emoji: "🐴", fr: "Cheval", en: "Horse" }, { emoji: "🦇", fr: "Chauve-souris", en: "Bat" }, { emoji: "🕷️", fr: "Araignée", en: "Spider" },
+  { emoji: "🐍", fr: "Serpent", en: "Snake" },
+
+  { emoji: "📱", fr: "Téléphone", en: "Phone" }, { emoji: "💻", fr: "Ordinateur", en: "Laptop" }, { emoji: "📷", fr: "Appareil photo", en: "Camera" },
+  { emoji: "🎧", fr: "Casque audio", en: "Headphones" }, { emoji: "⌚", fr: "Montre", en: "Watch" }, { emoji: "💡", fr: "Ampoule", en: "Light Bulb" },
+  { emoji: "🔑", fr: "Clé", en: "Key" }, { emoji: "🔒", fr: "Cadenas", en: "Lock" }, { emoji: "📚", fr: "Livres", en: "Books" },
+  { emoji: "✏️", fr: "Crayon", en: "Pencil" }, { emoji: "🎨", fr: "Palette", en: "Palette" }, { emoji: "🎮", fr: "Manette", en: "Game Controller" },
+  { emoji: "🎲", fr: "Dé", en: "Dice" }, { emoji: "🧸", fr: "Peluche", en: "Teddy Bear" }, { emoji: "👑", fr: "Couronne", en: "Crown" },
+  { emoji: "💎", fr: "Diamant", en: "Diamond" }, { emoji: "🔔", fr: "Cloche", en: "Bell" }, { emoji: "⏰", fr: "Réveil", en: "Alarm Clock" },
+  { emoji: "🧲", fr: "Aimant", en: "Magnet" }, { emoji: "🪁", fr: "Cerf-volant", en: "Kite" },
+
+  { emoji: "🌸", fr: "Fleur de cerisier", en: "Cherry Blossom" }, { emoji: "🌻", fr: "Tournesol", en: "Sunflower" }, { emoji: "🌵", fr: "Cactus", en: "Cactus" },
+  { emoji: "🍄", fr: "Champignon", en: "Mushroom" }, { emoji: "🌴", fr: "Palmier", en: "Palm Tree" }, { emoji: "⭐", fr: "Étoile", en: "Star" },
+  { emoji: "🌙", fr: "Lune", en: "Moon" }, { emoji: "☀️", fr: "Soleil", en: "Sun" }, { emoji: "⛄", fr: "Bonhomme de neige", en: "Snowman" },
+  { emoji: "❄️", fr: "Flocon de neige", en: "Snowflake" }, { emoji: "🔥", fr: "Feu", en: "Fire" }, { emoji: "⚡", fr: "Éclair", en: "Lightning" },
+  { emoji: "🌊", fr: "Vague", en: "Wave" },
+
+  { emoji: "🚗", fr: "Voiture", en: "Car" }, { emoji: "🚲", fr: "Vélo", en: "Bicycle" }, { emoji: "✈️", fr: "Avion", en: "Airplane" },
+  { emoji: "🚢", fr: "Bateau", en: "Ship" }, { emoji: "🚂", fr: "Train", en: "Train" }, { emoji: "🛴", fr: "Trottinette", en: "Scooter" },
+  { emoji: "🏍️", fr: "Moto", en: "Motorcycle" }, { emoji: "🚌", fr: "Bus", en: "Bus" }, { emoji: "⛵", fr: "Voilier", en: "Sailboat" },
+
+  { emoji: "⚽", fr: "Ballon de foot", en: "Soccer Ball" }, { emoji: "🏀", fr: "Basketball", en: "Basketball" }, { emoji: "🎾", fr: "Tennis", en: "Tennis" },
+  { emoji: "🏈", fr: "Football américain", en: "American Football" }, { emoji: "⚾", fr: "Baseball", en: "Baseball" }, { emoji: "🥊", fr: "Gant de boxe", en: "Boxing Glove" },
+  { emoji: "🎳", fr: "Bowling", en: "Bowling" }, { emoji: "🏆", fr: "Trophée", en: "Trophy" },
+
+  { emoji: "🎪", fr: "Cirque", en: "Circus" }, { emoji: "🎭", fr: "Théâtre", en: "Theater" }, { emoji: "🎬", fr: "Cinéma", en: "Movie Clapper" },
+  { emoji: "🎹", fr: "Piano", en: "Piano" }, { emoji: "🥁", fr: "Tambour", en: "Drum" }, { emoji: "🔮", fr: "Boule de cristal", en: "Crystal Ball" },
+  { emoji: "🪀", fr: "Yoyo", en: "Yo-yo" }, { emoji: "🛸", fr: "OVNI", en: "UFO" }, { emoji: "🏰", fr: "Château", en: "Castle" },
+  { emoji: "⛺", fr: "Tente", en: "Tent" }, { emoji: "🗿", fr: "Statue", en: "Moai Statue" }
 ];
 
 const DIFFICULTIES = {

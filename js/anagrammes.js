@@ -24,16 +24,24 @@ let lang = getLang();
 
 const WORD_BANKS = {
   fr: {
-    facile: ["chat", "velo", "lune", "jupe", "robe", "sofa", "gare", "table", "lampe", "radio", "stylo", "disco", "pomme", "poire", "melon", "sucre", "ecole", "porte", "route", "fleur", "livre", "tapis"],
-    moyen: ["jardin", "cahier", "crayon", "gateau", "cinema", "etoile", "riviere", "fromage", "voiture", "musique", "cuisine", "fenetre", "chapeau", "guitare", "docteur"],
-    difficile: ["montagne", "peinture", "bouteille", "chocolat", "parapluie", "telephone", "elephant", "escalier", "aeroport", "tournesol", "dinosaure", "programme", "poussiere"],
-    impossible: ["ordinateur", "dictionnaire", "anniversaire", "refrigerateur", "bibliotheque", "tremblement", "gouvernement", "appartement", "parachutiste", "informatique", "thermometre"]
+    facile: ["chat", "velo", "lune", "jupe", "robe", "sofa", "gare", "table", "lampe", "radio", "stylo", "disco", "pomme", "poire", "melon", "sucre", "ecole", "porte", "route", "fleur", "livre", "tapis",
+      "piano", "violon", "trompette", "cravate", "ceinture", "bracelet", "collier", "manteau", "echarpe", "chaussure", "pantalon", "chemise", "valise", "sandale", "chaussette", "bonnet", "gant", "foulard"],
+    moyen: ["jardin", "cahier", "crayon", "gateau", "cinema", "etoile", "riviere", "fromage", "voiture", "musique", "cuisine", "fenetre", "chapeau", "guitare", "docteur",
+      "dauphin", "papillon", "tortue", "corbeau", "hibou", "renard", "ecureuil", "poisson", "chateau", "bouquet", "pyramide", "planete", "univers", "silence", "courage"],
+    difficile: ["montagne", "peinture", "bouteille", "chocolat", "parapluie", "telephone", "elephant", "escalier", "aeroport", "tournesol", "dinosaure", "programme", "poussiere",
+      "aquarium", "kangourou", "chirurgien", "astronaute", "laboratoire", "temperature", "atmosphere", "revolution", "decoration", "escalator", "montgolfiere", "hippopotame"],
+    impossible: ["ordinateur", "dictionnaire", "anniversaire", "refrigerateur", "bibliotheque", "tremblement", "gouvernement", "appartement", "parachutiste", "informatique", "thermometre",
+      "architecture", "environnement", "developpement", "independance", "caracteristique", "responsabilite", "investissement", "administration", "transformation", "reconnaissance"]
   },
   en: {
-    facile: ["lamp", "sofa", "moon", "robe", "gate", "book", "road", "cake", "milk", "bread", "chair", "plate", "shirt", "mouse", "house"],
-    moyen: ["guitar", "camera", "garden", "pencil", "window", "bottle", "castle", "wallet", "jacket", "kitchen", "teacher", "rainbow", "diamond", "volcano", "dolphin"],
-    difficile: ["elephant", "mountain", "umbrella", "treasure", "triangle", "vacation", "sandwich", "butterfly", "chocolate", "telephone", "newspaper", "spaceship", "wonderful"],
-    impossible: ["dictionary", "restaurant", "helicopter", "caterpillar", "refrigerator", "extraordinary", "thermometer", "encyclopedia", "neighborhood", "grandmother", "watermelon"]
+    facile: ["lamp", "sofa", "moon", "robe", "gate", "book", "road", "cake", "milk", "bread", "chair", "plate", "shirt", "mouse", "house",
+      "mirror", "basket", "pillow", "blanket", "candle", "ladder", "hammer", "bucket", "engine", "rocket", "planet", "forest", "desert", "island", "valley", "meadow", "cherry", "orange", "sunset", "sunrise"],
+    moyen: ["guitar", "camera", "garden", "pencil", "window", "bottle", "castle", "wallet", "jacket", "kitchen", "teacher", "rainbow", "diamond", "volcano", "dolphin",
+      "penguin", "hamster", "leopard", "panther", "gorilla", "buffalo", "peacock", "seagull", "sparrow", "mustang", "biscuit", "pumpkin", "avocado", "popcorn", "cabinet", "curtain", "mailbox", "journey"],
+    difficile: ["elephant", "mountain", "umbrella", "treasure", "triangle", "vacation", "sandwich", "butterfly", "chocolate", "telephone", "newspaper", "spaceship", "wonderful",
+      "telescope", "chimpanzee", "waterfall", "dinosaur", "hurricane", "adventure", "chemistry", "geography", "astronomy", "orchestra", "laboratory", "aquarium"],
+    impossible: ["dictionary", "restaurant", "helicopter", "caterpillar", "refrigerator", "extraordinary", "thermometer", "encyclopedia", "neighborhood", "grandmother", "watermelon",
+      "architecture", "environment", "development", "independence", "characteristic", "responsibility", "investment", "administration", "transformation", "government"]
   }
 };
 

@@ -24,16 +24,24 @@ let lang = getLang();
 
 const WORD_BANKS = {
   fr: {
-    facile: ["chat", "velo", "jupe", "robe", "gare", "table", "lampe", "radio", "stylo", "pomme", "poire", "melon", "sucre", "ecole", "porte", "route", "fleur", "livre", "tapis"],
-    moyen: ["jardin", "cahier", "crayon", "gateau", "cinema", "etoile", "riviere", "fromage", "voiture", "musique", "cuisine", "fenetre", "chapeau", "guitare", "docteur"],
-    difficile: ["montagne", "peinture", "bouteille", "chocolat", "parapluie", "telephone", "elephant", "escalier", "aeroport"],
-    impossible: ["ordinateur", "dictionnaire", "anniversaire", "bibliotheque", "gouvernement", "appartement", "informatique", "thermometre"]
+    facile: ["chat", "velo", "jupe", "robe", "gare", "table", "lampe", "radio", "stylo", "pomme", "poire", "melon", "sucre", "ecole", "porte", "route", "fleur", "livre", "tapis",
+      "souris", "ballon", "montre", "bureau", "cheval", "poulet", "camion", "avion", "bateau", "maison", "moulin", "piscine", "plage", "foret", "neige", "pluie", "soleil", "nuage", "vague", "sable"],
+    moyen: ["jardin", "cahier", "crayon", "gateau", "cinema", "etoile", "riviere", "fromage", "voiture", "musique", "cuisine", "fenetre", "chapeau", "guitare", "docteur",
+      "dauphin", "papillon", "tortue", "corbeau", "hibou", "renard", "ecureuil", "poisson", "chateau", "bouquet", "pyramide", "planete", "univers", "silence", "courage", "sourire", "cadeau", "orchestre"],
+    difficile: ["montagne", "peinture", "bouteille", "chocolat", "parapluie", "telephone", "elephant", "escalier", "aeroport",
+      "aquarium", "dinosaure", "tournesol", "kangourou", "chirurgien", "astronaute", "laboratoire", "temperature", "atmosphere", "revolution", "decoration", "escalator"],
+    impossible: ["ordinateur", "dictionnaire", "anniversaire", "bibliotheque", "gouvernement", "appartement", "informatique", "thermometre",
+      "architecture", "environnement", "developpement", "independance", "caracteristique", "responsabilite", "investissement", "administration", "transformation", "reconnaissance"]
   },
   en: {
-    facile: ["lamp", "sofa", "moon", "robe", "gate", "book", "road", "cake", "milk", "bread", "chair", "plate", "shirt", "mouse", "house"],
-    moyen: ["guitar", "camera", "garden", "pencil", "window", "bottle", "castle", "wallet", "jacket", "kitchen", "teacher", "rainbow", "diamond", "volcano", "dolphin"],
-    difficile: ["elephant", "mountain", "umbrella", "treasure", "triangle", "vacation", "sandwich", "butterfly", "chocolate"],
-    impossible: ["dictionary", "restaurant", "helicopter", "caterpillar", "refrigerator", "thermometer", "encyclopedia", "grandmother"]
+    facile: ["lamp", "sofa", "moon", "robe", "gate", "book", "road", "cake", "milk", "bread", "chair", "plate", "shirt", "mouse", "house",
+      "mirror", "basket", "pillow", "blanket", "candle", "ladder", "hammer", "bucket", "engine", "rocket", "planet", "forest", "desert", "island", "valley", "meadow", "cherry", "orange", "sunset", "sunrise"],
+    moyen: ["guitar", "camera", "garden", "pencil", "window", "bottle", "castle", "wallet", "jacket", "kitchen", "teacher", "rainbow", "diamond", "volcano", "dolphin",
+      "penguin", "hamster", "leopard", "panther", "gorilla", "buffalo", "peacock", "seagull", "sparrow", "mustang", "biscuit", "pumpkin", "avocado", "popcorn", "cabinet", "curtain", "mailbox", "journey"],
+    difficile: ["elephant", "mountain", "umbrella", "treasure", "triangle", "vacation", "sandwich", "butterfly", "chocolate",
+      "telescope", "chimpanzee", "waterfall", "dinosaur", "hurricane", "adventure", "chemistry", "geography", "astronomy", "orchestra", "laboratory", "aquarium"],
+    impossible: ["dictionary", "restaurant", "helicopter", "caterpillar", "refrigerator", "thermometer", "encyclopedia", "grandmother",
+      "architecture", "environment", "development", "independence", "characteristic", "responsibility", "investment", "administration", "transformation", "government"]
   }
 };
 
