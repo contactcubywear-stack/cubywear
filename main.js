@@ -10,7 +10,6 @@ const UI_TEXT = {
     "daily.countdownPrefix": "Prochains jeux dans",
     "shop.title": "🛍️ BOUTIQUE",
     "shop.desc": "Découvre les hoodies CubyWear",
-    "shop.cta": "Qu'attends-tu pour t'en procurer un ?",
     "footer.text": "Conceptualisé entièrement au Québec",
     dateLocale: "fr-FR"
   },
@@ -23,7 +22,6 @@ const UI_TEXT = {
     "daily.countdownPrefix": "Next games in",
     "shop.title": "🛍️ SHOP",
     "shop.desc": "Discover CubyWear hoodies",
-    "shop.cta": "What are you waiting for to get one?",
     "footer.text": "Designed entirely in Quebec",
     dateLocale: "en-US"
   }
