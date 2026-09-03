@@ -82,7 +82,9 @@ const GAMES = [
   { id: "piano-tiles", icon: "🎹",
     fr: { name: "Piano Tiles", desc: "Touche les tuiles noires sans en rater une" }, en: { name: "Piano Tiles", desc: "Tap the black tiles without missing one" } },
   { id: "air-hockey", icon: "🏒",
-    fr: { name: "Air Hockey", desc: "Marque plus de buts que le bot" }, en: { name: "Air Hockey", desc: "Score more goals than the bot" } }
+    fr: { name: "Air Hockey", desc: "Marque plus de buts que le bot" }, en: { name: "Air Hockey", desc: "Score more goals than the bot" } },
+  { id: "quiz-culture", icon: "🎭",
+    fr: { name: "Quiz Culture", desc: "Musique, art, citations : teste tes connaissances" }, en: { name: "Culture Quiz", desc: "Music, art, quotes: test your knowledge" } }
 ];
 
 const GAMES_BY_ID = Object.fromEntries(GAMES.map(g => [g.id, g]));
