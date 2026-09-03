@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <script>(function(){try{if(localStorage.getItem("cubywearTheme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>CubyWear – Admin</title>
+  <link rel="icon" type="image/png" href="/assets/logo_dark.png">
+  <link rel="stylesheet" href="style.css">
+  <meta name="robots" content="noindex, nofollow">
+</head>
+
+<body>
+
+  <h1 class="title" style="font-size: 26px;">⚙️ Admin CubyWear</h1>
+
+  <div class="admin-card" id="adminGate">
+    <h3>Mot de passe requis</h3>
+    <form id="passwordForm">
+      <input type="password" id="passwordInput" placeholder="Mot de passe" autocomplete="current-password"
+        style="width: 85%; padding: 12px; border-radius: 10px; border: none; margin-bottom: 12px; font-size: 16px; box-sizing: border-box;">
+      <p id="passwordError" hidden style="color: #e74c3c; font-size: 14px; margin: -6px 0 12px;">Mot de passe incorrect</p>
+      <button type="submit" class="btn-small">Entrer</button>
+    </form>
+    <div class="actions" style="margin-top: 16px;">
+      <a href="./index.html" class="btn-small">Accueil</a>
+    </div>
+  </div>
+
+  <div class="admin-card" id="adminPanel" hidden style="max-width: 420px;">
+    <h3>Jeux du jour</h3>
+    <p style="color: var(--text-light); font-size: 13px; margin-bottom: 14px;">
+      Ce choix n'est enregistré que sur cet appareil/navigateur (pas de serveur central) — utile pour tester.
+    </p>
+    <select id="gameSelector1"></select>
+    <select id="gameSelector2"></select>
+    <select id="gameSelector3"></select>
+
+    <div class="actions" style="margin-top: 10px;">
+      <button id="applyBtn" class="btn-small">Appliquer</button>
+      <button id="resetBtn" class="btn-small">Réinitialiser</button>
+    </div>
+
+    <p id="applyStatus" hidden style="color: #2ecc71; font-weight: bold; margin-top: 12px;">✅ Enregistré sur cet appareil</p>
+
+    <div class="actions" style="margin-top: 20px;">
+      <a href="./index.html" class="btn-small">Accueil</a>
+      <button id="logoutBtn" class="btn-small">Déconnexion</button>
+    </div>
+  </div>
+
+  <script src="js/games-data.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
