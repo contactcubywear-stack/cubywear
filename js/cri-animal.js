@@ -76,7 +76,49 @@ const ANIMALS = [
   { key: "rattlesnake", fr: "Serpent à sonnette", en: "Rattlesnake", cat: "reptiles", url: "https://upload.wikimedia.org/wikipedia/commons/2/22/Rattlesnake.ogg" },
 
   { key: "gibbon", fr: "Gibbon", en: "Gibbon", cat: "primates", url: "https://upload.wikimedia.org/wikipedia/commons/d/d1/Hoolock_Gibbon_Call.ogg" },
-  { key: "chimpanzee", fr: "Chimpanzé", en: "Chimpanzee", cat: "primates", url: "https://upload.wikimedia.org/wikipedia/commons/5/56/Pant-hoot_call_made_by_a_male_chimpanzee.ogg" }
+  { key: "chimpanzee", fr: "Chimpanzé", en: "Chimpanzee", cat: "primates", url: "https://upload.wikimedia.org/wikipedia/commons/5/56/Pant-hoot_call_made_by_a_male_chimpanzee.ogg" },
+
+  { key: "piglet", fr: "Porcelet", en: "Piglet", cat: "farm", url: "https://upload.wikimedia.org/wikipedia/commons/6/6f/618483_foleyhaven_piglet-squeal-01.flac" },
+
+  { key: "squirrel", fr: "Écureuil", en: "Squirrel", cat: "rodents", url: "https://upload.wikimedia.org/wikipedia/commons/6/6b/Squirrel_squealing-audio.ogg" },
+  { key: "hedgehog", fr: "Hérisson", en: "Hedgehog", cat: "small_mammals", url: "https://upload.wikimedia.org/wikipedia/commons/3/3d/Hedgehog_O.ogg" },
+  { key: "bat", fr: "Chauve-souris", en: "Bat", cat: "small_mammals", url: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Bat_feeding_buzz.wav" },
+  { key: "raccoon", fr: "Raton laveur", en: "Raccoon", cat: "small_mammals", url: "https://upload.wikimedia.org/wikipedia/commons/f/f7/Baby_Raccoon_Chatter_1.flac" },
+
+  { key: "cheetah", fr: "Guépard", en: "Cheetah", cat: "predators", url: "https://upload.wikimedia.org/wikipedia/commons/c/ca/Acoustic-Structure-and-Contextual-Use-of-Calls-by-Captive-Male-and-Female-Cheetahs-%28Acinonyx-pone.0158546.s001.oga" },
+
+  { key: "orca", fr: "Orque", en: "Orca", cat: "marine", url: "https://upload.wikimedia.org/wikipedia/commons/7/79/Killer_whale.ogg" },
+
+  { key: "orangutan", fr: "Orang-outan", en: "Orangutan", cat: "primates", url: "https://upload.wikimedia.org/wikipedia/commons/3/3b/Speech-Like-Rhythm-in-a-Voiced-and-Voiceless-Orangutan-Call-pone.0116136.s001.oga" },
+  { key: "baboon", fr: "Babouin", en: "Baboon", cat: "primates", url: "https://upload.wikimedia.org/wikipedia/commons/f/f1/Baboon_Bark.ogg" },
+  { key: "lemur", fr: "Lémurien", en: "Ring-tailed Lemur", cat: "primates", url: "https://upload.wikimedia.org/wikipedia/commons/8/86/Lemur_catta--infant_contact_calls1.ogg" },
+
+  { key: "gecko", fr: "Gecko tokay", en: "Tokay Gecko", cat: "reptiles", url: "https://upload.wikimedia.org/wikipedia/commons/9/91/Mating_call_of_a_male_Tokay_gecko_%28Gekko_gecko%29.ogg" },
+
+  { key: "cricket", fr: "Grillon", en: "Cricket", cat: "insects", url: "https://upload.wikimedia.org/wikipedia/commons/0/0d/Field_cricket_unedited.ogg" },
+  { key: "grasshopper", fr: "Sauterelle", en: "Grasshopper", cat: "insects", url: "https://upload.wikimedia.org/wikipedia/commons/2/28/Grasshoppers.ogg" },
+  { key: "bumblebee", fr: "Bourdon", en: "Bumblebee", cat: "insects", url: "https://upload.wikimedia.org/wikipedia/commons/c/ca/Bombus_buzz.ogg" },
+
+  { key: "sparrow", fr: "Moineau", en: "Sparrow", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/0/00/House_Sparrows_chirping.ogg" },
+  { key: "cardinal", fr: "Cardinal rouge", en: "Northern Cardinal", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/0/0a/Cardinalis_cardinalis_-_Northern_Cardinal_XC125284.ogg" },
+  { key: "bluejay", fr: "Geai bleu", en: "Blue Jay", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/1/15/Cyanocitta_cristata_-_Blue_Jay_-_XC86756.ogg" },
+  { key: "kingfisher", fr: "Martin-pêcheur", en: "Belted Kingfisher", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/5/5d/Megaceryle_alcyon_-_Belted_Kingfisher_XC132870.ogg" },
+  { key: "chickadee", fr: "Mésange à tête noire", en: "Black-capped Chickadee", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/a/ac/Poecile_atricapillus_-_Black-capped_Chickadee_XC132861.ogg" },
+  { key: "cuckoo", fr: "Coulicou à bec jaune", en: "Yellow-billed Cuckoo", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/4/4f/Coccyzus_americanus_-_Yellow-billed_Cuckoo_XC143181.ogg" },
+  { key: "hawk", fr: "Buse à queue rousse", en: "Red-tailed Hawk", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/0/0f/Buteo_jamaicensis_-_Red-tailed_Hawk_XC71575.mp3" },
+  { key: "heron", fr: "Grand héron", en: "Great Blue Heron", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/2/23/Great_Blue_Heron.ogg" },
+  { key: "magpie", fr: "Pie bavarde", en: "Eurasian Magpie", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/9/97/Pica_pica_-_Eurasian_Magpie_XC432921.mp3" },
+  { key: "gull", fr: "Goéland argenté", en: "Herring Gull", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/a/a3/Larus_argentatus_-_European_Herring_Gull_XC436943.mp3" },
+  { key: "flamingo", fr: "Flamant rose", en: "Flamingo", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/5/5d/Phoenicopterus_roseus_-_Greater_Flamingo_XC432217.mp3" },
+  { key: "parrot", fr: "Perroquet gris", en: "African Grey Parrot", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/2/2d/African_grey_parrot_sound.wav" },
+  { key: "loon", fr: "Plongeon huard", en: "Common Loon", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/0/02/Common_loon_yodels.ogg" },
+  { key: "mourningdove", fr: "Tourterelle triste", en: "Mourning Dove", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/a/a2/Zenaida_macroura_-_Mourning_Dove_XC128006.ogg" },
+  { key: "robin", fr: "Merle d'Amérique", en: "American Robin", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/d/d0/Turdus_migratorius_-_American_Robin_XC132864.ogg" },
+  { key: "housefinch", fr: "Roselin familier", en: "House Finch", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/e/ed/Haemorhous_mexicanus_-_House_Finch_XC124078.ogg" },
+  { key: "americancrow", fr: "Corneille d'Amérique", en: "American Crow", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/1/12/Corvus_brachyrhynchos_-_American_Crow_XC121396.ogg" },
+  { key: "nightingale", fr: "Rossignol", en: "Nightingale", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/5/52/Luscinia_megarhynchos_-_Common_Nightingale_XC131581.ogg" },
+  { key: "quail", fr: "Caille", en: "Quail", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/c/c1/Rain_Quail_-_Coturnix_coromandelica.ogg" },
+  { key: "canary", fr: "Canari", en: "Canary", cat: "birds", url: "https://upload.wikimedia.org/wikipedia/commons/6/6e/Long-range-Order-in-Canary-Song-pcbi.1003052.s001.oga" }
 ];
 
 const DIFFICULTIES = {
