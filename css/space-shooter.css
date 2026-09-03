@@ -43,7 +43,7 @@ body {
 
 .shooter-area {
   position: relative;
-  width: min(calc(100vw - 40px), 340px);
+  width: min(calc(100vw - 40px), 300px);
   margin: 0 auto;
   border: 2px solid var(--accent-blue);
   border-radius: 12px;

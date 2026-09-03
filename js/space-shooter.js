@@ -280,10 +280,12 @@ async function endGame() {
   await saveScore("CW-BLK-1-0001", "space-shooter", score);
 }
 
+const DISPLAY_MAX_W = 300;
+
 function applyAreaSize() {
   canvas.width = W;
   canvas.height = H;
-  area.style.width = `min(calc(100vw - 40px), ${W}px)`;
+  area.style.width = `min(calc(100vw - 40px), ${Math.min(W, DISPLAY_MAX_W)}px)`;
   area.style.aspectRatio = `${W} / ${H}`;
   area.style.height = "auto";
 }

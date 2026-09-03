@@ -32,7 +32,7 @@ body {
 .runner-area {
   position: relative;
   width: min(80vw, 320px);
-  height: min(120vw, 480px);
+  height: min(105vw, 440px);
   margin: 0 auto;
   background: linear-gradient(to bottom, #0a0f2a 0%, #161f4d 35%, var(--bg-card) 100%);
   border: 2px solid var(--accent-blue);

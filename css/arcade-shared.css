@@ -45,7 +45,11 @@ body {
 canvas.game-canvas {
   display: block;
   margin: 0 auto;
-  width: min(calc(100vw - 40px), var(--canvas-w, 360px));
+  /* --canvas-w/--canvas-h sont des nombres sans unité (partagés avec
+     aspect-ratio, qui exige des nombres) ; on les convertit en longueur
+     ici via *1px, sinon min()/calc() les rejette et la largeur retombe
+     sur la taille intrinsèque du canvas (attributs width/height HTML). */
+  width: min(calc(100vw - 40px), calc(var(--canvas-w, 360) * 1px));
   height: auto;
   aspect-ratio: var(--canvas-w, 360) / var(--canvas-h, 560);
   border: 2px solid var(--accent-blue);
